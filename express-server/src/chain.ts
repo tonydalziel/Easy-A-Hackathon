@@ -1,6 +1,6 @@
 import { AlgorandClient } from '@algorandfoundation/algokit-utils';
 import { TransactionType } from 'algosdk';
-import
+import { ItemState, AgentState } from './types.js';
 
 // Initialize Algorand client
 const algorand = AlgorandClient.fromEnvironment();
@@ -28,31 +28,39 @@ export interface ResponseData {
     timestamp: number;
 }
 
+export async function transferIntoWallet(wallet_id: string, sender_addr: string, amount: number, prompt: string): Promise<string> {
+    const result = await algorand.send.payment({
+        sender: sender_addr,
+        receiver: sender_addr, // Send to self to just store data
+        amount: amount, // Minimum amount
+        note: prompt,
+    });
+
+    return result.txIds[0];
+};
+
 /**
  * Post agent information to the chain using a payment transaction with note field
  */
-export async function postAgentToChain(provider_id: string, model_id: string, prompt: string) {
+export async function postAgentToChain(provider_id: string, model_id: string, prompt: string, walletBalance: number): Promise<string> {
     // Get or create account from environment
     const sender = algorand.account.fromEnvironment('SENDER_ACCOUNT');
 
+    const {wallet_id} = await getNewWallet();
+    await transferIntoWallet(id, walletBalance);
     // Create agent data object
-    const agentData: AgentData = {
+    const agentData: AgentState = {
+        currentItemsAcquired: [],
         provider_id,
         model_id,
         prompt,
-        timestamp: Date.now()
+        wallet_id,
     };
 
     // Encode agent data as note (must be base64 encoded)
     const noteData = new TextEncoder().encode(JSON.stringify(agentData));
 
     // Send a payment transaction with the agent data in the note field
-    const result = await algorand.send.payment({
-        sender: sender.addr,
-        receiver: sender.addr, // Send to self to just store data
-        amount: (0).microAlgo(), // Minimum amount
-        note: noteData,
-    });
 
     // Return the transaction ID as the agent_id
     return result.txIds[0];
@@ -136,3 +144,7 @@ export function parseMessage(note: Uint8Array | undefined, sender: string, txId:
         return null;
     }
 }
+function getNewWallet() {
+    throw new Error('Function not implemented.');
+}
+

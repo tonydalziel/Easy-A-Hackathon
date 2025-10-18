@@ -2,7 +2,9 @@ export type AgentState = {
     id: string;
     prompt: string;
     currentItemsAcquired: string[];
-    walletBalance: number;
+    model_id: string;
+    provider_id: string;
+    wallet_id: string;
 }
 
 export type ItemState = {
