@@ -23,11 +23,6 @@ export function getAlgorandClient(): AlgorandClient {
     return algorand;
 }
 
-// Export for use in other files
-export function getAlgorandClient() {
-    return algorand;
-}
-
 // Message types that can be received on the blockchain
 export enum MessageType {
     BID = 'BID',
@@ -137,7 +132,7 @@ export async function postResponseToChain(originalTxId: string, messageType: Mes
     const result = await algorand.send.payment({
         sender: sender.addr,
         receiver: sender.addr, // Send to self to just store data
-        amount: 0, // Minimum amount -- TODO
+        amount: (0).microAlgo(), // Minimum amount
         note: noteData,
     });
 

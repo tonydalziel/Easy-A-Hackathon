@@ -177,7 +177,8 @@ router.post('/', (req: Request, res: Response) => {
             provider_id,
             currentItemsAcquired: [],
             wallet_id: `wallet-${Date.now()}`,
-            wallet_pwd: 'temp-pwd' // In production, this should be properly managed
+            wallet_pwd: 'temp-pwd', // In production, this should be properly managed
+            walletBalance: 0 // Initialize with 0 balance
         };
 
         // Store agent
