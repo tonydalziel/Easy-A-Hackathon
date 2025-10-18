@@ -17,14 +17,11 @@ export default function WalletWindow() {
 
   const fetchWalletData = async () => {
     try {
-      // For user wallet, we need a wallet ID
-      // This should be configured or passed in
-      const walletId = 'user-wallet'; // TODO: Get actual user wallet ID
+      const walletId = process.env.NEXT_PUBLIC_USER_WALLET_ID || 'user-wallet';
 
       const response = await fetch(`/api/wallet?id=${walletId}`);
       if (response.ok) {
         const data = await response.json();
-        setWalletHistory(data.history || []);
         setCurrentValue(data.currentValue || 0);
       }
     } catch (error) {

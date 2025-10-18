@@ -1,7 +1,7 @@
 import algosdk from "algosdk";
 
-const token = "API_KEY"; // Replace with your algod API token
-const server = "http://localhost";
-const port = 4001; // Default localnet port, change if needed
+const token = process.env.NEXT_PUBLIC_ALGOD_TOKEN || "";
+const server = process.env.NEXT_PUBLIC_ALGOD_SERVER || "http://localhost";
+const port = parseInt(process.env.NEXT_PUBLIC_ALGOD_PORT || "4001", 10);
 
 export const client = new algosdk.Algodv2(token, server, port);
