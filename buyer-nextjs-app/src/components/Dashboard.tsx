@@ -223,7 +223,7 @@ export default function Dashboard() {
               ))
             ) : (
               <div className="text-center py-8 text-gray-500">
-                <div className="text-3xl mb-2">😴</div>
+                <div className="text-3xl mb-2 text-gray-600">-</div>
                 <div className="text-sm">No active agents</div>
               </div>
             )}
@@ -274,7 +274,7 @@ export default function Dashboard() {
               ))
             ) : (
               <div className="text-center py-8 text-gray-500">
-                <div className="text-3xl mb-2">📭</div>
+                <div className="text-3xl mb-2 text-gray-600">-</div>
                 <div className="text-sm">No recent activity</div>
               </div>
             )}
