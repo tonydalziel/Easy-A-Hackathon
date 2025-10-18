@@ -141,6 +141,9 @@ export default function Home() {
   };
 
   const handleCreateAgent = async (prompt: string) => {
+    setError('');
+    setSuccess('');
+    
     try {
       const response = await fetch('/api/agents/create', {
         method: 'POST',
@@ -151,7 +154,8 @@ export default function Home() {
       if (response.ok) {
         const data = await response.json();
         if (data.success && data.agentId) {
-          setError(`Agent created successfully! ID: ${data.agentId}`);
+          setSuccess(`Agent created successfully! ID: ${data.agentId}`);
+          setTimeout(() => setSuccess(''), 5000);
           // Optionally open the agent tracker window
           createWindow('agent-tracker', `Agent Tracker - ${data.agentId}`, data.agentId);
         } else {
@@ -344,6 +348,12 @@ export default function Home() {
           {error && (
             <div className="text-red-400 text-sm font-mono bg-gray-900 border border-red-900 rounded px-3 py-1">
               {error}
+            </div>
+          )}
+          
+          {success && (
+            <div className="text-green-400 text-sm font-mono bg-gray-900 border border-green-900 rounded px-3 py-1">
+              {success}
             </div>
           )}
         </form>
