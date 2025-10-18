@@ -6,16 +6,20 @@
   "author": "",
   "type": "commonjs",
   "main": "index.js",
-"scripts": {
-  "start": "ts-node src/index.ts",
-  "build": "tsc",
-  "serve": "node dist/index.js"
-},
+  "scripts": {
+    "start": "ts-node src/index.ts",
+    "build": "tsc",
+    "serve": "node dist/index.js"
+  },
   "devDependencies": {
     "@types/express": "^5.0.3",
     "@types/node": "^24.8.1",
     "express": "^5.1.0",
     "ts-node": "^10.9.2",
     "typescript": "^5.9.3"
+  },
+  "dependencies": {
+    "@algorandfoundation/algokit-utils": "^9.1.2",
+    "algosdk": "^3.5.2"
   }
 }
