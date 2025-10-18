@@ -17,8 +17,19 @@ export default function Home() {
   const [error, setError] = useState('');
   const [suggestion, setSuggestion] = useState('');
   const [showSuggestions, setShowSuggestions] = useState(false);
+  const [parameterHint, setParameterHint] = useState('');
 
   const commands = ['-h', 'wallet', 'watch', 'track', 'list', 'events', 'create'];
+  
+  const commandInfo: Record<string, { params?: string; description: string }> = {
+    '-h': { description: 'Display help window' },
+    'wallet': { description: 'Show your total wallet value' },
+    'watch': { description: 'Watch live agent decision stream in real-time' },
+    'track': { params: '<agent-id>', description: 'Track a specific agent\'s activity' },
+    'list': { description: 'List all agents with their status' },
+    'events': { description: 'Show all on-chain events' },
+    'create': { params: '<prompt>', description: 'Create a new agent with the specified prompt' },
+  };
 
   useEffect(() => {
 	createWindow('help', 'Help - Available Commands');
@@ -28,6 +39,7 @@ export default function Home() {
   useEffect(() => {
     if (!command) {
       setSuggestion('');
+      setParameterHint('');
       return;
     }
 
@@ -41,6 +53,18 @@ export default function Home() {
       setSuggestion(match.slice(cmd.length));
     } else {
       setSuggestion('');
+    }
+
+    // Show parameter hint for commands that need parameters
+    if (commands.includes(cmd) && parts.length === 1) {
+      const info = commandInfo[cmd];
+      if (info?.params) {
+        setParameterHint(`${cmd} ${info.params} - ${info.description}`);
+      } else {
+        setParameterHint('');
+      }
+    } else {
+      setParameterHint('');
     }
   }, [command]);
 
@@ -149,10 +173,15 @@ export default function Home() {
     // Determine window size based on type
     let width = 500;
     let height = 400;
+    let x = 20 + windows.length * 30;
+    let y = 70 + windows.length * 30;
 
     if (type === 'help') {
       width = 400;
       height = 300;
+      // Position help window on the right side to avoid terminal dropdown
+      x = window.innerWidth - width - 40;
+      y = 20;
     } else if (type === 'agent-list') {
       width = 700;
       height = 500;
@@ -171,8 +200,8 @@ export default function Home() {
       id: `${type}-${Date.now()}`,
       type,
       title,
-      x: 20 + windows.length * 30,
-      y: 70 + windows.length * 30,
+      x,
+      y,
       width,
       height,
       zIndex: nextZIndex,
@@ -254,6 +283,18 @@ export default function Home() {
               </div>
             </div>
             
+            {/* Parameter hint */}
+            {parameterHint && !suggestion && (
+              <div className="mt-1 ml-12 font-mono text-xs bg-gray-900 border border-blue-900/50 rounded px-3 py-2">
+                <div className="text-blue-400 mb-1">
+                  📝 Usage: <span className="text-white">{parameterHint.split(' - ')[0]}</span>
+                </div>
+                <div className="text-gray-400">
+                  {parameterHint.split(' - ')[1]}
+                </div>
+              </div>
+            )}
+            
             {/* Suggestion hint */}
             {suggestion && (
               <div className="text-xs text-gray-500 mt-1 ml-12 font-mono">
@@ -266,21 +307,34 @@ export default function Home() {
               <div className="absolute top-full left-0 mt-1 bg-gray-900 border border-gray-700 rounded-lg shadow-xl overflow-hidden w-full z-10">
                 {commands
                   .filter(cmd => cmd.toLowerCase().startsWith(command.toLowerCase()))
-                  .map(cmd => (
-                    <div
-                      key={cmd}
-                      onMouseDown={(e) => {
-                        e.preventDefault(); // Prevent blur
-                        setCommand(cmd + ' ');
-                        setSuggestion('');
-                        setShowSuggestions(false);
-                      }}
-                      className="px-4 py-2 hover:bg-green-500/20 cursor-pointer text-green-400 font-mono text-sm transition-colors"
-                    >
-                      <span className="text-white">{command}</span>
-                      <span className="text-green-400">{cmd.slice(command.length)}</span>
-                    </div>
-                  ))
+                  .map(cmd => {
+                    const info = commandInfo[cmd];
+                    return (
+                      <div
+                        key={cmd}
+                        onMouseDown={(e) => {
+                          e.preventDefault(); // Prevent blur
+                          setCommand(cmd + ' ');
+                          setSuggestion('');
+                          setShowSuggestions(false);
+                        }}
+                        className="px-4 py-2 hover:bg-green-500/20 cursor-pointer font-mono text-sm transition-colors"
+                      >
+                        <div className="flex items-center justify-between">
+                          <div>
+                            <span className="text-white">{command}</span>
+                            <span className="text-green-400">{cmd.slice(command.length)}</span>
+                            {info?.params && (
+                              <span className="text-blue-400 ml-2">{info.params}</span>
+                            )}
+                          </div>
+                        </div>
+                        <div className="text-gray-500 text-xs mt-0.5">
+                          {info?.description}
+                        </div>
+                      </div>
+                    );
+                  })
                 }
               </div>
             )}
