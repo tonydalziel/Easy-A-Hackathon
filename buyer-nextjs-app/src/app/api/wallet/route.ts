@@ -13,6 +13,6 @@ export async function GET(request: Request) {
   const accountInfo = await client.accountInformation(walletId).do();
 
   return NextResponse.json({
-		currentValue: accountInfo.amount
-	});
+    currentValue: Number(accountInfo.amount)
+  });
 }

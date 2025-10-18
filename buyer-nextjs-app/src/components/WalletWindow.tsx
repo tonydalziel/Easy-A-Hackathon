@@ -7,19 +7,32 @@ interface WalletData {
   value: number;
 }
 
-export default function WalletWindow() {
+interface WalletWindowProps {
+  address: string;
+  balance: number;
+}
+
+export default function WalletWindow({ address, balance }: WalletWindowProps) {
   const [walletHistory, setWalletHistory] = useState<WalletData[]>([]);
-  const [currentValue, setCurrentValue] = useState(0);
+  const [currentValue, setCurrentValue] = useState(balance);
+
+  // Update current value when balance prop changes
+  useEffect(() => {
+    setCurrentValue(balance);
+  }, [balance]);
 
   useEffect(() => {
     fetchWalletData();
-  }, []);
+  }, [address]);
 
   const fetchWalletData = async () => {
     try {
-      const walletId = process.env.NEXT_PUBLIC_USER_WALLET_ID || 'user-wallet';
+      if (!address || address === 'REPLACE_WITH_YOUR_WALLET_ADDRESS') {
+        console.log('No valid wallet address configured');
+        return;
+      }
 
-      const response = await fetch(`/api/wallet?id=${walletId}`);
+      const response = await fetch(`/api/wallet?id=${address}`);
       if (response.ok) {
         const data = await response.json();
         setCurrentValue(data.currentValue || 0);
@@ -38,11 +51,25 @@ export default function WalletWindow() {
   return (
     <div className="text-white font-mono">
       <div className="mb-6">
-        <div className="text-gray-400 text-sm mb-1">Total Balance</div>
-        <div className="text-3xl font-bold text-green-400">${currentValue.toFixed(2)}</div>
-        <div className={`text-sm mt-1 ${valueChange >= 0 ? 'text-green-500' : 'text-red-500'}`}>
-          {valueChange >= 0 ? '↑' : '↓'} {Math.abs(valueChange).toFixed(2)}% (7 days)
+        <div className="text-gray-400 text-sm mb-2">Wallet Address</div>
+        <div className="text-xs text-cyan-400 bg-gray-800/50 p-2 rounded mb-4 break-all">
+          {address}
         </div>
+        <div className="text-gray-400 text-sm mb-1">Total Balance</div>
+        <div className="text-3xl font-bold text-green-400">
+          {(currentValue / 1000000).toLocaleString(undefined, {
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 6
+          })} ALGO
+        </div>
+        <div className="text-xs text-gray-500 mt-1">
+          {currentValue.toLocaleString()} microALGO
+        </div>
+        {walletHistory.length > 1 && (
+          <div className={`text-sm mt-1 ${valueChange >= 0 ? 'text-green-500' : 'text-red-500'}`}>
+            {valueChange >= 0 ? '↑' : '↓'} {Math.abs(valueChange).toFixed(2)}% (7 days)
+          </div>
+        )}
       </div>
 
       <div className="border-t border-gray-700 pt-4">
