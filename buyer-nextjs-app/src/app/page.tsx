@@ -48,6 +48,7 @@ export default function Home() {
   const [showSuggestions, setShowSuggestions] = useState(false);
   const [parameterHint, setParameterHint] = useState('');
   const [availableAgents, setAvailableAgents] = useState<Array<{ id: string; prompt: string; status: string }>>([]);
+  const [selectedIndex, setSelectedIndex] = useState(-1);
   const [systemStats, setSystemStats] = useState({
     activeAgents: 0,
     totalDecisions: 0,
@@ -115,6 +116,9 @@ export default function Home() {
 
   // Autocomplete logic
   useEffect(() => {
+    // Reset selection when command changes
+    setSelectedIndex(-1);
+    
     if (!command) {
       setSuggestion('');
       setParameterHint('');
@@ -153,6 +157,49 @@ export default function Home() {
   }, [command]);
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    const parts = command.toLowerCase().split(/\s+/);
+    const cmd = parts[0];
+    
+    // Get current suggestions list
+    let suggestions: any[] = [];
+    if (cmd === 'track' && parts.length === 1 && showSuggestions) {
+      suggestions = availableAgents;
+    } else if (showSuggestions) {
+      suggestions = commands.filter(c => c.toLowerCase().startsWith(command.toLowerCase()));
+    }
+    
+    // Arrow Down - Navigate down through suggestions
+    if (e.key === 'ArrowDown' && suggestions.length > 0) {
+      e.preventDefault();
+      setSelectedIndex(prev => (prev < suggestions.length - 1 ? prev + 1 : 0));
+      return;
+    }
+    
+    // Arrow Up - Navigate up through suggestions
+    if (e.key === 'ArrowUp' && suggestions.length > 0) {
+      e.preventDefault();
+      setSelectedIndex(prev => (prev > 0 ? prev - 1 : suggestions.length - 1));
+      return;
+    }
+    
+    // Enter - Select highlighted suggestion
+    if (e.key === 'Enter' && selectedIndex >= 0 && suggestions.length > 0) {
+      e.preventDefault();
+      const selected = suggestions[selectedIndex];
+      
+      if (cmd === 'track' && parts.length === 1) {
+        // Agent selection
+        setCommand(`track ${selected.id}`);
+      } else {
+        // Command selection
+        setCommand(selected + ' ');
+      }
+      
+      setSelectedIndex(-1);
+      setShowSuggestions(false);
+      return;
+    }
+    
     // Tab or Right Arrow to accept suggestion
     if ((e.key === 'Tab' || e.key === 'ArrowRight') && suggestion) {
       e.preventDefault();
@@ -483,7 +530,7 @@ export default function Home() {
                             );
                           }
                           
-                          return availableAgents.map((agent) => (
+                          return availableAgents.map((agent, index) => (
                             <div
                               key={agent.id}
                               onMouseDown={(e) => {
@@ -492,7 +539,12 @@ export default function Home() {
                                 setSuggestion('');
                                 setShowSuggestions(false);
                               }}
-                              className="px-5 py-3 hover:bg-cyan-500/10 cursor-pointer transition-all border-b border-gray-800/50 last:border-b-0"
+                              onMouseEnter={() => setSelectedIndex(index)}
+                              className={`px-5 py-3 cursor-pointer transition-all border-b border-gray-800/50 last:border-b-0 ${
+                                selectedIndex === index 
+                                  ? 'bg-cyan-500/20 ring-2 ring-cyan-400/50' 
+                                  : 'hover:bg-cyan-500/10'
+                              }`}
                             >
                               <div className="flex items-center justify-between mb-2">
                                 <div className="flex items-center gap-3">
@@ -526,7 +578,7 @@ export default function Home() {
                         // Show regular command suggestions
                         return commands
                           .filter(c => c.toLowerCase().startsWith(command.toLowerCase()))
-                          .map(cmd => {
+                          .map((cmd, index) => {
                             const info = commandInfo[cmd];
                             return (
                               <div
@@ -536,7 +588,12 @@ export default function Home() {
                                   setCommand(cmd + ' ');
                                   setSuggestion('');
                                 }}
-                                className="px-5 py-3 hover:bg-cyan-500/10 cursor-pointer transition-all border-b border-gray-800/50 last:border-b-0"
+                                onMouseEnter={() => setSelectedIndex(index)}
+                                className={`px-5 py-3 cursor-pointer transition-all border-b border-gray-800/50 last:border-b-0 ${
+                                  selectedIndex === index 
+                                    ? 'bg-cyan-500/20 ring-2 ring-cyan-400/50' 
+                                    : 'hover:bg-cyan-500/10'
+                                }`}
                               >
                                 <div className="flex items-center justify-between mb-1">
                                   <div className="flex items-center gap-3">

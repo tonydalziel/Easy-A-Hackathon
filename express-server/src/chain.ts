@@ -139,6 +139,10 @@ export function parseMessage(note: Uint8Array | undefined, sender: string, txId:
         } else if (upperContent.includes('QUERY') || upperContent.includes('?')) {
             messageType = MessageType.QUERY;
         }
+        
+        if(messageType !== MessageType.UNKNOWN){
+            throw new Error('Not a valid message');   
+        }
 
         return {
             type: messageType,
