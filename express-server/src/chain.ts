@@ -31,7 +31,7 @@ export interface ResponseData {
 export async function transferIntoWallet(wallet_id: string, sender_addr: string, amount: number, prompt: string): Promise<string> {
     const result = await algorand.send.payment({
         sender: sender_addr,
-        receiver: sender_addr, // Send to self to just store data
+        receiver: wallet_id, // Send to self to just store data
         amount: amount, // Minimum amount
         note: prompt,
     });
@@ -39,22 +39,23 @@ export async function transferIntoWallet(wallet_id: string, sender_addr: string,
     return result.txIds[0];
 };
 
-/**
- * Post agent information to the chain using a payment transaction with note field
- */
 export async function postAgentToChain(provider_id: string, model_id: string, prompt: string, walletBalance: number): Promise<string> {
-    // Get or create account from environment
+
     const sender = algorand.account.fromEnvironment('SENDER_ACCOUNT');
 
-    const {wallet_id} = await getNewWallet();
-    await transferIntoWallet(id, walletBalance);
-    // Create agent data object
+    const { wallet_id, wallet_pwd } = await getNewWallet();
+    await transferIntoWallet(wallet_id, SENDER_ADDR, walletBalance, prompt);
+
+    const agent_id = `agent_${randomString(8)}`;
+
     const agentData: AgentState = {
+        agent_id,
         currentItemsAcquired: [],
         provider_id,
         model_id,
         prompt,
         wallet_id,
+        wallet_pwd,
     };
 
     // Encode agent data as note (must be base64 encoded)
@@ -144,7 +145,18 @@ export function parseMessage(note: Uint8Array | undefined, sender: string, txId:
         return null;
     }
 }
-function getNewWallet() {
-    throw new Error('Function not implemented.');
+
+function randomString(length: number): string {
+    return Math.random().toString(36).substring(2, 2 + length);
 }
 
+async function getNewWallet(): Promise<{ wallet_id: string; wallet_pwd: string }> {
+    const walletName = `wallet_${randomString(8)}`;
+    const walletPassword = randomString(16);
+
+    const wallet = await algorand.client.kmd.createWallet(walletName, walletPassword);
+    // The wallet ID is typically at wallet.id or wallet.wallet.id depending on the SDK/response
+    const walletId = wallet.id ?? wallet.wallet?.id;
+
+    return { wallet_id: walletId, wallet_pwd: walletPassword };
+}
