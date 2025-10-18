@@ -36,6 +36,7 @@ import AgentList from '@/components/AgentList';
 import EventHistory from '@/components/EventHistory';
 import DecisionStream from '@/components/DecisionStream';
 import Dashboard from '@/components/Dashboard';
+import ItemRegistration from '@/components/ItemRegistration';
 import { WindowData } from '@/types/window';
 
 export default function Home() {
@@ -258,6 +259,8 @@ export default function Home() {
       createWindow('event-history', 'On-Chain Event History');
     } else if (cmd === 'dashboard') {
       createWindow('dashboard', '📊 System Dashboard');
+    } else if (cmd === 'items') {
+      createWindow('item-registration', '🏪 Item Marketplace');
     } else if (cmd === 'create') {
       if (params.length === 0) {
         setError('Error: create command requires a prompt. Usage: create <prompt>');
@@ -304,7 +307,7 @@ export default function Home() {
   };
 
   const createWindow = (
-    type: 'help' | 'wallet' | 'agent-tracker' | 'agent-list' | 'event-history' | 'decision-stream' | 'dashboard',
+    type: 'help' | 'wallet' | 'agent-tracker' | 'agent-list' | 'event-history' | 'decision-stream' | 'dashboard' | 'item-registration',
     title: string,
     agentId?: string
   ) => {
@@ -387,6 +390,8 @@ export default function Home() {
         return <DecisionStream />;
       case 'dashboard':
         return <Dashboard />;
+      case 'item-registration':
+        return <ItemRegistration />;
       case 'agent-tracker':
         return window.agentId ? (
           <AgentTracker
@@ -425,6 +430,7 @@ export default function Home() {
                 { cmd: 'create', label: 'New Agent', icon: '+' },
                 { cmd: 'list', label: 'Agents', icon: '≡' },
                 { cmd: 'watch', label: 'Live Feed', icon: '◉' },
+                { cmd: 'items', label: 'Marketplace', icon: '🏪' },
                 { cmd: 'dashboard', label: 'Dashboard', icon: '▣' },
               ].map((action, index) => (
                 <div
@@ -475,6 +481,7 @@ export default function Home() {
                           {window.type === 'wallet' && '$'}
                           {window.type === 'decision-stream' && '◉'}
                           {window.type === 'dashboard' && '▣'}
+                          {window.type === 'item-registration' && '🏪'}
                           {window.type === 'agent-tracker' && '→'}
                         </span>
                         <span className="text-sm text-gray-300 group-hover:text-white font-medium max-w-[120px] truncate transition-colors">

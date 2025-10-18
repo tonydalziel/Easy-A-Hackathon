@@ -85,7 +85,7 @@ export const agentSpecifyingUpperBoundFormatPrompt = (reasoning: string): string
     return prompt;
 }
 
-export const haveLLMConsiderPurchase = async (agentState: AgentState, itemState: ItemState): Promise<number | null> => {
+export const haveLLMConsiderPurchase = async (agentState: AgentState, itemState: ItemState): Promise<any | null> => {
     console.log('\n🤖 === Starting LLM Purchase Consideration ===');
     console.log('Agent ID:', agentState.id);
     console.log('Item:', itemState.name, '($' + itemState.price + ')');
@@ -183,11 +183,19 @@ export const haveLLMConsiderPurchase = async (agentState: AgentState, itemState:
             const id = await registerPurchaseIntent(agentState.wallet_id, itemState.id, price);
             console.log('Purchase intent registered with ID:', id);
             console.log('=== Purchase Consideration Complete ===\n');
-            return id;
+            return {
+                id: id,
+                reasoning: reasoning,
+                priceReasoning: priceReasoning,
+            };
         case 'IGNORE':
             console.log('❌ Agent decided to IGNORE the offer');
             console.log('=== Purchase Consideration Complete ===\n');
-            return null;
+            return {
+                id: '',
+                reasoning: reasoning,
+                priceReasoning: '',
+            };
         default:
             console.log('⚠️  Unexpected response from LLM:', decision);
             console.log('=== Purchase Consideration Complete ===\n');

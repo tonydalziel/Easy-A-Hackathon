@@ -1,11 +1,27 @@
 import { AlgorandClient } from '@algorandfoundation/algokit-utils';
 import { TransactionType } from 'algosdk';
-import { ItemState, AgentState } from './types.js';
+import { ItemState, AgentState } from './types';
 
 const SENDER_ADDR = process.env.SENDER_ADDR || '';
 
-// Initialize Algorand client
-const algorand = AlgorandClient.fromEnvironment();
+// Initialize Algorand client with error handling
+let algorand: AlgorandClient | null = null;
+
+try {
+    algorand = AlgorandClient.fromEnvironment();
+    console.log('✅ Algorand client initialized successfully');
+} catch (error) {
+    console.error('⚠️  Failed to initialize Algorand client:', error instanceof Error ? error.message : error);
+    console.error('⚠️  Blockchain features will be disabled. Server will continue without Algorand integration.');
+}
+
+// Export function to get Algorand client (required by blockchainSubscriber)
+export function getAlgorandClient(): AlgorandClient {
+    if (!algorand) {
+        throw new Error('Algorand client not initialized. Check environment configuration.');
+    }
+    return algorand;
+}
 
 // Message types that can be received on the blockchain
 export enum MessageType {
@@ -37,6 +53,10 @@ export interface ResponseData {
 
 // Transfer Amount from Wallet A -> Wallet B
 export async function transferIntoWallet(wallet_id: string, sender_addr: string, amount: number, prompt: string): Promise<string> {
+    if (!algorand) {
+        throw new Error('Algorand client not initialized');
+    }
+    
     const result = await algorand.send.payment({
         sender: sender_addr,
         receiver: wallet_id, // Send to self to just store data
@@ -49,6 +69,9 @@ export async function transferIntoWallet(wallet_id: string, sender_addr: string,
 
 // Generate new Agent
 export async function postAgentToChain(provider_id: string, model_id: string, prompt: string, walletBalance: number): Promise<string> {
+    if (!algorand) {
+        throw new Error('Algorand client not initialized');
+    }
 
     const sender = algorand.account.fromEnvironment('SENDER_ACCOUNT');
 
@@ -80,6 +103,10 @@ export async function postAgentToChain(provider_id: string, model_id: string, pr
  * Post a response to the chain
  */
 export async function postResponseToChain(originalTxId: string, messageType: MessageType, response: string) {
+    if (!algorand) {
+        throw new Error('Algorand client not initialized');
+    }
+    
     // Get or create account from environment
     const sender = algorand.account.fromEnvironment('SENDER_ACCOUNT');
 
@@ -164,6 +191,10 @@ function randomString(length: number): string {
 }
 
 async function getNewWallet(): Promise<{ wallet_id: string; wallet_pwd: string }> {
+    if (!algorand) {
+        throw new Error('Algorand client not initialized');
+    }
+    
     const walletName = `wallet_${randomString(8)}`;
     const walletPassword = randomString(16);
 
