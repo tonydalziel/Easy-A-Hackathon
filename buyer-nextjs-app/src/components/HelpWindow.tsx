@@ -4,6 +4,7 @@ export default function HelpWindow() {
   const commands = [
     { name: '-h', description: 'Display this help window' },
     { name: 'wallet', description: 'Show your total wallet value' },
+    { name: 'watch', description: '📡 Watch live agent decision stream in real-time' },
     { name: 'track <agent-id>', description: 'Track a specific agent\'s activity and wallet value' },
     { name: 'list', description: 'List all agents with their status, tasks, and purchases' },
     { name: 'events', description: 'Show all on-chain events across all agents' },

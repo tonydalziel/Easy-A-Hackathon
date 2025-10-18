@@ -7,6 +7,7 @@ import WalletWindow from '@/components/WalletWindow';
 import AgentTracker from '@/components/AgentTracker';
 import AgentList from '@/components/AgentList';
 import EventHistory from '@/components/EventHistory';
+import DecisionStream from '@/components/DecisionStream';
 import { WindowData } from '@/types/window';
 
 export default function Home() {
@@ -36,6 +37,8 @@ export default function Home() {
       createWindow('help', 'Help - Available Commands');
     } else if (cmd === 'wallet') {
       createWindow('wallet', 'Wallet Overview');
+    } else if (cmd === 'watch') {
+      createWindow('decision-stream', '📡 Live Decision Stream');
     } else if (cmd === 'track') {
       if (params.length === 0) {
         setError('Error: track command requires an agent ID. Usage: track <agent-id>');
@@ -88,7 +91,7 @@ export default function Home() {
   };
 
   const createWindow = (
-    type: 'help' | 'wallet' | 'agent-tracker' | 'agent-list' | 'event-history',
+    type: 'help' | 'wallet' | 'agent-tracker' | 'agent-list' | 'event-history' | 'decision-stream',
     title: string,
     agentId?: string
   ) => {
@@ -108,6 +111,9 @@ export default function Home() {
     } else if (type === 'event-history') {
       width = 800;
       height = 500;
+    } else if (type === 'decision-stream') {
+      width = 700;
+      height = 600;
     }
 
     const newWindow: WindowData = {
@@ -143,6 +149,8 @@ export default function Home() {
         return <HelpWindow />;
       case 'wallet':
         return <WalletWindow />;
+      case 'decision-stream':
+        return <DecisionStream />;
       case 'agent-tracker':
         return window.agentId ? (
           <AgentTracker
