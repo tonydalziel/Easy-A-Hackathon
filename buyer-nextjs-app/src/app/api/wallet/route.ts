@@ -1,4 +1,5 @@
 import { NextResponse } from 'next/server';
+import { client } from '../algoClient';
 
 // API endpoint that proxies to external /wallet-balance?id=
 export async function GET(request: Request) {
@@ -9,15 +10,9 @@ export async function GET(request: Request) {
     return NextResponse.json({ error: 'Wallet ID required' }, { status: 400 });
   }
 
-  return callExternalAPI(walletId);
-}
-
-function callExternalAPI(walletId: string) {
-  // Skeleton function - replace with actual external API call
-  // Should call: GET /wallet-balance?id=<walletId>
+  const accountInfo = await client.accountInformation(walletId).do();
 
   return NextResponse.json({
-    currentValue: 0,
-    history: []
-  });
+		currentValue: accountInfo.amount
+	});
 }
