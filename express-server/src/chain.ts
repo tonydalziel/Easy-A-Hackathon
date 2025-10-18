@@ -2,13 +2,20 @@ import { AlgorandClient } from '@algorandfoundation/algokit-utils';
 import { TransactionType } from 'algosdk';
 import { ItemState, AgentState } from './types.js';
 
+const SENDER_ADDR = process.env.SENDER_ADDR || '';
+
 // Initialize Algorand client
 const algorand = AlgorandClient.fromEnvironment();
 
 // Message types that can be received on the blockchain
 export enum MessageType {
     BID = 'BID',
-    ASK = 'ASK'
+    ASK = 'ASK',
+    BUY = 'BUY',
+    SELL = 'SELL',
+    QUERY = 'QUERY',
+    RESPONSE = 'RESPONSE',
+    UNKNOWN = 'UNKNOWN'
 }
 
 // Interface for blockchain messages
@@ -91,7 +98,7 @@ export async function postResponseToChain(originalTxId: string, messageType: Mes
     const result = await algorand.send.payment({
         sender: sender.addr,
         receiver: sender.addr, // Send to self to just store data
-        amount: (0).microAlgo(), // Minimum amount
+        amount: 0, // Minimum amount -- TODO
         note: noteData,
     });
 
