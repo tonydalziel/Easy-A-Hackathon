@@ -1,5 +1,7 @@
 import express, { Request, Response } from 'express';
 import agentRouter from './agentRouter';
+import { BlockchainSubscriber } from './blockchainSubscriber';
+import { initializeSmartContract } from './chain';
 
 // Handle uncaught errors
 process.on('uncaughtException', (error) => {
@@ -40,14 +42,29 @@ app.get('/', (req: Request, res: Response) => {
 
 app.use('/agents', agentRouter);
 
-const server = app.listen(port, () => {
-  console.log(`✅ Server running at http://localhost:${port}`);
-  console.log(`✅ Server is listening and ready to accept requests`);
+// Initialize blockchain monitoring
+async function initializeBlockchain() {
+  try {
+    // Initialize smart contract
+    await initializeSmartContract();
+    
+    // Start blockchain subscriber
+    const walletAddress = process.env.WALLET_ADDRESS || 'YOUR_WALLET_ADDRESS_HERE';
+    const subscriber = new BlockchainSubscriber(walletAddress);
+    await subscriber.start();
+    
+    console.log('Blockchain monitoring started');
+  } catch (error) {
+    console.error('Failed to initialize blockchain:', error);
+  }
+}
+
+app.listen(port, async () => {
+  console.log(`Server running at http://localhost:${port}`);
+  
+  // Initialize blockchain after server starts
+  await initializeBlockchain();
 });
 
-server.on('error', (error) => {
-  console.error('💥 Server error:', error);
-  process.exit(1);
-});
 
 console.log('🚀 Starting server...');

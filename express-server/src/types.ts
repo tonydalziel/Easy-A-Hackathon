@@ -6,6 +6,7 @@ export type AgentState = {
     provider_id: string;
     wallet_id: string;
     wallet_pwd: string;
+    walletBalance: number;
 }
 
 export type ItemState = {

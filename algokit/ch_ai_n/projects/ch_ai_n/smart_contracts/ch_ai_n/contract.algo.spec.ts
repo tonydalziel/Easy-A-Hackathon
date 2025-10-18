@@ -4,11 +4,11 @@ import { ChAiN } from './contract.algo'
 
 describe('ChAiN contract', () => {
   const ctx = new TestExecutionContext()
-  it('Logs the returned value when sayHello is called', () => {
+  it('Opens a listing successfully', () => {
     const contract = ctx.contract.create(ChAiN)
 
-    const result = contract.hello('Sally')
+    const result = contract.openListing('ABC123TESTWALLETADDRESS', '1000000')
 
-    expect(result).toBe('Hello, Sally')
+    expect(result).toBe('Listing opened: 1000000 microAlgos to ABC123TESTWALLETADDRESS')
   })
 })

@@ -305,4 +305,40 @@ router.get('/:agentId', (req: Request, res: Response) => {
     res.json({ agent });
 });
 
+// Import listing functions
+import { openListingOnChain, getListingStatusFromChain } from './chain';
+
+// Open a new listing
+router.post('/listings', async (req: Request, res: Response) => {
+    try {
+        const { targetWallet, targetAmount } = req.body;
+        
+        if (!targetWallet || !targetAmount) {
+            return res.status(400).json({ error: 'targetWallet and targetAmount are required' });
+        }
+        
+        const result = await openListingOnChain(targetWallet, targetAmount);
+        res.json({ 
+            message: 'Listing opened successfully',
+            result: result
+        });
+    } catch (error) {
+        console.error('Error opening listing:', error);
+        res.status(500).json({ error: 'Failed to open listing' });
+    }
+});
+
+// Get listing status
+router.get('/listings/status', async (req: Request, res: Response) => {
+    try {
+        const status = await getListingStatusFromChain();
+        res.json({ 
+            status: status
+        });
+    } catch (error) {
+        console.error('Error getting listing status:', error);
+        res.status(500).json({ error: 'Failed to get listing status' });
+    }
+});
+
 export default router;
