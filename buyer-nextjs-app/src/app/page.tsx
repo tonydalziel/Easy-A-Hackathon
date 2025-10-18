@@ -47,6 +47,7 @@ export default function Home() {
   const [suggestion, setSuggestion] = useState('');
   const [showSuggestions, setShowSuggestions] = useState(false);
   const [parameterHint, setParameterHint] = useState('');
+  const [availableAgents, setAvailableAgents] = useState<Array<{ id: string; prompt: string; status: string }>>([]);
   const [systemStats, setSystemStats] = useState({
     activeAgents: 0,
     totalDecisions: 0,
@@ -76,7 +77,15 @@ export default function Home() {
         const agentsRes = await fetch('/api/agents');
         if (agentsRes.ok) {
           const agentsData = await agentsRes.json();
-          const activeCount = agentsData.agents?.filter((a: any) => a.status === 'active').length || 0;
+          const agents = agentsData.agents || [];
+          const activeCount = agents.filter((a: any) => a.status === 'active').length || 0;
+          
+          // Store agents for autocomplete
+          setAvailableAgents(agents.map((a: any) => ({
+            id: a.id,
+            prompt: a.prompt,
+            status: a.status
+          })));
           
           // Fetch decision stats
           const decisionsRes = await fetch('/api/decisions');
@@ -109,6 +118,7 @@ export default function Home() {
     if (!command) {
       setSuggestion('');
       setParameterHint('');
+      setShowSuggestions(false);
       return;
     }
 
@@ -134,6 +144,11 @@ export default function Home() {
       }
     } else {
       setParameterHint('');
+    }
+
+    // Auto-show suggestions for track command
+    if (cmd === 'track' && parts.length === 1) {
+      setShowSuggestions(true);
     }
   }, [command]);
 
@@ -238,6 +253,7 @@ export default function Home() {
       console.error('Failed to create agent:', error);
       setError('Failed to create agent');
     }
+
   };
 
   const createWindow = (
@@ -450,41 +466,97 @@ export default function Home() {
                 {/* Dropdown suggestions */}
                 {showSuggestions && command && (
                   <div className="absolute top-full left-0 mt-2 w-full z-50 slide-in">
-                    <div className="glass rounded-xl shadow-2xl overflow-hidden border border-cyan-500/30">
-                      {commands
-                        .filter(cmd => cmd.toLowerCase().startsWith(command.toLowerCase()))
-                        .map(cmd => {
-                          const info = commandInfo[cmd];
-                          return (
+                    <div className="glass rounded-xl shadow-2xl overflow-hidden border border-cyan-500/30 max-h-96 overflow-y-auto">
+                      {(() => {
+                        const parts = command.toLowerCase().split(/\s+/);
+                        const cmd = parts[0];
+                        
+                        // Show agent IDs if command is "track"
+                        if (cmd === 'track' && parts.length === 1) {
+                          if (availableAgents.length === 0) {
+                            return (
+                              <div className="px-5 py-6 text-center text-gray-500">
+                                <div className="text-2xl mb-2">-</div>
+                                <div className="text-sm">No agents available</div>
+                                <div className="text-xs mt-1">Create an agent first with: create &lt;prompt&gt;</div>
+                              </div>
+                            );
+                          }
+                          
+                          return availableAgents.map((agent) => (
                             <div
-                              key={cmd}
+                              key={agent.id}
                               onMouseDown={(e) => {
                                 e.preventDefault();
-                                setCommand(cmd + ' ');
+                                setCommand(`track ${agent.id}`);
                                 setSuggestion('');
                                 setShowSuggestions(false);
                               }}
                               className="px-5 py-3 hover:bg-cyan-500/10 cursor-pointer transition-all border-b border-gray-800/50 last:border-b-0"
                             >
-                              <div className="flex items-center justify-between mb-1">
+                              <div className="flex items-center justify-between mb-2">
                                 <div className="flex items-center gap-3">
-                                  <span className="text-xl">{info?.icon}</span>
-                                  <span className="font-mono">
-                                    <span className="text-gray-500">{command}</span>
-                                    <span className="text-cyan-400 font-bold">{cmd.slice(command.length)}</span>
-                                    {info?.params && (
-                                      <span className="text-blue-400 ml-2">{info.params}</span>
-                                    )}
-                                  </span>
+                                  <span className="text-lg">→</span>
+                                  <div>
+                                    <div className="font-mono text-sm text-cyan-400">
+                                      {agent.id.slice(0, 16)}...
+                                    </div>
+                                    <div className="text-xs text-gray-500 mt-0.5">
+                                      Click to track this agent
+                                    </div>
+                                  </div>
                                 </div>
+                                <span className={`
+                                  px-2 py-1 rounded text-xs font-bold
+                                  ${agent.status === 'active' 
+                                    ? 'bg-green-500/20 text-green-400 border border-green-500/50' 
+                                    : 'bg-gray-500/20 text-gray-400 border border-gray-500/50'
+                                  }
+                                `}>
+                                  {agent.status.toUpperCase()}
+                                </span>
                               </div>
-                              <div className="text-gray-400 text-xs ml-9">
-                                {info?.description}
+                              <div className="text-gray-400 text-xs ml-9 line-clamp-1">
+                                {agent.prompt}
                               </div>
                             </div>
-                          );
-                        })
-                      }
+                          ));
+                        }
+                        
+                        // Show regular command suggestions
+                        return commands
+                          .filter(c => c.toLowerCase().startsWith(command.toLowerCase()))
+                          .map(cmd => {
+                            const info = commandInfo[cmd];
+                            return (
+                              <div
+                                key={cmd}
+                                onMouseDown={(e) => {
+                                  e.preventDefault();
+                                  setCommand(cmd + ' ');
+                                  setSuggestion('');
+                                }}
+                                className="px-5 py-3 hover:bg-cyan-500/10 cursor-pointer transition-all border-b border-gray-800/50 last:border-b-0"
+                              >
+                                <div className="flex items-center justify-between mb-1">
+                                  <div className="flex items-center gap-3">
+                                    <span className="text-xl">{info?.icon}</span>
+                                    <span className="font-mono">
+                                      <span className="text-gray-500">{command}</span>
+                                      <span className="text-cyan-400 font-bold">{cmd.slice(command.length)}</span>
+                                      {info?.params && (
+                                        <span className="text-blue-400 ml-2">{info.params}</span>
+                                      )}
+                                    </span>
+                                  </div>
+                                </div>
+                                <div className="text-gray-400 text-xs ml-9">
+                                  {info?.description}
+                                </div>
+                              </div>
+                            );
+                          });
+                      })()}
                     </div>
                   </div>
                 )}

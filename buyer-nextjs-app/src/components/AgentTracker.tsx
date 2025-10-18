@@ -30,7 +30,7 @@ export default function AgentTracker({ agentId, onNotFound }: AgentTrackerProps)
     eventSourceRef.current = eventSource;
 
     eventSource.onopen = () => {
-      console.log('📡 Agent tracker connected to decision stream');
+      console.log('[Stream] Agent tracker connected to decision stream');
       setStreamStatus('connected');
     };
 
@@ -42,7 +42,7 @@ export default function AgentTracker({ agentId, onNotFound }: AgentTrackerProps)
           const decision = message.data as AgentDecision;
           // Only add decisions for this specific agent
           if (decision.agentId === agentId) {
-            console.log('🎯 New decision for agent:', decision);
+            console.log('[Decision] New decision for agent:', decision);
             setDecisions(prev => [decision, ...prev].slice(0, 20)); // Keep last 20
             setNewDecisionId(decision.id);
             
@@ -233,7 +233,7 @@ export default function AgentTracker({ agentId, onNotFound }: AgentTrackerProps)
               <div ref={decisionsEndRef} />
               {decisions.length === 0 ? (
                 <div className="bg-gray-900 rounded p-6 text-center text-gray-500">
-                  <div className="text-2xl mb-2">👀</div>
+                  <div className="text-2xl mb-2 text-gray-600">◉</div>
                   <div className="text-sm">Waiting for decisions...</div>
                   <div className="text-xs mt-1">Decisions will appear here in real-time</div>
                 </div>

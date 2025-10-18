@@ -25,7 +25,7 @@ export default function DecisionStream() {
     eventSourceRef.current = eventSource;
 
     eventSource.onopen = () => {
-      console.log('📡 Connected to decision stream');
+      console.log('[Stream] Connected to decision stream');
       setStatus('connected');
     };
 
@@ -35,7 +35,7 @@ export default function DecisionStream() {
         
         switch (message.type) {
           case 'connected':
-            console.log('✅', message.message);
+            console.log('[Stream]', message.message);
             break;
             
           case 'stats':
@@ -44,7 +44,7 @@ export default function DecisionStream() {
             
           case 'decision':
             const decision = message.data as AgentDecision;
-            console.log('🎯 New decision received:', decision);
+            console.log('[Decision] New decision received:', decision);
             setDecisions(prev => [decision, ...prev].slice(0, 50)); // Keep last 50
             setNewDecisionId(decision.id);
             
@@ -61,7 +61,7 @@ export default function DecisionStream() {
             break;
             
           case 'heartbeat':
-            console.log('💓 Heartbeat');
+            console.log('[Stream] Heartbeat');
             break;
         }
       } catch (error) {
@@ -157,7 +157,7 @@ export default function DecisionStream() {
         <div ref={decisionsEndRef} />
         {decisions.length === 0 ? (
           <div className="text-center text-gray-500 py-8">
-            <div className="text-4xl mb-2">👀</div>
+            <div className="text-4xl mb-2 text-gray-600">◉</div>
             <div>Waiting for decisions...</div>
             <div className="text-xs mt-2">Decisions will appear here in real-time</div>
           </div>
