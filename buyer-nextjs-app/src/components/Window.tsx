@@ -26,12 +26,18 @@ interface WindowProps {
   window: WindowData;
   onClose: (id: string) => void;
   onFocus: (id: string) => void;
+  onMinimize: (id: string) => void;
   children: React.ReactNode;
 }
 
-export default function Window({ window, onClose, onFocus, children }: WindowProps) {
+export default function Window({ window, onClose, onFocus, onMinimize, children }: WindowProps) {
   const [isResizing, setIsResizing] = useState(false);
   const [isDragging, setIsDragging] = useState(false);
+
+  // Don't render if minimized
+  if (window.isMinimized) {
+    return null;
+  }
 
   return (
     <Rnd
@@ -113,8 +119,16 @@ export default function Window({ window, onClose, onFocus, children }: WindowPro
                   title="Close"
                   type="button"
                 />
-                <div className="w-3 h-3 rounded-full bg-yellow-500/80 opacity-50 cursor-not-allowed" 
-                     title="Minimize (not available)" />
+                <button
+                  className="w-3 h-3 rounded-full bg-yellow-500/80 hover:bg-yellow-500 transition-colors cursor-pointer" 
+                  onClick={(e) => { 
+                    e.stopPropagation(); 
+                    e.preventDefault();
+                    onMinimize(window.id); 
+                  }}
+                  title="Minimize"
+                  type="button"
+                />
                 <div className="w-3 h-3 rounded-full bg-green-500/80 opacity-50 cursor-not-allowed" 
                      title="Maximize (not available)" />
               </div>

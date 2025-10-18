@@ -8,4 +8,5 @@ export interface WindowData {
   height: number;
   zIndex: number;
   agentId?: string; // For agent-tracker windows
+  isMinimized?: boolean; // Whether the window is minimized to dock
 }

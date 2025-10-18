@@ -303,10 +303,35 @@ Windows use dynamic z-indexing starting at 1000:
 
 **Traffic Light Buttons** (macOS-style):
 - Red: Close window (functional)
-- Yellow: Minimize (disabled - not implemented)
+- Yellow: Minimize to dock (functional)
 - Green: Maximize (disabled - not implemented)
 
 **X Button**: Alternative close button in top-right
+
+### Dock/Taskbar System
+
+Minimized windows appear in an elegant dock at the bottom center of the screen:
+
+**Features**:
+- Glassmorphism panel with backdrop blur
+- Icon + title for each minimized window
+- Hover effects with scale and lift animation
+- Tooltip showing full window title
+- Click to restore window to foreground
+- Small X button on hover to close without restoring
+- Auto-hides when no windows are minimized
+
+**Visual Design**:
+- Bottom-centered floating dock
+- Rounded corners with cyan border glow
+- Smooth scale-up and translate-up on hover
+- Individual window icons for quick identification
+- Gradient backgrounds on dock items
+
+**Keyboard Shortcuts**:
+- Click yellow button or press minimize to send to dock
+- Click dock item to restore and focus
+- Restored windows appear with highest z-index
 
 ---
 

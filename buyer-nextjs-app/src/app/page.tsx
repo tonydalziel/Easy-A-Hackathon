@@ -357,6 +357,19 @@ export default function Home() {
     setWindows(windows.filter(w => w.id !== id));
   };
 
+  const minimizeWindow = (id: string) => {
+    setWindows(windows.map(w =>
+      w.id === id ? { ...w, isMinimized: true } : w
+    ));
+  };
+
+  const restoreWindow = (id: string) => {
+    setWindows(windows.map(w =>
+      w.id === id ? { ...w, isMinimized: false, zIndex: nextZIndex } : w
+    ));
+    setNextZIndex(nextZIndex + 1);
+  };
+
   const focusWindow = (id: string) => {
     setWindows(windows.map(w =>
       w.id === id ? { ...w, zIndex: nextZIndex } : w
@@ -684,11 +697,73 @@ export default function Home() {
             window={window}
             onClose={closeWindow}
             onFocus={focusWindow}
+            onMinimize={minimizeWindow}
           >
             {renderWindowContent(window)}
           </Window>
         ))}
       </div>
+
+      {/* Dock/Taskbar */}
+      {windows.some(w => w.isMinimized) && (
+        <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-[9999]">
+          <div className="glass rounded-2xl px-3 py-2.5 shadow-2xl border border-cyan-500/30 backdrop-blur-xl">
+            <div className="flex items-center gap-2">
+              {windows
+                .filter(w => w.isMinimized)
+                .map((window) => (
+                  <button
+                    key={window.id}
+                    onClick={() => restoreWindow(window.id)}
+                    className="group relative px-4 py-2.5 rounded-xl bg-gradient-to-br from-cyan-500/10 to-purple-500/10 
+                             hover:from-cyan-500/20 hover:to-purple-500/20 
+                             border border-cyan-500/30 hover:border-cyan-400/50
+                             transition-all duration-300 hover:scale-110 hover:-translate-y-1
+                             shadow-lg hover:shadow-cyan-500/20"
+                    title={`Restore ${window.title}`}
+                  >
+                    <div className="flex items-center gap-2">
+                      <span className="text-lg">
+                        {window.type === 'help' && '?'}
+                        {window.type === 'wallet' && '$'}
+                        {window.type === 'decision-stream' && '◉'}
+                        {window.type === 'dashboard' && '▣'}
+                        {window.type === 'agent-tracker' && '→'}
+                      </span>
+                      <span className="text-sm text-white font-medium max-w-[120px] truncate">
+                        {window.title}
+                      </span>
+                    </div>
+                    
+                    {/* Tooltip */}
+                    <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-3 py-1.5 
+                                  bg-gray-900 text-white text-xs rounded-lg whitespace-nowrap
+                                  opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none
+                                  border border-cyan-500/30">
+                      {window.title}
+                      <div className="absolute top-full left-1/2 -translate-x-1/2 -mt-1 
+                                    border-4 border-transparent border-t-gray-900"></div>
+                    </div>
+                    
+                    {/* Close button on hover */}
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        closeWindow(window.id);
+                      }}
+                      className="absolute -top-1 -right-1 w-5 h-5 rounded-full bg-red-500 
+                               flex items-center justify-center opacity-0 group-hover:opacity-100
+                               transition-opacity hover:bg-red-600 text-white text-xs"
+                      title="Close"
+                    >
+                      ×
+                    </button>
+                  </button>
+                ))}
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Background Pattern Overlay */}
       <div className="absolute inset-0 pointer-events-none opacity-5">
