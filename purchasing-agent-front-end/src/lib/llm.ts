@@ -2,17 +2,25 @@ import OpenAI from 'openai';
 import { Message } from '@/types';
 
 // Initialize OpenAI client with environment variables
-const openai = new OpenAI({
-  apiKey: process.env.LLM_API_KEY || 'ollama',
-  baseURL: process.env.LLM_API_URL || 'http://127.0.0.1:11434/v1',
+const API_KEY = process.env.LLM_API_KEY || 'ollama';
+const BASE_URL = process.env.LLM_API_URL || 'http://127.0.0.1:11434/v1';
+const MODEL = process.env.LLM_MODEL || 'gemma3';
+
+console.log('[LLM] Environment variables:', {
+  LLM_API_URL: process.env.LLM_API_URL,
+  LLM_API_KEY: process.env.LLM_API_KEY,
+  LLM_MODEL: process.env.LLM_MODEL,
 });
 
-const MODEL = process.env.LLM_MODEL || 'gemma2';
-
-console.log('[LLM] Initialized with config:', {
-  baseURL: process.env.LLM_API_URL || 'http://127.0.0.1:11434/v1',
+console.log('[LLM] Using config:', {
+  baseURL: BASE_URL,
   model: MODEL,
-  hasApiKey: !!(process.env.LLM_API_KEY),
+  apiKey: API_KEY,
+});
+
+const openai = new OpenAI({
+  apiKey: API_KEY,
+  baseURL: BASE_URL,
 });
 
 export interface LLMResponse {
