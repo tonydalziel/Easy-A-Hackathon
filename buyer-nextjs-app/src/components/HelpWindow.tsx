@@ -1,0 +1,27 @@
+'use client';
+
+export default function HelpWindow() {
+  const commands = [
+    { name: '-h', description: 'Display this help window' },
+    { name: 'wallet', description: 'Show your total wallet value' },
+    { name: 'watch', description: 'Watch live agent decision stream in real-time' },
+    { name: 'track <agent-id>', description: 'Track a specific agent\'s activity and wallet value' },
+    { name: 'list', description: 'List all agents with their status, tasks, and purchases' },
+    { name: 'events', description: 'Show all on-chain events across all agents' },
+    { name: 'create <prompt>', description: 'Create a new agent with the specified prompt' },
+  ];
+
+  return (
+    <div className="text-white font-mono">
+      <h2 className="text-lg font-bold mb-4 text-green-400">Available Commands</h2>
+      <div className="space-y-3">
+        {commands.map((cmd) => (
+          <div key={cmd.name} className="border-l-2 border-green-500 pl-3">
+            <div className="text-green-300 font-semibold">{cmd.name}</div>
+            <div className="text-gray-400 text-sm">{cmd.description}</div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}

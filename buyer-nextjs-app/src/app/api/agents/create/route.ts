@@ -1,0 +1,87 @@
+import { NextResponse } from 'next/server';
+import { agentStore } from '@/lib/agentStore';
+import { Agent } from '@/types/agent';
+
+const EXPRESS_SERVER_URL = process.env.EXPRESS_SERVER_URL || 'http://localhost:3000';
+const DEFAULT_MODEL_ID = process.env.DEFAULT_MODEL_ID || 'qwen2.5:7b-instruct-q4_K_M';
+const DEFAULT_PROVIDER_ID = process.env.DEFAULT_PROVIDER_ID || 'ollama';
+
+// API endpoint to create a new agent with a prompt
+export async function POST(request: Request) {
+  try {
+    const body = await request.json();
+    const { prompt, model_id, provider_id } = body;
+
+    if (!prompt) {
+      return NextResponse.json({ error: 'Prompt required' }, { status: 400 });
+    }
+
+    // Generate agent ID
+    const agentId = `agent-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+
+    // Generate wallet credentials (in production, use proper crypto)
+    const walletId = `wallet-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+    const walletPwd = Math.random().toString(36).substr(2, 15);
+
+    // Create agent object
+    const agent: Agent = {
+      id: agentId,
+      prompt: prompt.trim(),
+      model_id: model_id || DEFAULT_MODEL_ID,
+      provider_id: provider_id || DEFAULT_PROVIDER_ID,
+      wallet_id: walletId,
+      wallet_pwd: walletPwd,
+      currentItemsAcquired: [],
+      createdAt: Date.now(),
+      status: 'active'
+    };
+
+    // Store agent in memory
+    const storeResult = agentStore.createAgent(agent);
+
+    if (!storeResult.success) {
+      return NextResponse.json(
+        { error: storeResult.message },
+        { status: 409 }
+      );
+    }
+
+    // Register agent with express-server
+    try {
+      const expressResponse = await fetch(`${EXPRESS_SERVER_URL}/agents`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          provider_id: agent.provider_id,
+          model_id: agent.model_id,
+          prompt: agent.prompt,
+          user_id: agent.id // Pass agent ID as user_id
+        })
+      });
+
+      if (!expressResponse.ok) {
+        console.warn('Failed to register agent with express-server:', await expressResponse.text());
+        // Continue anyway - agent is still created locally
+      } else {
+        console.log(`✅ Agent ${agentId} registered with express-server`);
+      }
+    } catch (error) {
+      console.error('Error calling express-server:', error);
+      // Continue anyway - agent is still created locally
+    }
+
+    return NextResponse.json({
+      success: true,
+      agentId: agent.id,
+      agent,
+      message: 'Agent created successfully'
+    });
+
+  } catch (error) {
+    console.error('Error creating agent:', error);
+    return NextResponse.json(
+      { error: 'Invalid request' },
+      { status: 400 }
+    );
+  }
+}

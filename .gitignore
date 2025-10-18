@@ -1,1 +1,13 @@
-node_modules/
+*/node_modules/*
+node_modules
+
+# Ignore all node modules
+**/node_modules/**
+express-server/node_modules/**  
+agentic-framework/node_modules/**
+**/.next/**
+.next
+.DS_Store
+.vscode
+dist
+build               
