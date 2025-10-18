@@ -1,6 +1,6 @@
 export interface WindowData {
   id: string;
-  type: 'help' | 'wallet' | 'agent-tracker' | 'agent-list' | 'event-history' | 'decision-stream';
+  type: 'help' | 'wallet' | 'agent-tracker' | 'agent-list' | 'event-history' | 'decision-stream' | 'dashboard';
   title: string;
   x: number;
   y: number;
