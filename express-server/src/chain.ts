@@ -55,14 +55,15 @@ export async function transferIntoWallet(wallet_id: string, sender_addr: string,
     if (!algorand) {
         throw new Error('Algorand client not initialized');
     }
-    
+
     const result = await algorand.send.payment({
         sender: sender_addr,
-        receiver: sender_addr, // Send to self to just store data
+        receiver: wallet_id, // Send to the new agent wallet
         amount: (amount).microAlgo(), // Convert to microAlgos
         note: prompt,
     });
 
+    console.log(`💰 Transferred ${amount / 1000000} ALGO to wallet ${wallet_id}`);
     return result.txIds[0];
 };
 
