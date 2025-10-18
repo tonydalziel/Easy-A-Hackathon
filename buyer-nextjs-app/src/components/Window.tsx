@@ -115,7 +115,8 @@ export default function Window({ window, onClose, onFocus, onMinimize, children 
                     e.stopPropagation(); 
                     e.preventDefault();
                     onClose(window.id); 
-                  }} 
+                  }}
+                  onMouseDown={(e) => e.stopPropagation()}
                   title="Close"
                   type="button"
                 />
@@ -126,6 +127,7 @@ export default function Window({ window, onClose, onFocus, onMinimize, children 
                     e.preventDefault();
                     onMinimize(window.id); 
                   }}
+                  onMouseDown={(e) => e.stopPropagation()}
                   title="Minimize"
                   type="button"
                 />
