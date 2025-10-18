@@ -17,29 +17,16 @@ export const haveLLMConsiderPurchase = async (agentState: AgentState, itemState:
     const openAIMessages = [
         {
             role: 'system',
-            content: 'prompt'
+            content: prompt
         }
     ];
 
-    const completion = await openai.chat.completions.create({
-      model: MODEL,
-      messages: openAIMessages,
-      temperature: 0.7,
-      max_tokens: 2000,
+    const response = await openai.chat.completions.create({
+        model: MODEL,
+        messages: openAIMessages,
+        max_tokens: 100,
+        temperature: 0.7,
     });
-
-    const response = completion.choices[0].message?.content || '';
-
-    switch(response.trim()) {
-        case 'BUY':
-            console.log(`Agent decided to BUY the item: ${itemState.name}`);
-            break;
-        case 'IGNORE':
-            console.log(`Agent decided to IGNORE the item: ${itemState.name}`);
-            break;
-        default:
-            console.log(`Agent response unrecognized: ${response}`);
-    }
 
     
     return response;
