@@ -3,7 +3,7 @@ import { agentStore } from '@/lib/agentStore';
 import { Agent } from '@/types/agent';
 
 const EXPRESS_SERVER_URL = process.env.EXPRESS_SERVER_URL || 'http://localhost:3000';
-const DEFAULT_MODEL_ID = process.env.DEFAULT_MODEL_ID || 'gemma3';
+const DEFAULT_MODEL_ID = process.env.DEFAULT_MODEL_ID || 'qwen2.5:7b-instruct-q4_K_M';
 const DEFAULT_PROVIDER_ID = process.env.DEFAULT_PROVIDER_ID || 'ollama';
 
 // API endpoint to create a new agent with a prompt
@@ -18,7 +18,7 @@ export async function POST(request: Request) {
 
     // Generate agent ID
     const agentId = `agent-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
-    
+
     // Generate wallet credentials (in production, use proper crypto)
     const walletId = `wallet-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
     const walletPwd = Math.random().toString(36).substr(2, 15);
@@ -38,7 +38,7 @@ export async function POST(request: Request) {
 
     // Store agent in memory
     const storeResult = agentStore.createAgent(agent);
-    
+
     if (!storeResult.success) {
       return NextResponse.json(
         { error: storeResult.message },
