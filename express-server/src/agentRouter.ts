@@ -2,29 +2,9 @@
 import express, { Request, Response } from 'express';
 import { postAgentToChain } from './chain';
 import { AgentState, ItemState } from './types';
+import { haveLLMConsiderPurchase } from './llms';
 
 const router = express.Router();
-
-export const agentConsideringPurchasePrompt = (agentState: AgentState, itemState: ItemState): string => {
-    const BUY_CODE = 'BUY';
-    const IGNORE_OFFER_CODE = 'IGNORE'; 1
-    let prompt = `You are an autonomous agent with the following goal: ${agentState.prompt}.
-    You have already acquired the following items: ${agentState.currentItemsAcquired.join(', ')}.
-    Your current wallet balance is $${agentState.walletBalance}.
-    You are considering purchasing a new item: ${itemState.name}.
-    Decide whether to purchase the item or ignore the offer.
-    Respond with only one of the following codes: ${BUY_CODE} to purchase the item or ${IGNORE_OFFER_CODE} to skip purchasing.
-    `
-    return prompt;
-};
-
-export const agentSpecifyingUpperBoundPrompt = (itemState: AgentState): string => {
-    let prompt = `You are an autonomous agent with the following goal: ${itemState.prompt}.
-    You have already acquired the following items: ${itemState.currentItemsAcquired.join(', ')}.
-    Your current wallet balance is $${itemState.walletBalance}. What is the maximum amount you are willing to pay for the next item you consider purchasing? Respond with a single numerical value only.`;
-    
-    return prompt;
-}
 
 // Example endpoint 
 router.get('/status', (req: Request, res: Response) => {
@@ -40,8 +20,45 @@ router.post('/', (req: Request, res: Response) => {
 
     const { provider_id, model_id, prompt } = req.body;
 
-    postAgentToChain(provider_id, model_id, prompt);
+    // postAgentToChain(provider_id, model_id, prompt);
     res.json({ message: 'Agent created successfully' });
+});
+
+// Endpoint to have LLM consider a purchase
+router.post('/consider-purchase', async (req: Request, res: Response) => {
+    try {
+        const { agentState, itemState } = req.body;
+
+        // Validate request body
+        if (!agentState || !itemState) {
+            return res.status(400).json({ 
+                error: 'Missing required fields: agentState and itemState' 
+            });
+        }
+
+        // Call the LLM function
+        const purchaseIntentId = await haveLLMConsiderPurchase(agentState, itemState);
+
+        if (purchaseIntentId === null) {
+            return res.json({ 
+                decision: 'IGNORE',
+                purchaseIntentId: null,
+                message: 'Agent decided not to purchase the item'
+            });
+        }
+
+        res.json({ 
+            decision: 'BUY',
+            purchaseIntentId,
+            message: 'Purchase intent registered successfully'
+        });
+    } catch (error) {
+        console.error('Error in consider-purchase endpoint:', error);
+        res.status(500).json({ 
+            error: 'Internal server error',
+            details: error instanceof Error ? error.message : 'Unknown error'
+        });
+    }
 });
 
 export default router;
