@@ -27,3 +27,21 @@ export type ItemState = {
   name: string;
   price: number;
 };
+
+export type Agent = {
+  id: string;
+  prompt: string;
+  model_id: string;
+  provider_id: string;
+  wallet_id: string;
+  wallet_pwd: string;
+  currentItemsAcquired: string[];
+  createdAt: number;
+  status: 'active' | 'inactive' | 'error';
+};
+
+export type CreateAgentRequest = {
+  prompt: string;
+  model_id?: string;
+  provider_id?: string;
+};

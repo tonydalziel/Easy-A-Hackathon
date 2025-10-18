@@ -1,42 +1,58 @@
 import { NextResponse } from 'next/server';
+import { agentStore } from '@/lib/agentStore';
 
-// API endpoint that aggregates all agent details from multiple external APIs
+// API endpoint that gets agent details from memory
 export async function GET(
   request: Request,
   { params }: { params: Promise<{ id: string }> }
 ) {
   const { id } = await params;
 
-  // Check if agent exists first
-  const exists = await checkAgentExists(id);
-  if (!exists) {
+  const agent = agentStore.getAgent(id);
+  
+  if (!agent) {
     return NextResponse.json({ error: 'Agent not found' }, { status: 404 });
   }
 
-  // Aggregate all agent data
-  const agentDetails = await getAgentDetails(id);
-  return NextResponse.json(agentDetails);
+  return NextResponse.json({ agent });
 }
 
-async function checkAgentExists(agentId: string): Promise<boolean> {
-  // Skeleton function - check if agent exists in /all-agents
-  return false;
+// Update agent
+export async function PATCH(
+  request: Request,
+  { params }: { params: Promise<{ id: string }> }
+) {
+  try {
+    const { id } = await params;
+    const body = await request.json();
+    const { status } = body;
+
+    if (status && ['active', 'inactive', 'error'].includes(status)) {
+      const updated = agentStore.updateAgentStatus(id, status);
+      if (!updated) {
+        return NextResponse.json({ error: 'Agent not found' }, { status: 404 });
+      }
+      return NextResponse.json({ success: true, message: 'Agent updated' });
+    }
+
+    return NextResponse.json({ error: 'Invalid update data' }, { status: 400 });
+  } catch (error) {
+    return NextResponse.json({ error: 'Failed to update agent' }, { status: 500 });
+  }
 }
 
-async function getAgentDetails(agentId: string) {
-  // Skeleton function - aggregates data from multiple external APIs:
-  // - Status from agent status API
-  // - Prompt from agent prompt API
-  // - Events from agent events API
-  // - Wallet ID from agent wallet-id API
-  // - Wallet balance from /wallet-balance?id=<walletId>
-  // - Starting balance from agent starting-balance API
+// Delete agent
+export async function DELETE(
+  request: Request,
+  { params }: { params: Promise<{ id: string }> }
+) {
+  const { id } = await params;
+  
+  const deleted = agentStore.deleteAgent(id);
+  
+  if (!deleted) {
+    return NextResponse.json({ error: 'Agent not found' }, { status: 404 });
+  }
 
-  return {
-    id: agentId,
-    status: 'active',
-    currentTask: '',
-    walletValue: 0,
-    recentTransactions: []
-  };
+  return NextResponse.json({ success: true, message: 'Agent deleted' });
 }

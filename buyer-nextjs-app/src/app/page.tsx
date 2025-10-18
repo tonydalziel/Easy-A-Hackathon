@@ -1,3 +1,30 @@
+/**
+ * AGENTIC PROCUREMENT SYSTEM - MAIN INTERFACE
+ * 
+ * A modern, terminal-inspired interface for AI-powered procurement and selling.
+ * 
+ * Features:
+ * - Command-line interface with intelligent autocomplete
+ * - Real-time agent monitoring and decision streaming
+ * - Multi-window workspace management
+ * - Live transaction tracking and analytics
+ * 
+ * Architecture:
+ * - Command routing to appropriate handlers
+ * - Dynamic window management with focus/z-index control
+ * - Real-time updates via Server-Sent Events (SSE)
+ * - Responsive glassmorphism UI with smooth animations
+ * 
+ * Commands:
+ * - help: Display command reference
+ * - create <prompt>: Create new AI agent
+ * - track <id>: Monitor specific agent
+ * - list: View all agents
+ * - watch: Live decision stream
+ * - wallet: Check balance
+ * - events: Transaction history
+ */
+
 'use client';
 
 import { useState, FormEvent, useEffect } from 'react';
@@ -8,6 +35,7 @@ import AgentTracker from '@/components/AgentTracker';
 import AgentList from '@/components/AgentList';
 import EventHistory from '@/components/EventHistory';
 import DecisionStream from '@/components/DecisionStream';
+import Dashboard from '@/components/Dashboard';
 import { WindowData } from '@/types/window';
 
 export default function Home() {
@@ -15,31 +43,86 @@ export default function Home() {
   const [windows, setWindows] = useState<WindowData[]>([]);
   const [nextZIndex, setNextZIndex] = useState(1000);
   const [error, setError] = useState('');
+  const [success, setSuccess] = useState('');
   const [suggestion, setSuggestion] = useState('');
   const [showSuggestions, setShowSuggestions] = useState(false);
   const [parameterHint, setParameterHint] = useState('');
+  const [availableAgents, setAvailableAgents] = useState<Array<{ id: string; prompt: string; status: string }>>([]);
+  const [selectedIndex, setSelectedIndex] = useState(-1);
+  const [systemStats, setSystemStats] = useState({
+    activeAgents: 0,
+    totalDecisions: 0,
+    successRate: 0,
+  });
 
-  const commands = ['-h', 'wallet', 'watch', 'track', 'list', 'events', 'create'];
+  const commands = ['-h', 'wallet', 'watch', 'track', 'list', 'events', 'create', 'dashboard'];
   
-  const commandInfo: Record<string, { params?: string; description: string }> = {
-    '-h': { description: 'Display help window' },
-    'wallet': { description: 'Show your total wallet value' },
-    'watch': { description: 'Watch live agent decision stream in real-time' },
-    'track': { params: '<agent-id>', description: 'Track a specific agent\'s activity' },
-    'list': { description: 'List all agents with their status' },
-    'events': { description: 'Show all on-chain events' },
-    'create': { params: '<prompt>', description: 'Create a new agent with the specified prompt' },
+  const commandInfo: Record<string, { params?: string; description: string; icon?: string }> = {
+    '-h': { description: 'Display help window', icon: '?' },
+    'wallet': { description: 'Show your total wallet value', icon: '$' },
+    'watch': { description: 'Watch live agent decision stream in real-time', icon: '◉' },
+    'track': { params: '<agent-id>', description: 'Track a specific agent\'s activity', icon: '→' },
+    'list': { description: 'List all agents with their status', icon: '≡' },
+    'events': { description: 'Show all on-chain events', icon: '⋯' },
+    'create': { params: '<prompt>', description: 'Create a new agent with the specified prompt', icon: '+' },
+    'dashboard': { description: 'Open system dashboard with analytics', icon: '▣' },
   };
 
   useEffect(() => {
 	createWindow('help', 'Help - Available Commands');
+    
+    // Fetch system stats periodically
+    const fetchStats = async () => {
+      try {
+        // Fetch agent count
+        const agentsRes = await fetch('/api/agents');
+        if (agentsRes.ok) {
+          const agentsData = await agentsRes.json();
+          const agents = agentsData.agents || [];
+          const activeCount = agents.filter((a: any) => a.status === 'active').length || 0;
+          
+          // Store agents for autocomplete
+          setAvailableAgents(agents.map((a: any) => ({
+            id: a.id,
+            prompt: a.prompt,
+            status: a.status
+          })));
+          
+          // Fetch decision stats
+          const decisionsRes = await fetch('/api/decisions');
+          if (decisionsRes.ok) {
+            const decisionsData = await decisionsRes.json();
+            const totalDecisions = decisionsData.decisions?.length || 0;
+            const buyCount = decisionsData.decisions?.filter((d: any) => d.decision === 'BUY').length || 0;
+            const successRate = totalDecisions > 0 ? Math.round((buyCount / totalDecisions) * 100) : 0;
+            
+            setSystemStats({
+              activeAgents: activeCount,
+              totalDecisions,
+              successRate,
+            });
+          }
+        }
+      } catch (error) {
+        console.error('Failed to fetch system stats:', error);
+      }
+    };
+    
+    fetchStats();
+    const interval = setInterval(fetchStats, 10000); // Update every 10 seconds
+    
+    return () => clearInterval(interval);
   }, []);
 
   // Autocomplete logic
   useEffect(() => {
+    // Reset selection when command changes
+    setSelectedIndex(-1);
+    
     if (!command) {
       setSuggestion('');
       setParameterHint('');
+      setShowSuggestions(false);
       return;
     }
 
@@ -66,9 +149,57 @@ export default function Home() {
     } else {
       setParameterHint('');
     }
+
+    // Auto-show suggestions for track command
+    if (cmd === 'track' && parts.length === 1) {
+      setShowSuggestions(true);
+    }
   }, [command]);
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    const parts = command.toLowerCase().split(/\s+/);
+    const cmd = parts[0];
+    
+    // Get current suggestions list
+    let suggestions: any[] = [];
+    if (cmd === 'track' && parts.length === 1 && showSuggestions) {
+      suggestions = availableAgents;
+    } else if (showSuggestions) {
+      suggestions = commands.filter(c => c.toLowerCase().startsWith(command.toLowerCase()));
+    }
+    
+    // Arrow Down - Navigate down through suggestions
+    if (e.key === 'ArrowDown' && suggestions.length > 0) {
+      e.preventDefault();
+      setSelectedIndex(prev => (prev < suggestions.length - 1 ? prev + 1 : 0));
+      return;
+    }
+    
+    // Arrow Up - Navigate up through suggestions
+    if (e.key === 'ArrowUp' && suggestions.length > 0) {
+      e.preventDefault();
+      setSelectedIndex(prev => (prev > 0 ? prev - 1 : suggestions.length - 1));
+      return;
+    }
+    
+    // Enter - Select highlighted suggestion
+    if (e.key === 'Enter' && selectedIndex >= 0 && suggestions.length > 0) {
+      e.preventDefault();
+      const selected = suggestions[selectedIndex];
+      
+      if (cmd === 'track' && parts.length === 1) {
+        // Agent selection
+        setCommand(`track ${selected.id}`);
+      } else {
+        // Command selection
+        setCommand(selected + ' ');
+      }
+      
+      setSelectedIndex(-1);
+      setShowSuggestions(false);
+      return;
+    }
+    
     // Tab or Right Arrow to accept suggestion
     if ((e.key === 'Tab' || e.key === 'ArrowRight') && suggestion) {
       e.preventDefault();
@@ -125,6 +256,8 @@ export default function Home() {
       createWindow('agent-list', 'All Agents');
     } else if (cmd === 'events') {
       createWindow('event-history', 'On-Chain Event History');
+    } else if (cmd === 'dashboard') {
+      createWindow('dashboard', '📊 System Dashboard');
     } else if (cmd === 'create') {
       if (params.length === 0) {
         setError('Error: create command requires a prompt. Usage: create <prompt>');
@@ -140,6 +273,9 @@ export default function Home() {
   };
 
   const handleCreateAgent = async (prompt: string) => {
+    setError('');
+    setSuccess('');
+    
     try {
       const response = await fetch('/api/agents/create', {
         method: 'POST',
@@ -150,7 +286,8 @@ export default function Home() {
       if (response.ok) {
         const data = await response.json();
         if (data.success && data.agentId) {
-          setError(`Agent created successfully! ID: ${data.agentId}`);
+          setSuccess(`Agent created successfully! ID: ${data.agentId}`);
+          setTimeout(() => setSuccess(''), 5000);
           // Optionally open the agent tracker window
           createWindow('agent-tracker', `Agent Tracker - ${data.agentId}`, data.agentId);
         } else {
@@ -163,10 +300,11 @@ export default function Home() {
       console.error('Failed to create agent:', error);
       setError('Failed to create agent');
     }
+
   };
 
   const createWindow = (
-    type: 'help' | 'wallet' | 'agent-tracker' | 'agent-list' | 'event-history' | 'decision-stream',
+    type: 'help' | 'wallet' | 'agent-tracker' | 'agent-list' | 'event-history' | 'decision-stream' | 'dashboard',
     title: string,
     agentId?: string
   ) => {
@@ -194,6 +332,9 @@ export default function Home() {
     } else if (type === 'decision-stream') {
       width = 700;
       height = 600;
+    } else if (type === 'dashboard') {
+      width = 900;
+      height = 700;
     }
 
     const newWindow: WindowData = {
@@ -216,6 +357,19 @@ export default function Home() {
     setWindows(windows.filter(w => w.id !== id));
   };
 
+  const minimizeWindow = (id: string) => {
+    setWindows(windows.map(w =>
+      w.id === id ? { ...w, isMinimized: true } : w
+    ));
+  };
+
+  const restoreWindow = (id: string) => {
+    setWindows(windows.map(w =>
+      w.id === id ? { ...w, isMinimized: false, zIndex: nextZIndex } : w
+    ));
+    setNextZIndex(nextZIndex + 1);
+  };
+
   const focusWindow = (id: string) => {
     setWindows(windows.map(w =>
       w.id === id ? { ...w, zIndex: nextZIndex } : w
@@ -231,6 +385,8 @@ export default function Home() {
         return <WalletWindow />;
       case 'decision-stream':
         return <DecisionStream />;
+      case 'dashboard':
+        return <Dashboard />;
       case 'agent-tracker':
         return window.agentId ? (
           <AgentTracker
@@ -248,118 +404,376 @@ export default function Home() {
   };
 
   return (
-    <div className="h-screen w-screen bg-gray-950 relative">
-      {/* Command Prompt - Top Left */}
-      <div className="absolute top-4 left-4 z-50">
-        <form onSubmit={handleCommand} className="flex flex-col gap-2">
-          <div className="relative">
-            <div className="flex items-center gap-2 bg-gray-900 border border-gray-700 rounded-lg px-4 py-2 shadow-lg hover:border-green-500/50 transition-colors">
-              <span className="text-green-400 font-mono">$</span>
+    <div className="h-screen w-screen relative overflow-hidden">
+      {/* Hero Section with System Info */}
+      <div className="absolute top-0 left-0 right-0 z-40 pointer-events-none">
+        <div className="glass rounded-b-3xl shadow-2xl pointer-events-auto scale-in">
+          <div className="px-8 py-6">
+            {/* Header */}
+            <div className="flex items-center justify-between mb-4">
+              <div>
+                <h1 className="text-3xl font-bold bg-gradient-to-r from-cyan-400 via-blue-500 to-purple-600 bg-clip-text text-transparent">
+                  Agentic Procurement System
+                </h1>
+                <p className="text-gray-400 text-sm mt-1">AI-Powered Autonomous Trading Platform</p>
+              </div>
               
-              <div className="relative w-64">
-                {/* Visible styled text with syntax highlighting and suggestion */}
-                <div className="absolute inset-0 pointer-events-none font-mono whitespace-pre">
-                  {command ? (
-                    <>
-                      {highlightCommand(command)}
-                      <span className="text-gray-500">{suggestion}</span>
-                    </>
-                  ) : (
-                    <span className="text-gray-600">Enter command...</span>
-                  )}
+              {/* Live System Stats */}
+              <div className="flex gap-6 items-center">
+                <div className="text-center">
+                  <div className="text-2xl font-bold text-cyan-400">{systemStats.activeAgents}</div>
+                  <div className="text-xs text-gray-500">Active Agents</div>
+                </div>
+                <div className="w-px h-10 bg-gray-700"></div>
+                <div className="text-center">
+                  <div className="text-2xl font-bold text-green-400">{systemStats.totalDecisions}</div>
+                  <div className="text-xs text-gray-500">Total Decisions</div>
+                </div>
+                <div className="w-px h-10 bg-gray-700"></div>
+                <div className="text-center">
+                  <div className="text-2xl font-bold text-purple-400">{systemStats.successRate}%</div>
+                  <div className="text-xs text-gray-500">Success Rate</div>
+                </div>
+                <div className="w-px h-10 bg-gray-700"></div>
+                <div className="flex items-center gap-2">
+                  <div className="w-2 h-2 rounded-full bg-green-500 pulse-glow"></div>
+                  <span className="text-xs text-green-400 font-medium">System Online</span>
+                </div>
+              </div>
+            </div>
+
+            {/* Command Interface */}
+            <form onSubmit={handleCommand} className="relative">
+              <div className="relative">
+                <div className="flex items-center gap-3 bg-gray-900/50 border border-cyan-500/30 rounded-xl px-5 py-4 shadow-lg hover:border-cyan-500/50 transition-all hover:shadow-cyan-500/20 backdrop-blur-sm">
+                  {/* Terminal Prompt */}
+                  <div className="flex items-center gap-2">
+                    <div className="w-3 h-3 rounded-full bg-green-500 animate-pulse"></div>
+                    <span className="text-cyan-400 font-mono text-lg font-bold">→</span>
+                  </div>
+                  
+                  <div className="flex-1 relative">
+                    {/* Styled overlay with syntax highlighting */}
+                    <div className="absolute inset-0 pointer-events-none font-mono text-lg whitespace-pre">
+                      {command ? (
+                        <>
+                          {highlightCommand(command)}
+                          <span className="text-gray-600">{suggestion}</span>
+                        </>
+                      ) : (
+                        <span className="text-gray-600">Type a command or press Tab for suggestions...</span>
+                      )}
+                    </div>
+                    
+                    {/* Actual input */}
+                    <input
+                      type="text"
+                      value={command}
+                      onChange={(e) => setCommand(e.target.value)}
+                      onKeyDown={handleKeyDown}
+                      onFocus={() => setShowSuggestions(true)}
+                      onBlur={() => setTimeout(() => setShowSuggestions(false), 200)}
+                      className="w-full bg-transparent text-transparent caret-cyan-400 font-mono text-lg outline-none"
+                      autoFocus
+                      placeholder=""
+                    />
+                  </div>
+
+                  {/* Submit button */}
+                  <button
+                    type="submit"
+                    className="px-4 py-2 bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-600 hover:to-blue-700 rounded-lg text-white font-medium transition-all shadow-lg hover:shadow-cyan-500/50 flex items-center gap-2"
+                  >
+                    <span>Execute</span>
+                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
+                    </svg>
+                  </button>
                 </div>
                 
-                {/* Actual input for typing */}
-                <input
-                  type="text"
-                  value={command}
-                  onChange={(e) => setCommand(e.target.value)}
-                  onKeyDown={handleKeyDown}
-                  onFocus={() => setShowSuggestions(true)}
-                  onBlur={() => setTimeout(() => setShowSuggestions(false), 200)}
-                  className="w-full bg-transparent text-transparent caret-green-400 font-mono outline-none"
-                  autoFocus
-                />
-              </div>
-            </div>
-            
-            {/* Parameter hint */}
-            {parameterHint && !suggestion && (
-              <div className="mt-1 ml-12 font-mono text-xs bg-gray-900 border border-blue-900/50 rounded px-3 py-2">
-                <div className="text-blue-400 mb-1">
-                  📝 Usage: <span className="text-white">{parameterHint.split(' - ')[0]}</span>
-                </div>
-                <div className="text-gray-400">
-                  {parameterHint.split(' - ')[1]}
-                </div>
-              </div>
-            )}
-            
-            {/* Suggestion hint */}
-            {suggestion && (
-              <div className="text-xs text-gray-500 mt-1 ml-12 font-mono">
-                Press <kbd className="px-1 py-0.5 bg-gray-800 rounded text-green-400">Tab</kbd> or <kbd className="px-1 py-0.5 bg-gray-800 rounded text-green-400">→</kbd> to autocomplete
-              </div>
-            )}
-            
-            {/* Dropdown suggestions */}
-            {showSuggestions && command && (
-              <div className="absolute top-full left-0 mt-1 bg-gray-900 border border-gray-700 rounded-lg shadow-xl overflow-hidden w-full z-10">
-                {commands
-                  .filter(cmd => cmd.toLowerCase().startsWith(command.toLowerCase()))
-                  .map(cmd => {
-                    const info = commandInfo[cmd];
-                    return (
-                      <div
-                        key={cmd}
-                        onMouseDown={(e) => {
-                          e.preventDefault(); // Prevent blur
-                          setCommand(cmd + ' ');
-                          setSuggestion('');
-                          setShowSuggestions(false);
-                        }}
-                        className="px-4 py-2 hover:bg-green-500/20 cursor-pointer font-mono text-sm transition-colors"
-                      >
-                        <div className="flex items-center justify-between">
-                          <div>
-                            <span className="text-white">{command}</span>
-                            <span className="text-green-400">{cmd.slice(command.length)}</span>
-                            {info?.params && (
-                              <span className="text-blue-400 ml-2">{info.params}</span>
-                            )}
+                {/* Parameter hint */}
+                {parameterHint && !suggestion && (
+                  <div className="absolute top-full left-0 mt-2 w-full slide-in">
+                    <div className="glass rounded-lg px-4 py-3 border border-blue-500/30">
+                      <div className="flex items-start gap-3">
+                        <div className="text-2xl text-blue-400">i</div>
+                        <div>
+                          <div className="text-blue-400 font-mono text-sm mb-1">
+                            Usage: <span className="text-white font-semibold">{parameterHint.split(' - ')[0]}</span>
+                          </div>
+                          <div className="text-gray-400 text-xs">
+                            {parameterHint.split(' - ')[1]}
                           </div>
                         </div>
-                        <div className="text-gray-500 text-xs mt-0.5">
-                          {info?.description}
-                        </div>
                       </div>
-                    );
-                  })
-                }
+                    </div>
+                  </div>
+                )}
+                
+                {/* Autocomplete hint */}
+                {suggestion && (
+                  <div className="absolute top-full left-0 mt-2 px-5 slide-in">
+                    <div className="text-xs text-gray-500 font-mono flex items-center gap-2">
+                      <span>Quick tip:</span>
+                      <kbd className="px-2 py-1 bg-gray-800/80 rounded text-cyan-400 border border-gray-700">Tab</kbd>
+                      <span>or</span>
+                      <kbd className="px-2 py-1 bg-gray-800/80 rounded text-cyan-400 border border-gray-700">→</kbd>
+                      <span>to autocomplete</span>
+                    </div>
+                  </div>
+                )}
+                
+                {/* Dropdown suggestions */}
+                {showSuggestions && command && (
+                  <div className="absolute top-full left-0 mt-2 w-full z-50 slide-in">
+                    <div className="glass rounded-xl shadow-2xl overflow-hidden border border-cyan-500/30 max-h-96 overflow-y-auto">
+                      {(() => {
+                        const parts = command.toLowerCase().split(/\s+/);
+                        const cmd = parts[0];
+                        
+                        // Show agent IDs if command is "track"
+                        if (cmd === 'track' && parts.length === 1) {
+                          if (availableAgents.length === 0) {
+                            return (
+                              <div className="px-5 py-6 text-center text-gray-500">
+                                <div className="text-2xl mb-2">-</div>
+                                <div className="text-sm">No agents available</div>
+                                <div className="text-xs mt-1">Create an agent first with: create &lt;prompt&gt;</div>
+                              </div>
+                            );
+                          }
+                          
+                          return availableAgents.map((agent, index) => (
+                            <div
+                              key={agent.id}
+                              onMouseDown={(e) => {
+                                e.preventDefault();
+                                setCommand(`track ${agent.id}`);
+                                setSuggestion('');
+                                setShowSuggestions(false);
+                              }}
+                              onMouseEnter={() => setSelectedIndex(index)}
+                              className={`px-5 py-3 cursor-pointer transition-all border-b border-gray-800/50 last:border-b-0 ${
+                                selectedIndex === index 
+                                  ? 'bg-cyan-500/20 ring-2 ring-cyan-400/50' 
+                                  : 'hover:bg-cyan-500/10'
+                              }`}
+                            >
+                              <div className="flex items-center justify-between mb-2">
+                                <div className="flex items-center gap-3">
+                                  <span className="text-lg">→</span>
+                                  <div>
+                                    <div className="font-mono text-sm text-cyan-400">
+                                      {agent.id.slice(0, 16)}...
+                                    </div>
+                                    <div className="text-xs text-gray-500 mt-0.5">
+                                      Click to track this agent
+                                    </div>
+                                  </div>
+                                </div>
+                                <span className={`
+                                  px-2 py-1 rounded text-xs font-bold
+                                  ${agent.status === 'active' 
+                                    ? 'bg-green-500/20 text-green-400 border border-green-500/50' 
+                                    : 'bg-gray-500/20 text-gray-400 border border-gray-500/50'
+                                  }
+                                `}>
+                                  {agent.status.toUpperCase()}
+                                </span>
+                              </div>
+                              <div className="text-gray-400 text-xs ml-9 line-clamp-1">
+                                {agent.prompt}
+                              </div>
+                            </div>
+                          ));
+                        }
+                        
+                        // Show regular command suggestions
+                        return commands
+                          .filter(c => c.toLowerCase().startsWith(command.toLowerCase()))
+                          .map((cmd, index) => {
+                            const info = commandInfo[cmd];
+                            return (
+                              <div
+                                key={cmd}
+                                onMouseDown={(e) => {
+                                  e.preventDefault();
+                                  setCommand(cmd + ' ');
+                                  setSuggestion('');
+                                }}
+                                onMouseEnter={() => setSelectedIndex(index)}
+                                className={`px-5 py-3 cursor-pointer transition-all border-b border-gray-800/50 last:border-b-0 ${
+                                  selectedIndex === index 
+                                    ? 'bg-cyan-500/20 ring-2 ring-cyan-400/50' 
+                                    : 'hover:bg-cyan-500/10'
+                                }`}
+                              >
+                                <div className="flex items-center justify-between mb-1">
+                                  <div className="flex items-center gap-3">
+                                    <span className="text-xl">{info?.icon}</span>
+                                    <span className="font-mono">
+                                      <span className="text-gray-500">{command}</span>
+                                      <span className="text-cyan-400 font-bold">{cmd.slice(command.length)}</span>
+                                      {info?.params && (
+                                        <span className="text-blue-400 ml-2">{info.params}</span>
+                                      )}
+                                    </span>
+                                  </div>
+                                </div>
+                                <div className="text-gray-400 text-xs ml-9">
+                                  {info?.description}
+                                </div>
+                              </div>
+                            );
+                          });
+                      })()}
+                    </div>
+                  </div>
+                )}
               </div>
-            )}
+              
+              {/* Error/Success Messages */}
+              {error && (
+                <div className="mt-3 slide-in">
+                  <div className="glass border-red-500/50 rounded-lg px-4 py-3 flex items-start gap-3">
+                    <div className="text-xl text-red-400 font-bold">!</div>
+                    <div>
+                      <div className="text-red-400 font-medium text-sm mb-1">Error</div>
+                      <div className="text-gray-300 text-sm">{error}</div>
+                    </div>
+                  </div>
+                </div>
+              )}
+              
+              {success && (
+                <div className="mt-3 slide-in">
+                  <div className="glass border-green-500/50 rounded-lg px-4 py-3 flex items-start gap-3">
+                    <div className="text-xl text-green-400 font-bold">✓</div>
+                    <div>
+                      <div className="text-green-400 font-medium text-sm mb-1">Success</div>
+                      <div className="text-gray-300 text-sm">{success}</div>
+                    </div>
+                  </div>
+                </div>
+              )}
+            </form>
           </div>
-          
-          {error && (
-            <div className="text-red-400 text-sm font-mono bg-gray-900 border border-red-900 rounded px-3 py-1">
-              {error}
-            </div>
-          )}
-        </form>
+        </div>
+      </div>
+
+      {/* Quick Actions Bar */}
+      <div className="absolute bottom-6 left-1/2 -translate-x-1/2 z-40 pointer-events-none">
+        <div className="glass rounded-2xl shadow-2xl px-4 py-3 pointer-events-auto scale-in">
+          <div className="flex items-center gap-2">
+            {[
+              { cmd: '-h', label: 'Help', icon: '?' },
+              { cmd: 'create', label: 'New Agent', icon: '+' },
+              { cmd: 'list', label: 'Agents', icon: '≡' },
+              { cmd: 'watch', label: 'Live Feed', icon: '◉' },
+              { cmd: 'dashboard', label: 'Dashboard', icon: '▣' },
+            ].map((action) => (
+              <button
+                key={action.cmd}
+                onClick={() => {
+                  setCommand(action.cmd + ' ');
+                  document.querySelector('input')?.focus();
+                }}
+                className="px-4 py-2 rounded-xl bg-gray-800/50 hover:bg-cyan-500/20 border border-gray-700 hover:border-cyan-500/50 transition-all flex items-center gap-2 group"
+                title={action.label}
+              >
+                <span className="text-lg font-bold text-gray-400 group-hover:text-cyan-400">{action.icon}</span>
+                <span className="text-sm text-gray-400 group-hover:text-cyan-400 transition-colors">{action.label}</span>
+              </button>
+            ))}
+          </div>
+        </div>
       </div>
 
       {/* Windows Container */}
-      <div className="absolute inset-0">
+      <div className="absolute inset-0 pt-40">
         {windows.map((window) => (
           <Window
             key={window.id}
             window={window}
             onClose={closeWindow}
             onFocus={focusWindow}
+            onMinimize={minimizeWindow}
           >
             {renderWindowContent(window)}
           </Window>
         ))}
+      </div>
+
+      {/* Dock/Taskbar */}
+      {windows.some(w => w.isMinimized) && (
+        <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-[9999]">
+          <div className="glass rounded-2xl px-3 py-2.5 shadow-2xl border border-cyan-500/30 backdrop-blur-xl">
+            <div className="flex items-center gap-2">
+              {windows
+                .filter(w => w.isMinimized)
+                .map((window) => (
+                  <button
+                    key={window.id}
+                    onClick={() => restoreWindow(window.id)}
+                    className="group relative px-4 py-2.5 rounded-xl bg-gradient-to-br from-cyan-500/10 to-purple-500/10 
+                             hover:from-cyan-500/20 hover:to-purple-500/20 
+                             border border-cyan-500/30 hover:border-cyan-400/50
+                             transition-all duration-300 hover:scale-110 hover:-translate-y-1
+                             shadow-lg hover:shadow-cyan-500/20"
+                    title={`Restore ${window.title}`}
+                  >
+                    <div className="flex items-center gap-2">
+                      <span className="text-lg">
+                        {window.type === 'help' && '?'}
+                        {window.type === 'wallet' && '$'}
+                        {window.type === 'decision-stream' && '◉'}
+                        {window.type === 'dashboard' && '▣'}
+                        {window.type === 'agent-tracker' && '→'}
+                      </span>
+                      <span className="text-sm text-white font-medium max-w-[120px] truncate">
+                        {window.title}
+                      </span>
+                    </div>
+                    
+                    {/* Tooltip */}
+                    <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-3 py-1.5 
+                                  bg-gray-900 text-white text-xs rounded-lg whitespace-nowrap
+                                  opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none
+                                  border border-cyan-500/30">
+                      {window.title}
+                      <div className="absolute top-full left-1/2 -translate-x-1/2 -mt-1 
+                                    border-4 border-transparent border-t-gray-900"></div>
+                    </div>
+                    
+                    {/* Close button on hover */}
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        closeWindow(window.id);
+                      }}
+                      className="absolute -top-1 -right-1 w-5 h-5 rounded-full bg-red-500 
+                               flex items-center justify-center opacity-0 group-hover:opacity-100
+                               transition-opacity hover:bg-red-600 text-white text-xs"
+                      title="Close"
+                    >
+                      ×
+                    </button>
+                  </button>
+                ))}
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Background Pattern Overlay */}
+      <div className="absolute inset-0 pointer-events-none opacity-5">
+        <div className="absolute inset-0" style={{
+          backgroundImage: `
+            linear-gradient(rgba(0, 212, 255, 0.1) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(0, 212, 255, 0.1) 1px, transparent 1px)
+          `,
+          backgroundSize: '50px 50px'
+        }}></div>
       </div>
     </div>
   );
