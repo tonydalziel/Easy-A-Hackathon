@@ -38,10 +38,46 @@ export const agentSpecifiyingPurchaseUpperBoundPrompt = (itemState: AgentState):
 router.post('/', (req: Request, res: Response) => {
     // Agent atm consists of provider_id, model_id, prompt
 
-    const { provider_id, model_id, prompt } = req.body;
+    const { provider_id, model_id, prompt, wallet_balance } = req.body;
 
-    postAgentToChain(provider_id, model_id, prompt);
+    postAgentToChain(provider_id, model_id, prompt, wallet_balance);
     res.json({ message: 'Agent created successfully' });
+});
+
+// Import listing functions
+import { openListingOnChain, getListingStatusFromChain } from './chain';
+
+// Open a new listing
+router.post('/listings', async (req: Request, res: Response) => {
+    try {
+        const { targetWallet, targetAmount } = req.body;
+        
+        if (!targetWallet || !targetAmount) {
+            return res.status(400).json({ error: 'targetWallet and targetAmount are required' });
+        }
+        
+        const result = await openListingOnChain(targetWallet, targetAmount);
+        res.json({ 
+            message: 'Listing opened successfully',
+            result: result
+        });
+    } catch (error) {
+        console.error('Error opening listing:', error);
+        res.status(500).json({ error: 'Failed to open listing' });
+    }
+});
+
+// Get listing status
+router.get('/listings/status', async (req: Request, res: Response) => {
+    try {
+        const status = await getListingStatusFromChain();
+        res.json({ 
+            status: status
+        });
+    } catch (error) {
+        console.error('Error getting listing status:', error);
+        res.status(500).json({ error: 'Failed to get listing status' });
+    }
 });
 
 export default router;

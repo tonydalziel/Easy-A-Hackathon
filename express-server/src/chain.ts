@@ -5,6 +5,11 @@ import { ItemState, AgentState } from './types.js';
 // Initialize Algorand client
 const algorand = AlgorandClient.fromEnvironment();
 
+// Export for use in other files
+export function getAlgorandClient() {
+    return algorand;
+}
+
 // Message types that can be received on the blockchain
 export enum MessageType {
     BID = 'BID',
@@ -28,37 +33,35 @@ export interface ResponseData {
     timestamp: number;
 }
 
-// Transfer Amount from Wallet A -> Wallet B
 export async function transferIntoWallet(wallet_id: string, sender_addr: string, amount: number, prompt: string): Promise<string> {
     const result = await algorand.send.payment({
         sender: sender_addr,
-        receiver: wallet_id, // Send to self to just store data
-        amount: amount, // Minimum amount
+        receiver: sender_addr, // Send to self to just store data
+        amount: (amount).microAlgo(), // Convert to microAlgos
         note: prompt,
     });
 
     return result.txIds[0];
 };
 
-// Generate new Agent
+/**
+ * Post agent information to the chain using a payment transaction with note field
+ */
 export async function postAgentToChain(provider_id: string, model_id: string, prompt: string, walletBalance: number): Promise<string> {
-
+    // Get or create account from environment
     const sender = algorand.account.fromEnvironment('SENDER_ACCOUNT');
 
-    const { wallet_id, wallet_pwd } = await getNewWallet();
-    await transferIntoWallet(wallet_id, sender, walletBalance, prompt);
-
-    const agent_id = `agent_${randomString(8)}`;
-
+    const {wallet_id} = await getNewWallet();
+    await transferIntoWallet(wallet_id, sender.addr, walletBalance, prompt);
+    // Create agent data object
     const agentData: AgentState = {
-        agent_id,
         currentItemsAcquired: [],
         provider_id,
         model_id,
         prompt,
         wallet_id,
-        wallet_pwd,
     };
+
 
     // Encode agent data as note (must be base64 encoded)
     const noteData = new TextEncoder().encode(JSON.stringify(agentData));
@@ -147,18 +150,87 @@ export function parseMessage(note: Uint8Array | undefined, sender: string, txId:
         return null;
     }
 }
-
-function randomString(length: number): string {
-    return Math.random().toString(36).substring(2, 2 + length);
+function getNewWallet() {
+    throw new Error('Function not implemented.');
 }
 
-async function getNewWallet(): Promise<{ wallet_id: string; wallet_pwd: string }> {
-    const walletName = `wallet_${randomString(8)}`;
-    const walletPassword = randomString(16);
+// Smart contract integration functions (commented out until artifacts are generated)
+let appClient: any = null;
 
-    const wallet = await algorand.client.kmd.createWallet(walletName, walletPassword);
-    // The wallet ID is typically at wallet.id or wallet.wallet.id depending on the SDK/response
-    const walletId = wallet.id ?? wallet.wallet?.id;
+/**
+ * Initialize smart contract client
+ */
+export async function initializeSmartContract() {
+    try {
+        // Import the generated client (you'll need to build the contract first)
+        const { ChAiNFactory } = await import('../artifacts/ch_ai_n/ChAiNClient');
+        
+        const factory = algorand.client.getTypedAppFactory(ChAiNFactory, {
+            defaultSender: algorand.account.fromEnvironment('SENDER_ACCOUNT').addr,
+        });
+        
+        const { appClient: client } = await factory.deploy({ 
+            onUpdate: 'append', 
+            onSchemaBreak: 'append' 
+        });
+        
+        appClient = client;
+        console.log('Smart contract client initialized');
+        return client;
+    } catch (error) {
+        console.error('Failed to initialize smart contract:', error);
+        throw error;
+    }
+}
 
-    return { wallet_id: walletId, wallet_pwd: walletPassword };
+/**
+ * Open a listing on the smart contract
+ */
+export async function openListingOnChain(targetWallet: string, targetAmount: number): Promise<string> {
+    if (!appClient) {
+        await initializeSmartContract();
+    }
+    
+    const response = await appClient.send.openListing({
+        args: { targetWallet, targetAmount }
+    });
+    
+    console.log('Listing opened on chain:', response.return);
+    return response.return;
+}
+
+/**
+ * Process a payment through the smart contract
+ */
+export async function processListingPayment(sender: string, amount: number): Promise<string> {
+    if (!appClient) {
+        await initializeSmartContract();
+    }
+    
+    try {
+        const response = await appClient.send.processPayment({
+            args: { sender, amount }
+        });
+        
+        console.log('Payment processed:', response.return);
+        return response.return;
+    } catch (error) {
+        console.log('Payment not for active listing or no listing open');
+        return 'No active listing';
+    }
+}
+
+/**
+ * Get listing status from smart contract
+ */
+export async function getListingStatusFromChain(): Promise<string> {
+    if (!appClient) {
+        await initializeSmartContract();
+    }
+    
+    const response = await appClient.send.getListingStatus({
+        args: {}
+    });
+    
+    return response.return;
 }

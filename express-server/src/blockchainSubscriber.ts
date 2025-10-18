@@ -1,5 +1,5 @@
 import algosdk, { Transaction } from 'algosdk';
-import { getAlgorandClient, parseMessage, postResponseToChain, MessageType } from './chain';
+import { getAlgorandClient, parseMessage, postResponseToChain, MessageType, processListingPayment } from './chain';
 import { getLLMCompletion } from './llmService';
 
 /**
@@ -159,8 +159,53 @@ export class BlockchainSubscriber {
 
             // Process the message with LLM
             await this.processMessage(message);
+            
+            // Also check if this is a listing payment
+            await this.checkListingPayment(sender, txn.txn.amt, txId);
         } catch (error) {
             console.error('Error processing transaction:', error);
+        }
+    }
+
+    /**
+     * Check if payment is for an active listing
+     */
+    private async checkListingPayment(sender: string, amount: number, txId: string): Promise<void> {
+        try {
+            console.log(`\n Checking listing payment: ${amount} microAlgos from ${sender}`);
+            
+            const result = await processListingPayment(sender, amount);
+            
+            if (result.includes('Listing closed')) {
+                console.log('LISTING COMPLETED! Payment target reached!');
+                // You can add notification logic here (webhook, email, etc.)
+                await this.notifyListingCompleted(result);
+            } else if (result.includes('Payment received')) {
+                console.log(`Listing progress: ${result}`);
+            } else {
+                console.log('Payment not for active listing');
+            }
+        } catch (error) {
+            console.log('Payment not for active listing or no listing open');
+        }
+    }
+
+    /**
+     * Notify when listing is completed
+     */
+    private async notifyListingCompleted(result: string): Promise<void> {
+        try {
+            // Post completion notification to chain
+            await postResponseToChain('', MessageType.BID, `LISTING_COMPLETED: ${result}`);
+            console.log('✅ Listing completion posted to blockchain');
+            
+            // You can add additional notifications here:
+            // - Send webhook to your backend
+            // - Send email notification
+            // - Update database
+            // - Trigger other business logic
+        } catch (error) {
+            console.error('Error notifying listing completion:', error);
         }
     }
 
