@@ -28,6 +28,7 @@ export interface ResponseData {
     timestamp: number;
 }
 
+// Transfer Amount from Wallet A -> Wallet B
 export async function transferIntoWallet(wallet_id: string, sender_addr: string, amount: number, prompt: string): Promise<string> {
     const result = await algorand.send.payment({
         sender: sender_addr,
@@ -39,12 +40,13 @@ export async function transferIntoWallet(wallet_id: string, sender_addr: string,
     return result.txIds[0];
 };
 
+// Generate new Agent
 export async function postAgentToChain(provider_id: string, model_id: string, prompt: string, walletBalance: number): Promise<string> {
 
     const sender = algorand.account.fromEnvironment('SENDER_ACCOUNT');
 
     const { wallet_id, wallet_pwd } = await getNewWallet();
-    await transferIntoWallet(wallet_id, SENDER_ADDR, walletBalance, prompt);
+    await transferIntoWallet(wallet_id, sender, walletBalance, prompt);
 
     const agent_id = `agent_${randomString(8)}`;
 
