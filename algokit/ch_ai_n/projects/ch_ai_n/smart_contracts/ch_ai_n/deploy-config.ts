@@ -1,5 +1,5 @@
 import { AlgorandClient } from '@algorandfoundation/algokit-utils'
-import { ChAiNFactory } from '../artifacts/ch_ai_n/ChAiNClient'
+import { ChAiNFactory } from './artifacts/ch_ai_n/ChAiNClient'
 
 // Below is a showcase of various deployment options you can use in TypeScript Client
 export async function deploy() {
@@ -23,11 +23,11 @@ export async function deploy() {
     })
   }
 
-  const method = 'hello'  
-  const response = await appClient.send.hello({
-    args: { name: 'world' },
+  const method = 'openListing'  
+  const response = await appClient.send.openListing({
+    args: { targetWallet: 'TESTWALLETADDRESS123456789012345678901234567890', targetAmount: '1000000' },
   })
   console.log(
-    `Called ${method} on ${appClient.appClient.appName} (${appClient.appClient.appId}) with name = world, received: ${response.return}`,
+    `Called ${method} on ${appClient.appClient.appName} (${appClient.appClient.appId}) with targetWallet = TESTWALLETADDRESS123456789012345678901234567890, targetAmount = 1000000, received: ${response.return}`,
   )
 }

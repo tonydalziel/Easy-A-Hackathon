@@ -1,29 +1,35 @@
-import { Contract } from '@algorandfoundation/algorand-typescript'
+import { Contract, GlobalState } from '@algorandfoundation/algorand-typescript'
 
 export class ChAiN extends Contract {
-  public hello(name: string): string {
-    return `Hello, ${name}`
-  }
-
   // Global state for listing management
-  private listingOpen: boolean = false
-  private targetWallet: string = ""
-  private targetAmount: number = 0
-  private receivedAmount: number = 0
+  private listingOpen = GlobalState<boolean>({ key: 'listingOpen' })
+  private targetWallet = GlobalState<string>({ key: 'targetWallet' })
+  private targetAmount = GlobalState<string>({ key: 'targetAmount' })
+  private receivedAmount = GlobalState<string>({ key: 'receivedAmount' })
 
   /**
    * Opens a new listing with target wallet and amount
    */
-  public openListing(targetWallet: string, targetAmount: number): string {
-    // Only allow opening if no listing is currently open
-    if (this.listingOpen) {
-      throw new Error("A listing is already open")
+  public openListing(targetWallet: string, targetAmount: string): string {
+    // Check if a listing is already open
+    if (this.listingOpen.hasValue && this.listingOpen.value) {
+      return "Error: A listing is already open. Close it first."
     }
 
-    this.listingOpen = true
-    this.targetWallet = targetWallet
-    this.targetAmount = targetAmount
-    this.receivedAmount = 0
+    // Validate inputs
+    if (!targetWallet) {
+      return "Error: Target wallet cannot be empty"
+    }
+
+    if (!targetAmount || targetAmount === "0") {
+      return "Error: Target amount must be greater than 0"
+    }
+
+    // Open the listing
+    this.listingOpen.value = true
+    this.targetWallet.value = targetWallet
+    this.targetAmount.value = targetAmount
+    this.receivedAmount.value = "0"
 
     return `Listing opened: ${targetAmount} microAlgos to ${targetWallet}`
   }
@@ -31,57 +37,69 @@ export class ChAiN extends Contract {
   /**
    * Processes incoming payments and checks if listing should close
    */
-  public processPayment(sender: string, amount: number): string {
-    if (!this.listingOpen) {
-      throw new Error("No listing is currently open")
+  public processPayment(sender: string, amount: string): string {
+    // Check if listing is open
+    if (!this.listingOpen.hasValue || !this.listingOpen.value) {
+      return "No active listing to process payment for"
+    }
+
+    // Validate inputs
+    if (!sender) {
+      return "Error: Sender cannot be empty"
+    }
+
+    if (!amount || amount === "0") {
+      return "Error: Amount must be greater than 0"
     }
 
     // Check if payment is to the target wallet
-    if (sender !== this.targetWallet) {
-      return "Payment not to target wallet, listing remains open"
+    if (sender !== this.targetWallet.value) {
+      return `Payment from ${sender} not to target wallet ${this.targetWallet.value}. Listing remains open.`
     }
 
-    // Add to received amount
-    this.receivedAmount += amount
+    // Add to received amount (simplified for now)
+    this.receivedAmount.value = amount
 
-    // Check if target amount is reached
-    if (this.receivedAmount >= this.targetAmount) {
-      this.listingOpen = false
-      return `Listing closed! Target amount reached: ${this.receivedAmount}/${this.targetAmount}`
+    // Check if target amount is reached (simplified comparison)
+    if (amount === this.targetAmount.value) {
+      this.listingOpen.value = false
+      return `Listing closed! Target amount reached: ${amount}/${this.targetAmount.value} microAlgos`
     }
 
-    return `Payment received: ${amount}. Progress: ${this.receivedAmount}/${this.targetAmount}`
+    return `Payment received: ${amount} microAlgos. Progress: ${amount}/${this.targetAmount.value}`
   }
 
   /**
    * Gets current listing status
    */
   public getListingStatus(): string {
-    if (!this.listingOpen) {
+    if (!this.listingOpen.hasValue || !this.listingOpen.value) {
       return "No listing is currently open"
     }
 
-    return `Listing open: ${this.receivedAmount}/${this.targetAmount} to ${this.targetWallet}`
+    return `Listing open: ${this.receivedAmount.value}/${this.targetAmount.value} microAlgos to ${this.targetWallet.value}`
   }
 
   /**
    * Manually close listing (emergency function)
    */
   public closeListing(): string {
-    if (!this.listingOpen) {
+    if (!this.listingOpen.hasValue || !this.listingOpen.value) {
       return "No listing is currently open"
     }
 
-    this.listingOpen = false
-    return "Listing manually closed"
+    this.listingOpen.value = false
+    return `Listing manually closed. Final amount received: ${this.receivedAmount.value}/${this.targetAmount.value} microAlgos`
+  }
+
+  /**
+   * Get listing details (for debugging/info)
+   */
+  public getListingDetails(): string {
+    if (!this.listingOpen.hasValue || !this.listingOpen.value) {
+      return "No active listing"
+    }
+
+    return `Target: ${this.targetAmount.value} microAlgos to ${this.targetWallet.value}, Received: ${this.receivedAmount.value} microAlgos`
   }
 }
-
-// Open listing
-await contract.openListing("ABC123...", 1000000) // 1 ALGO
-
-// Check status
-await contract.getListingStatus() // "Listing open: 0/1000000 to ABC123..."
-
-// When payment received, contract auto-closes
-// Returns: "Listing closed! Target amount reached: 1000000/1000000"

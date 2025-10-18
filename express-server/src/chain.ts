@@ -1,5 +1,5 @@
 import { AlgorandClient } from '@algorandfoundation/algokit-utils';
-import { TransactionType } from 'algosdk';
+import { TransactionType, generateAccount, encodeAddress } from 'algosdk';
 import { ItemState, AgentState } from './types.js';
 
 // Initialize Algorand client
@@ -13,7 +13,11 @@ export function getAlgorandClient() {
 // Message types that can be received on the blockchain
 export enum MessageType {
     BID = 'BID',
-    ASK = 'ASK'
+    ASK = 'ASK',
+    BUY = 'BUY',
+    SELL = 'SELL',
+    QUERY = 'QUERY',
+    UNKNOWN = 'UNKNOWN'
 }
 
 // Interface for blockchain messages
@@ -49,17 +53,20 @@ export async function transferIntoWallet(wallet_id: string, sender_addr: string,
  */
 export async function postAgentToChain(provider_id: string, model_id: string, prompt: string, walletBalance: number): Promise<string> {
     // Get or create account from environment
-    const sender = algorand.account.fromEnvironment('SENDER_ACCOUNT');
+    const sender = await algorand.account.fromEnvironment('SENDER_ACCOUNT');
 
     const {wallet_id} = await getNewWallet();
-    await transferIntoWallet(wallet_id, sender.addr, walletBalance, prompt);
+    await transferIntoWallet(wallet_id, String(sender.addr), walletBalance, prompt);
     // Create agent data object
     const agentData: AgentState = {
+        agent_id: '', // Will be set to transaction ID
         currentItemsAcquired: [],
         provider_id,
         model_id,
         prompt,
         wallet_id,
+        wallet_pwd: '', // Not used in this context
+        walletBalance,
     };
 
 
@@ -67,6 +74,12 @@ export async function postAgentToChain(provider_id: string, model_id: string, pr
     const noteData = new TextEncoder().encode(JSON.stringify(agentData));
 
     // Send a payment transaction with the agent data in the note field
+    const result = await algorand.send.payment({
+        sender: sender.addr,
+        receiver: sender.addr, // Send to self to just store data
+        amount: (0).microAlgo(), // Minimum amount
+        note: noteData,
+    });
 
     // Return the transaction ID as the agent_id
     return result.txIds[0];
@@ -77,7 +90,7 @@ export async function postAgentToChain(provider_id: string, model_id: string, pr
  */
 export async function postResponseToChain(originalTxId: string, messageType: MessageType, response: string) {
     // Get or create account from environment
-    const sender = algorand.account.fromEnvironment('SENDER_ACCOUNT');
+    const sender = await algorand.account.fromEnvironment('SENDER_ACCOUNT');
 
     // Create response data object
     const responseData: ResponseData = {
@@ -150,8 +163,16 @@ export function parseMessage(note: Uint8Array | undefined, sender: string, txId:
         return null;
     }
 }
-function getNewWallet() {
-    throw new Error('Function not implemented.');
+async function getNewWallet() {
+    // Generate a new wallet using Algorand SDK
+    const account = generateAccount();
+    const wallet_id = encodeAddress(account.addr.publicKey);
+    
+    return { 
+        wallet_id,
+        address: wallet_id,
+        privateKey: encodeAddress(account.sk)
+    };
 }
 
 // Smart contract integration functions (commented out until artifacts are generated)
@@ -162,12 +183,10 @@ let appClient: any = null;
  */
 export async function initializeSmartContract() {
     try {
-        // Import the generated client (you'll need to build the contract first)
-        const { ChAiNFactory } = await import('../artifacts/ch_ai_n/ChAiNClient');
+        // Import the mock client for now
+        const { ChAiNFactory } = await import('../../algokit/ch_ai_n/projects/ch_ai_n/artifacts/ch_ai_n/ChAiNClient');
         
-        const factory = algorand.client.getTypedAppFactory(ChAiNFactory, {
-            defaultSender: algorand.account.fromEnvironment('SENDER_ACCOUNT').addr,
-        });
+        const factory = new ChAiNFactory();
         
         const { appClient: client } = await factory.deploy({ 
             onUpdate: 'append', 
