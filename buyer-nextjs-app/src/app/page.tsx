@@ -15,10 +15,61 @@ export default function Home() {
   const [windows, setWindows] = useState<WindowData[]>([]);
   const [nextZIndex, setNextZIndex] = useState(1000);
   const [error, setError] = useState('');
+  const [suggestion, setSuggestion] = useState('');
+  const [showSuggestions, setShowSuggestions] = useState(false);
+
+  const commands = ['-h', 'wallet', 'watch', 'track', 'list', 'events', 'create'];
 
   useEffect(() => {
 	createWindow('help', 'Help - Available Commands');
   }, []);
+
+  // Autocomplete logic
+  useEffect(() => {
+    if (!command) {
+      setSuggestion('');
+      return;
+    }
+
+    const input = command.toLowerCase();
+    const parts = input.split(/\s+/);
+    const cmd = parts[0];
+
+    // Find matching command
+    const match = commands.find(c => c.startsWith(cmd) && c !== cmd);
+    if (match && parts.length === 1) {
+      setSuggestion(match.slice(cmd.length));
+    } else {
+      setSuggestion('');
+    }
+  }, [command]);
+
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    // Tab or Right Arrow to accept suggestion
+    if ((e.key === 'Tab' || e.key === 'ArrowRight') && suggestion) {
+      e.preventDefault();
+      setCommand(command + suggestion);
+      setSuggestion('');
+    }
+  };
+
+  const highlightCommand = (text: string) => {
+    if (!text) return null;
+
+    const parts = text.split(/(\s+)/);
+    const cmd = parts[0].toLowerCase();
+
+    return (
+      <span>
+        <span className={commands.includes(cmd) ? 'text-green-400' : 'text-red-400'}>
+          {parts[0]}
+        </span>
+        {parts.slice(1).map((part, i) => (
+          <span key={i} className="text-white">{part}</span>
+        ))}
+      </span>
+    );
+  };
 
   const handleCommand = async (e: FormEvent) => {
     e.preventDefault();
@@ -172,17 +223,69 @@ export default function Home() {
       {/* Command Prompt - Top Left */}
       <div className="absolute top-4 left-4 z-50">
         <form onSubmit={handleCommand} className="flex flex-col gap-2">
-          <div className="flex items-center gap-2 bg-gray-900 border border-gray-700 rounded-lg px-4 py-2 shadow-lg">
-            <span className="text-green-400 font-mono">$</span>
-            <input
-              type="text"
-              value={command}
-              onChange={(e) => setCommand(e.target.value)}
-              placeholder="Enter command..."
-              className="bg-transparent text-white font-mono outline-none w-64"
-              autoFocus
-            />
+          <div className="relative">
+            <div className="flex items-center gap-2 bg-gray-900 border border-gray-700 rounded-lg px-4 py-2 shadow-lg hover:border-green-500/50 transition-colors">
+              <span className="text-green-400 font-mono">$</span>
+              
+              <div className="relative w-64">
+                {/* Visible styled text with syntax highlighting and suggestion */}
+                <div className="absolute inset-0 pointer-events-none font-mono whitespace-pre">
+                  {command ? (
+                    <>
+                      {highlightCommand(command)}
+                      <span className="text-gray-500">{suggestion}</span>
+                    </>
+                  ) : (
+                    <span className="text-gray-600">Enter command...</span>
+                  )}
+                </div>
+                
+                {/* Actual input for typing */}
+                <input
+                  type="text"
+                  value={command}
+                  onChange={(e) => setCommand(e.target.value)}
+                  onKeyDown={handleKeyDown}
+                  onFocus={() => setShowSuggestions(true)}
+                  onBlur={() => setTimeout(() => setShowSuggestions(false), 200)}
+                  className="w-full bg-transparent text-transparent caret-green-400 font-mono outline-none"
+                  autoFocus
+                />
+              </div>
+            </div>
+            
+            {/* Suggestion hint */}
+            {suggestion && (
+              <div className="text-xs text-gray-500 mt-1 ml-12 font-mono">
+                Press <kbd className="px-1 py-0.5 bg-gray-800 rounded text-green-400">Tab</kbd> or <kbd className="px-1 py-0.5 bg-gray-800 rounded text-green-400">→</kbd> to autocomplete
+              </div>
+            )}
+            
+            {/* Dropdown suggestions */}
+            {showSuggestions && command && (
+              <div className="absolute top-full left-0 mt-1 bg-gray-900 border border-gray-700 rounded-lg shadow-xl overflow-hidden w-full z-10">
+                {commands
+                  .filter(cmd => cmd.toLowerCase().startsWith(command.toLowerCase()))
+                  .map(cmd => (
+                    <div
+                      key={cmd}
+                      onMouseDown={(e) => {
+                        e.preventDefault(); // Prevent blur
+                        setCommand(cmd + ' ');
+                        setSuggestion('');
+                        setShowSuggestions(false);
+                      }}
+                      className="px-4 py-2 hover:bg-green-500/20 cursor-pointer text-green-400 font-mono text-sm transition-colors"
+                    >
+                      <span className="text-white">{command}</span>
+                      <span className="text-green-400">{cmd.slice(command.length)}</span>
+                    </div>
+                  ))
+                }
+              </div>
+            )}
           </div>
+          
           {error && (
             <div className="text-red-400 text-sm font-mono bg-gray-900 border border-red-900 rounded px-3 py-1">
               {error}
