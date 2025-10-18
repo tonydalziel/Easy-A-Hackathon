@@ -15,6 +15,7 @@ export default function Home() {
   const [windows, setWindows] = useState<WindowData[]>([]);
   const [nextZIndex, setNextZIndex] = useState(1000);
   const [error, setError] = useState('');
+  const [success, setSuccess] = useState('');
   const [suggestion, setSuggestion] = useState('');
   const [showSuggestions, setShowSuggestions] = useState(false);
   const [parameterHint, setParameterHint] = useState('');
