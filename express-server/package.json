@@ -20,7 +20,9 @@
   },
   "dependencies": {
     "@algorandfoundation/algokit-utils": "^9.1.2",
+    "@types/ws": "^8.18.1",
     "algosdk": "^3.5.2",
-    "openai": "^6.5.0"
+    "openai": "^6.5.0",
+    "ws": "^8.18.3"
   }
 }
