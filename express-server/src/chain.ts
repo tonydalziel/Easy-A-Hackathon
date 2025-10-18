@@ -7,10 +7,8 @@ const algorand = AlgorandClient.fromEnvironment();
 
 // Message types that can be received on the blockchain
 export enum MessageType {
-    BUY = 'BUY',
-    SELL = 'SELL',
-    QUERY = 'QUERY',
-    UNKNOWN = 'UNKNOWN'
+    BID = 'BID',
+    ASK = 'ASK'
 }
 
 // Interface for blockchain messages
