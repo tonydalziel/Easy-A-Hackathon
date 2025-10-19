@@ -16,6 +16,10 @@ export type ItemState = {
     id: string;
     name: string;
     price: number;
+    contractAppId?: string;  // Smart contract application ID
+    listingId?: string;      // Blockchain listing/transaction ID
+    seller_id?: string;      // Merchant/seller identifier
+    description?: string;    // Item description
 }
 
 export type MerchantState = {

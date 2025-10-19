@@ -1,6 +1,6 @@
 // router for agent endpoints
 import express, { Request, Response } from 'express';
-import { postAgentToChain } from './chain';
+import { postAgentToChain, openListingOnChain, getListingStatusFromChain } from './chain';
 import { AgentState, ItemState } from './types';
 import { haveLLMConsiderPurchase } from './llms';
 import { itemProcessor } from './itemProcessor';
@@ -53,7 +53,7 @@ router.get('/items/:itemId', (req: Request, res: Response) => {
 });
 
 // Register a new item for sale
-router.post('/items', (req: Request, res: Response) => {
+router.post('/items', async (req: Request, res: Response) => {
     try {
         console.log('📥 POST /agents/items - Request body:', req.body);
         const { name, description, price, seller_id } = req.body;
@@ -82,13 +82,31 @@ router.post('/items', (req: Request, res: Response) => {
         const itemState: ItemState = {
             id: itemId,
             name,
-            price: itemPrice
+            price: itemPrice,
+            seller_id,
+            description
         };
+
+        // Create smart contract listing on the blockchain
+        let listingId: string | undefined = undefined;
+        try {
+            console.log(`📝 Creating smart contract listing for item "${name}" with target amount ${itemPrice}...`);
+            listingId = await openListingOnChain(itemPrice);
+            itemState.listingId = listingId;
+            console.log(`✅ Smart contract listing created: ${listingId}`);
+        } catch (error) {
+            console.error('⚠️  Failed to create smart contract listing:', error);
+            console.log('⚠️  Item will be registered without blockchain listing');
+            // Continue with item registration even if blockchain fails
+        }
 
         // Store item
         registeredItems.set(itemId, itemState);
 
         console.log(`✅ Registered item: ${itemId} - "${name}" ($${itemPrice})`);
+        if (listingId) {
+            console.log(`🔗 Blockchain listing ID: ${listingId}`);
+        }
         console.log(`📊 Total items registered: ${registeredItems.size}`);
 
         // Process this new item with all existing agents
@@ -105,8 +123,10 @@ router.post('/items', (req: Request, res: Response) => {
             itemId: itemId,
             name: itemState.name,
             price: itemState.price,
+            listingId: itemState.listingId,
             item: itemState,
-            agentsNotified: allAgents.length
+            agentsNotified: allAgents.length,
+            blockchainEnabled: !!itemState.listingId
         });
     } catch (error) {
         console.error('❌ Error registering item:', error);
@@ -332,9 +352,6 @@ router.get('/:agentId', (req: Request, res: Response) => {
     console.log('✅ Found agent:', agent.agent_id);
     res.json({ agent });
 });
-
-// Import listing functions
-import { openListingOnChain, getListingStatusFromChain } from './chain';
 
 // Open a new listing
 router.post('/listings', async (req: Request, res: Response) => {
