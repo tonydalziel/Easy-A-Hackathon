@@ -10,9 +10,10 @@ interface WalletData {
 interface WalletWindowProps {
   address: string;
   balance: number;
+  onOpenLora?: (walletId: string) => void;
 }
 
-export default function WalletWindow({ address, balance }: WalletWindowProps) {
+export default function WalletWindow({ address, balance, onOpenLora }: WalletWindowProps) {
   const [walletHistory, setWalletHistory] = useState<WalletData[]>([]);
   const [currentValue, setCurrentValue] = useState(balance);
 
@@ -79,17 +80,15 @@ export default function WalletWindow({ address, balance }: WalletWindowProps) {
         <div className="text-gray-400 text-sm mb-2">Wallet Address</div>
         <div className="text-xs text-cyan-400 bg-gray-800/50 p-2 rounded mb-4 break-all flex items-center justify-between gap-2">
           <span>{address}</span>
-          <a
-            href={`https://lora.algokit.io/localnet/account/${address}`}
-            target="_blank"
-            rel="noopener noreferrer"
+          <button
+            onClick={() => onOpenLora?.(address)}
             className="flex-shrink-0 text-cyan-400 hover:text-cyan-300 transition-colors"
             title="View on Lora Explorer"
           >
             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
             </svg>
-          </a>
+          </button>
         </div>
         <div className="text-gray-400 text-sm mb-1">Total Balance</div>
         <div className="text-3xl font-bold text-green-400">

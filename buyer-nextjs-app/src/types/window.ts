@@ -9,5 +9,6 @@ export interface WindowData {
   zIndex: number;
   agentId?: string; // For agent-tracker windows
   evalSetId?: string; // For eval-runner windows
+  walletId?: string; // For lora-explorer windows
   isMinimized?: boolean; // Whether the window is minimized to dock
 }
