@@ -86,7 +86,7 @@ export async function transferIntoWallet(wallet_id: string, sender_addr: string,
 /**
  * Post agent information to the chain using a payment transaction with note field
  */
-export async function postAgentToChain(sender: string, provider_id: string, model_id: string, prompt: string, walletBalance: number): Promise<string> {
+export async function postAgentToChain(sender: string, provider_id: string, model_id: string, prompt: string, walletBalance: number): Promise<{transactionId: string; wallet_id: string}> {
     if (!algorand) {
         throw new Error('Algorand client not initialized');
     }
@@ -141,7 +141,7 @@ export async function postAgentToChain(sender: string, provider_id: string, mode
     console.log(`✅ Agent metadata posted to blockchain. TX: ${result.txIds[0]}`);
 
     // Return the transaction ID as the agent_id
-    return result.txIds[0];
+    return {transactionId: result.txIds[0], wallet_id };
 }
 
 /**

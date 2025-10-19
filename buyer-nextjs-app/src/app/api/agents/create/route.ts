@@ -10,7 +10,7 @@ const DEFAULT_PROVIDER_ID = process.env.DEFAULT_PROVIDER_ID || 'ollama';
 export async function POST(request: Request) {
   try {
     const body = await request.json();
-    const { prompt, model_id, provider_id, user_wallet_id } = body;
+    const { prompt, model_id, provider_id, user_wallet_id, walletBalance } = body;
 
     if (!prompt) {
       return NextResponse.json({ error: 'Prompt required' }, { status: 400 });
@@ -20,21 +20,21 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: 'User wallet ID required' }, { status: 400 });
     }
 
+    if (!walletBalance || walletBalance <= 0) {
+      return NextResponse.json({ error: 'Valid wallet balance required' }, { status: 400 });
+    }
+
     // Generate agent ID
     const agentId = `agent-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
 
-    // Generate wallet credentials (in production, use proper crypto)
-    const walletId = `wallet-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
-    const walletPwd = Math.random().toString(36).substr(2, 15);
-
-    // Create agent object
+	// Create agent object
     const agent: Agent = {
       id: agentId,
       prompt: prompt.trim(),
       model_id: model_id || DEFAULT_MODEL_ID,
       provider_id: provider_id || DEFAULT_PROVIDER_ID,
-      wallet_id: walletId,
-      wallet_pwd: walletPwd,
+      wallet_id: "UNASSIGNED",
+      wallet_pwd: "UNASSIGNED",
       currentItemsAcquired: [],
       createdAt: Date.now(),
       status: 'active'
@@ -52,8 +52,8 @@ export async function POST(request: Request) {
 
     // Register agent with express-server (with blockchain funding)
     try {
-      // Default: 1000 ALGO = 1,000,000,000 microALGO
-      const initialWalletBalance = 1000000000;
+      // Use the wallet balance provided by the user (already in microALGO)
+      const initialWalletBalance = walletBalance;
 
       const expressResponse = await fetch(`${EXPRESS_SERVER_URL}/agents`, {
         method: 'POST',
@@ -64,7 +64,7 @@ export async function POST(request: Request) {
           prompt: agent.prompt,
           user_id: agent.id, // Pass agent ID as user_id
           user_wallet_id: user_wallet_id, // Pass user's wallet ID for blockchain funding
-          walletBalance: initialWalletBalance // Fund with 1000 ALGO
+          walletBalance: initialWalletBalance // Fund with specified amount
         })
       });
 
@@ -74,6 +74,8 @@ export async function POST(request: Request) {
       } else {
         const expressData = await expressResponse.json();
         console.log(`Agent ${agentId} registered with express-server`);
+
+		console.log('Express server response status:', expressData);
 
         // Update local agent with blockchain info
         if (expressData.agent) {
@@ -93,6 +95,7 @@ export async function POST(request: Request) {
       console.error('Error calling express-server:', error);
       // Continue anyway - agent is still created locally
     }
+	
 
     return NextResponse.json({
       success: true,

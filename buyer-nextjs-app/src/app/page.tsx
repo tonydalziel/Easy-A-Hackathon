@@ -17,7 +17,7 @@
  *
  * Commands:
  * - help: Display command reference
- * - create <prompt>: Create new AI agent
+ * - BUY -p <prompt> -v <value>: Create new AI agent with budget
  * - track <id>: Monitor specific agent
  * - list: View all agents
  * - watch: Live decision stream
@@ -73,7 +73,7 @@ export default function Home() {
     successRate: 0,
   });
 
-  const commands = ['-h', 'wallet', 'watch', 'track', 'list', 'events', 'create', 'dashboard', 'items', 'review', 'evals', 'lora'];
+  const commands = ['-h', 'wallet', 'watch', 'track', 'list', 'events', 'buy', 'dashboard', 'items', 'review', 'evals', 'lora'];
 
   const commandInfo: Record<string, { params?: string; description: string; icon?: string }> = {
     '-h': { description: 'Display help window', icon: '?' },
@@ -82,7 +82,7 @@ export default function Home() {
     'track': { params: '<agent-id>', description: 'Track a specific agent\'s activity', icon: '→' },
     'list': { description: 'List all agents with their status', icon: '≡' },
     'events': { description: 'Show all on-chain events', icon: '⋯' },
-    'create': { params: '<prompt>', description: 'Create a new agent with the specified prompt', icon: '+' },
+    'buy': { params: '-p <prompt> -v <value>', description: 'Create a new agent with prompt and budget (in ALGO)', icon: '+' },
     'dashboard': { description: 'Open system dashboard with analytics', icon: '▣' },
     'lora': { description: 'Open Lora Algorand block explorer', icon: '🔍' },
   };
@@ -322,12 +322,30 @@ export default function Home() {
       createWindow('decision-review', '📝 Review Agent Decisions');
     } else if (cmd === 'evals') {
       createWindow('eval-manager', '🎯 Evaluation Sets');
-    } else if (cmd === 'create') {
-      if (params.length === 0) {
-        setError('Error: create command requires a prompt. Usage: create <prompt>');
+    } else if (cmd === 'buy') {
+      // Parse -p <prompt> -v <value> format
+      let prompt = '';
+      let value = '';
+
+      for (let i = 0; i < params.length; i++) {
+        if (params[i] === '-p' && i + 1 < params.length) {
+          // Collect all text until we hit -v or end
+          let j = i + 1;
+          while (j < params.length && params[j] !== '-v') {
+            prompt += (prompt ? ' ' : '') + params[j];
+            j++;
+          }
+          i = j - 1;
+        } else if (params[i] === '-v' && i + 1 < params.length) {
+          value = params[i + 1];
+          i++;
+        }
+      }
+
+      if (!prompt || !value) {
+        setError('Error: BUY command requires -p <prompt> and -v <value>. Usage: BUY -p <prompt> -v <value>');
       } else {
-        const prompt = params.join(' ');
-        await handleCreateAgent(prompt);
+        await handleCreateAgent(prompt, parseFloat(value));
       }
     } else {
       setError(`Unknown command: ${cmd}. Type -h for help.`);
@@ -336,7 +354,7 @@ export default function Home() {
     setCommand('');
   };
 
-  const handleCreateAgent = async (prompt: string) => {
+  const handleCreateAgent = async (prompt: string, value: number) => {
     setError('');
     setSuccess('');
 
@@ -347,22 +365,26 @@ export default function Home() {
         return;
       }
 
+      // Convert ALGO to microALGO (1 ALGO = 1,000,000 microALGO)
+      const microAlgoValue = Math.floor(value * 1000000);
+
       const response = await fetch('/api/agents/create', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           prompt,
-          user_wallet_id: user.walletId // Pass user's wallet ID
+          user_wallet_id: user.walletId, // Pass user's wallet ID
+          walletBalance: microAlgoValue // Pass the value in microALGO
         }),
       });
 
       if (response.ok) {
         const data = await response.json();
         if (data.success && data.agentId) {
-          setSuccess(`Agent created successfully! ID: ${data.agentId}`);
+          setSuccess(`Agent created successfully with ${value} ALGO! ID: ${data.agentId}`);
           setTimeout(() => setSuccess(''), 5000);
           // Optionally open the agent tracker window
-          createWindow('agent-tracker', `Agent Tracker - ${data.agentId}`, data.agentId);
+        //   createWindow('agent-tracker', `Agent Tracker - ${data.agentId}`, data.agentId);
         } else {
           setError(data.message || 'Failed to create agent');
         }
@@ -589,7 +611,7 @@ export default function Home() {
               {/* Navigation Links */}
               {[
                 { cmd: '-h', label: 'Help', icon: '?' },
-                { cmd: 'create', label: 'New Agent', icon: '+' },
+                { cmd: 'buy', label: 'New Agent', icon: '+' },
                 { cmd: 'list', label: 'Agents', icon: '≡' },
                 { cmd: 'watch', label: 'Live Feed', icon: '◉' },
                 { cmd: 'items', label: 'Marketplace', icon: '🏪' },

@@ -9,7 +9,7 @@ export default function HelpWindow() {
 	{ name: 'events', description: 'Show all on-chain events across all agents' },
 	{ name: 'list', description: 'List all agents with their status, tasks, and purchases' },
     { name: 'track <agent-id>', description: 'Track a specific agent\'s activity and wallet value' },
-    { name: 'create <prompt>', description: 'Create a new agent with the specified prompt' },
+    { name: 'BUY -p <prompt> -v <value>', description: 'Create a new agent with specified prompt and budget value (in ALGO)' },
   ];
 
   return (

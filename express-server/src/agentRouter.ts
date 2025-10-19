@@ -204,13 +204,13 @@ router.post('/', async (req: Request, res: Response) => {
         const initialBalance = walletBalance || 1000000000; // 1000 ALGO = 1,000,000,000 microALGO
 
         let blockchainAgentId: string | null = null;
-        let wallet_id = `wallet-${Date.now()}`;
+		let wallet_id: string = 'UNASSIGNED';
 
         // Post agent to blockchain with funding
         try {
             console.log(`💰 Creating agent on blockchain with ${initialBalance / 1000000} ALGO...`);
             console.log(`💳 Funding from user wallet: ${user_wallet_id}`);
-            blockchainAgentId = await postAgentToChain(
+            const postingAgentResponse = await postAgentToChain(
                 user_wallet_id, // Use authenticated user's wallet instead of hardcoded SENDER_ADDR
                 provider_id,
                 model_id,
@@ -218,10 +218,9 @@ router.post('/', async (req: Request, res: Response) => {
                 initialBalance
             );
 
-            console.log(`✅ Agent posted to blockchain! Transaction ID: ${blockchainAgentId}`);
+            console.log(`✅ Agent posted to blockchain! Transaction ID: ${postingAgentResponse.transactionId}`);
+			wallet_id = postingAgentResponse.wallet_id;
 
-            // Use blockchain transaction ID as wallet_id
-            wallet_id = blockchainAgentId;
         } catch (error) {
             console.error('⚠️  Failed to post agent to blockchain:', error);
             // Continue with local registration even if blockchain fails
