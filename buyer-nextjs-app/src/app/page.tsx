@@ -42,6 +42,7 @@ import EvalSetManager from '@/components/EvalSetManager';
 import EvalRunner from '@/components/EvalRunner';
 import SignupForm from '@/components/SignupForm';
 import LoraExplorer from '@/components/LoraExplorer';
+import AnimatedGlobe from '@/components/AnimatedGlobe';
 import { WindowData } from '@/types/window';
 import { EXPRESS_SERVER_URL } from './api/agents/create/route';
 
@@ -383,24 +384,72 @@ export default function Home() {
 
   };
 
+  // Smart window positioning to avoid overlaps
+  const findOptimalPosition = (width: number, height: number, existingWindows: WindowData[]) => {
+    const padding = 20;
+    const screenWidth = typeof window !== 'undefined' ? window.innerWidth : 1920;
+    const screenHeight = typeof window !== 'undefined' ? window.innerHeight : 1080;
+    const navbarHeight = 70;
+
+    // Check if a position overlaps with existing windows
+    const hasOverlap = (x: number, y: number, w: number, h: number) => {
+      return existingWindows.some(win => {
+        if (win.isMinimized) return false;
+        
+        const overlapX = x < win.x + win.width && x + w > win.x;
+        const overlapY = y < win.y + win.height && y + h > win.y;
+        return overlapX && overlapY;
+      });
+    };
+
+    // Try cascading positions first (classic staircase pattern)
+    for (let i = 0; i < 15; i++) {
+      const x = padding + i * 40;
+      const y = navbarHeight + padding + i * 40;
+      
+      if (x + width < screenWidth - padding && y + height < screenHeight - padding) {
+        if (!hasOverlap(x, y, width, height)) {
+          return { x, y };
+        }
+      }
+    }
+
+    // Try grid positions
+    const cols = Math.floor((screenWidth - padding * 2) / (width + padding));
+    const rows = Math.floor((screenHeight - navbarHeight - padding * 2) / (height + padding));
+    
+    for (let row = 0; row < rows; row++) {
+      for (let col = 0; col < cols; col++) {
+        const x = padding + col * (width + padding);
+        const y = navbarHeight + padding + row * (height + padding);
+        
+        if (!hasOverlap(x, y, width, height)) {
+          return { x, y };
+        }
+      }
+    }
+
+    // Fallback: center of screen
+    return {
+      x: Math.max(padding, (screenWidth - width) / 2),
+      y: Math.max(navbarHeight + padding, (screenHeight - height) / 2)
+    };
+  };
+
   const createWindow = (
     type: 'help' | 'wallet' | 'agent-tracker' | 'agent-list' | 'event-history' | 'decision-stream' | 'dashboard' | 'item-registration' | 'decision-review' | 'eval-manager' | 'eval-runner' | 'lora-explorer',
     title: string,
     agentId?: string,
-    evalSetId?: string
+    evalSetId?: string,
+    walletId?: string
   ) => {
     // Determine window size based on type
     let width = 500;
     let height = 400;
-    let x = 20 + windows.length * 30;
-    let y = 70 + windows.length * 30;
 
     if (type === 'help') {
       width = 400;
       height = 500;
-      // Position help window on the right side to avoid terminal dropdown
-      x = window.innerWidth - width - 40;
-      y = 20;
     } else if (type === 'agent-list') {
       width = 700;
       height = 500;
@@ -430,6 +479,9 @@ export default function Home() {
       height = 700;
     }
 
+    // Find optimal position
+    const { x, y } = findOptimalPosition(width, height, windows);
+
     const newWindow: WindowData = {
       id: `${type}-${Date.now()}`,
       type,
@@ -441,6 +493,7 @@ export default function Home() {
       zIndex: nextZIndex,
       agentId,
       evalSetId,
+      walletId,
     };
 
     setWindows([...windows, newWindow]);
@@ -471,12 +524,23 @@ export default function Home() {
     setNextZIndex(nextZIndex + 1);
   };
 
+  // Handle window position change
+  const handleWindowPositionChange = (id: string, x: number, y: number) => {
+    setWindows(windows.map(w =>
+      w.id === id ? { ...w, x, y } : w
+    ));
+  };
+
   const renderWindowContent = (window: WindowData) => {
+    const handleOpenLora = (walletId: string) => {
+      createWindow('lora-explorer', 'Lora Explorer', undefined, undefined, walletId);
+    };
+
     switch (window.type) {
       case 'help':
         return <HelpWindow />;
       case 'wallet':
-        return <WalletWindow address={user?.walletId || ''} balance={0} />;
+        return <WalletWindow address={user?.walletId || ''} balance={0} onOpenLora={handleOpenLora} />;
       case 'decision-stream':
         return <DecisionStream />;
       case 'dashboard':
@@ -484,7 +548,7 @@ export default function Home() {
       case 'item-registration':
         return <ItemRegistration />;
       case 'lora-explorer':
-        return <LoraExplorer />;
+        return <LoraExplorer walletId={window.walletId} />;
       case 'decision-review':
         return <DecisionReview onClose={() => closeWindow(window.id)} />;
       case 'eval-manager':
@@ -512,10 +576,11 @@ export default function Home() {
           <AgentTracker
             agentId={window.agentId}
             onNotFound={() => closeWindow(window.id)}
+            onOpenLora={handleOpenLora}
           />
         ) : null;
       case 'agent-list':
-        return <AgentList />;
+        return <AgentList onOpenLora={handleOpenLora} />;
       case 'event-history':
         return <EventHistory />;
       default:
@@ -578,11 +643,14 @@ export default function Home() {
   }
 
   return (
-    <div className="w-screen relative overflow-scroll h-screen">
-      {/* Top Navbar */}
+    <div className="h-screen w-screen relative overflow-hidden flex flex-col">
+      {/* Animated Globe Background */}
+      <AnimatedGlobe />
+      
+      {/* Top Navbar with integrated terminal */}
       <div className="bg-gradient-to-r from-gray-950 via-gray-900 to-gray-950 border-b-2 border-cyan-500/30 shadow-lg shadow-cyan-500/10 z-50">
         <div className="px-6">
-          <div className="flex items-center justify-between">
+          <div className="flex items-center justify-between gap-4">
             {/* Brand Logo */}
             <div className="flex items-center gap-3 py-4 px-4 border-r border-gray-800">
               <div className="text-2xl font-bold bg-gradient-to-r from-cyan-400 via-blue-500 to-purple-600 bg-clip-text text-transparent">
@@ -591,46 +659,208 @@ export default function Home() {
               <div className="text-xs text-gray-500 hidden sm:block">Crypto Marketplace</div>
             </div>
 
-            {/* Navigation Items */}
-            <div className="flex items-stretch flex-1">
-              {/* Navigation Links */}
-              {[
-                { cmd: '-h', label: 'Help', icon: '?' },
-                { cmd: 'buy', label: 'New Agent', icon: '+' },
-                { cmd: 'list', label: 'Agents', icon: '≡' },
-                { cmd: 'watch', label: 'Live Feed', icon: '◉' },
-                { cmd: 'items', label: 'Marketplace', icon: '🏪' },
-                { cmd: 'review', label: 'Review', icon: '📝' },
-                { cmd: 'evals', label: 'Evals', icon: '🎯' },
-                { cmd: 'dashboard', label: 'Dashboard', icon: '▣' },
-              ].map((action, index) => (
-                <div
-                  key={action.cmd}
-                  onClick={() => {
-                    setCommand(action.cmd + ' ');
-                    document.querySelector('input')?.focus();
-                  }}
-                  className="group relative px-6 py-4 flex items-center gap-2 cursor-pointer
-                           hover:bg-cyan-500/10 transition-all duration-200
-                           border-r border-gray-800 last:border-r-0"
-                  title={action.label}
-                >
-                  {/* Hover indicator bar */}
-                  <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-gradient-to-r from-cyan-400 to-blue-500
-                               scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left"></div>
+            {/* Menu Dropdown - Now outside terminal */}
+            <div className="relative group">
+              <button
+                type="button"
+                className="px-4 py-2 bg-gradient-to-r from-purple-500/20 to-blue-500/20 hover:from-purple-500/30 hover:to-blue-500/30 rounded-lg text-white font-medium transition-all border border-purple-500/30 flex items-center gap-2"
+              >
+                <span className="text-sm">Menu</span>
+                <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                </svg>
+              </button>
+              
+              {/* Dropdown menu */}
+              <div className="absolute left-0 top-full mt-2 w-56 bg-gray-900/95 backdrop-blur-sm border border-cyan-500/30 rounded-lg shadow-2xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50">
+                {[
+                  { cmd: '-h', label: 'Help', icon: '?' },
+                  { cmd: 'create', label: 'New Agent', icon: '+' },
+                  { cmd: 'list', label: 'List Agents', icon: '≡' },
+                  { cmd: 'watch', label: 'Live Feed', icon: '◉' },
+                  { cmd: 'items', label: 'Marketplace', icon: '🏪' },
+                  { cmd: 'review', label: 'Review', icon: '📝' },
+                  { cmd: 'evals', label: 'Evaluations', icon: '🎯' },
+                  { cmd: 'dashboard', label: 'Dashboard', icon: '▣' },
+                  { cmd: 'wallet', label: 'Wallet', icon: '$' },
+                  { cmd: 'lora', label: 'Explorer', icon: '🔍' },
+                ].map((action) => (
+                  <div
+                    key={action.cmd}
+                    onClick={() => {
+                      setCommand(action.cmd + ' ');
+                      document.querySelector('input')?.focus();
+                    }}
+                    className="px-4 py-2.5 hover:bg-cyan-500/10 cursor-pointer transition-all border-b border-gray-800/50 last:border-b-0 flex items-center gap-3"
+                  >
+                    <span className="text-lg">{action.icon}</span>
+                    <span className="text-sm text-gray-300 hover:text-white transition-colors">
+                      {action.label}
+                    </span>
+                  </div>
+                ))}
+              </div>
+            </div>
 
-                  <span className="text-base font-bold text-gray-400 group-hover:text-cyan-400 transition-colors">
-                    {action.icon}
-                  </span>
-                  <span className="text-sm text-gray-400 group-hover:text-white transition-colors font-medium">
-                    {action.label}
-                  </span>
+            {/* Integrated Terminal - Now takes maximum space */}
+            <form onSubmit={handleCommand} className="flex-1">
+              <div className="flex items-center gap-3 bg-gray-900/50 border border-cyan-500/30 rounded-lg px-4 py-2 hover:border-cyan-500/50 transition-all">
+                {/* Terminal Prompt */}
+                <div className="flex items-center gap-2">
+                  <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse"></div>
+                  <span className="text-cyan-400 font-mono text-sm font-bold">→</span>
                 </div>
-              ))}
 
+                <div className="flex-1 relative">
+                  {/* Styled overlay with syntax highlighting */}
+                  <div className="absolute inset-0 pointer-events-none font-mono text-sm whitespace-pre">
+                    {command ? (
+                      <>
+                        {highlightCommand(command)}
+                        <span className="text-gray-600">{suggestion}</span>
+                      </>
+                    ) : (
+                      <span className="text-gray-600">Type command...</span>
+                    )}
+                  </div>
+
+                  {/* Actual input */}
+                  <input
+                    type="text"
+                    value={command}
+                    onChange={(e) => setCommand(e.target.value)}
+                    onKeyDown={handleKeyDown}
+                    onFocus={() => setShowSuggestions(true)}
+                    onBlur={() => setTimeout(() => setShowSuggestions(false), 200)}
+                    className="w-full bg-transparent text-transparent caret-cyan-400 font-mono text-sm outline-none"
+                    placeholder=""
+                  />
+                </div>
+
+                {/* Submit button */}
+                <button
+                  type="submit"
+                  className="px-3 py-1.5 bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-600 hover:to-blue-700 rounded-lg text-white font-medium transition-all shadow-lg hover:shadow-cyan-500/50 flex items-center gap-2"
+                >
+                  <span className="text-sm">Run</span>
+                  <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
+                  </svg>
+                </button>
+              </div>
+
+              {/* Autocomplete dropdown */}
+              {showSuggestions && command && (
+                <div className="absolute left-0 right-0 mt-2 mx-6 z-50">
+                  <div className="bg-gray-900/95 backdrop-blur-sm rounded-xl shadow-2xl overflow-hidden border border-cyan-500/30 max-h-96 overflow-y-auto">
+                    {(() => {
+                      const parts = command.toLowerCase().split(/\s+/);
+                      const cmd = parts[0];
+
+                      // Show agent IDs if command is "track"
+                      if (cmd === 'track' && parts.length === 1) {
+                        if (availableAgents.length === 0) {
+                          return (
+                            <div className="px-5 py-6 text-center text-gray-500">
+                              <div className="text-2xl mb-2">-</div>
+                              <div className="text-sm">No agents available</div>
+                              <div className="text-xs mt-1">Create an agent first with: create &lt;prompt&gt;</div>
+                            </div>
+                          );
+                        }
+
+                        return availableAgents.map((agent, index) => (
+                          <div
+                            key={agent.id}
+                            onMouseDown={(e) => {
+                              e.preventDefault();
+                              setCommand(`track ${agent.id}`);
+                              setSuggestion('');
+                              setShowSuggestions(false);
+                            }}
+                            onMouseEnter={() => setSelectedIndex(index)}
+                            className={`px-5 py-3 cursor-pointer transition-all border-b border-gray-800/50 last:border-b-0 ${selectedIndex === index
+                              ? 'bg-cyan-500/20 ring-2 ring-cyan-400/50'
+                              : 'hover:bg-cyan-500/10'
+                              }`}
+                          >
+                            <div className="flex items-center justify-between mb-2">
+                              <div className="flex items-center gap-3">
+                                <span className="text-lg">→</span>
+                                <div>
+                                  <div className="font-mono text-sm text-cyan-400">
+                                    {agent.id.slice(0, 16)}...
+                                  </div>
+                                  <div className="text-xs text-gray-500 mt-0.5">
+                                    Click to track this agent
+                                  </div>
+                                </div>
+                              </div>
+                              <span className={`
+                                    px-2 py-1 rounded text-xs font-bold
+                                    ${agent.status === 'active'
+                                  ? 'bg-green-500/20 text-green-400 border border-green-500/50'
+                                  : 'bg-gray-500/20 text-gray-400 border border-gray-500/50'
+                                }
+                                  `}>
+                                {agent.status.toUpperCase()}
+                              </span>
+                            </div>
+                            <div className="text-gray-400 text-xs ml-9 line-clamp-1">
+                              {agent.prompt}
+                            </div>
+                          </div>
+                        ));
+                      }
+
+                      // Show regular command suggestions
+                      return commands
+                        .filter(c => c.toLowerCase().startsWith(command.toLowerCase()))
+                        .map((cmd, index) => {
+                          const info = commandInfo[cmd];
+                          return (
+                            <div
+                              key={cmd}
+                              onMouseDown={(e) => {
+                                e.preventDefault();
+                                setCommand(cmd + ' ');
+                                setSuggestion('');
+                              }}
+                              onMouseEnter={() => setSelectedIndex(index)}
+                              className={`px-5 py-3 cursor-pointer transition-all border-b border-gray-800/50 last:border-b-0 ${selectedIndex === index
+                                ? 'bg-cyan-500/20 ring-2 ring-cyan-400/50'
+                                : 'hover:bg-cyan-500/10'
+                                }`}
+                            >
+                              <div className="flex items-center justify-between mb-1">
+                                <div className="flex items-center gap-3">
+                                  <span className="text-xl">{info?.icon}</span>
+                                  <span className="font-mono">
+                                    <span className="text-gray-500">{command}</span>
+                                    <span className="text-cyan-400 font-bold">{cmd.slice(command.length)}</span>
+                                    {info?.params && (
+                                      <span className="text-blue-400 ml-2">{info.params}</span>
+                                    )}
+                                  </span>
+                                </div>
+                              </div>
+                              <div className="text-gray-400 text-xs ml-9">
+                                {info?.description}
+                              </div>
+                            </div>
+                          );
+                        });
+                    })()}
+                  </div>
+                </div>
+              )}
+            </form>
+
+            {/* Right side - User info and minimized windows */}
+            <div className="flex items-stretch">
               {/* User Info Section */}
               {user && (
-                <div className="flex items-center gap-4 px-6 py-4 border-l border-gray-800 ml-auto">
+                <div className="flex items-center gap-4 px-6 py-4 border-r border-gray-800">
                   <div className="flex flex-col items-end">
                     <span className="text-sm font-medium text-white">
                       {user.username}
@@ -639,17 +869,15 @@ export default function Home() {
                       <span className="text-xs text-gray-400 font-mono">
                         {user.walletId.substring(0, 20)}...
                       </span>
-                      <a
-                        href={`https://lora.algokit.io/localnet/account/${user.walletId}`}
-                        target="_blank"
-                        rel="noopener noreferrer"
+                      <button
+                        onClick={() => createWindow('lora-explorer', 'Lora Explorer', undefined, undefined, user.walletId)}
                         className="text-gray-400 hover:text-gray-300 transition-colors"
                         title="View on Lora Explorer"
                       >
                         <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
                         </svg>
-                      </a>
+                      </button>
                     </div>
                   </div>
                   <button
@@ -665,7 +893,7 @@ export default function Home() {
 
               {/* Minimized Windows Section */}
               {windows.some(w => w.isMinimized) && (
-                <div className="flex items-stretch border-l-2 border-cyan-500/30">
+                <div className="flex items-stretch border-l border-cyan-500/30">
                   {windows
                     .filter(w => w.isMinimized)
                     .map((window) => (
@@ -718,207 +946,29 @@ export default function Home() {
             </div>
           </div>
         </div>
-      </div>
 
-      {/* Command Interface Section */}
-      <div className="z-40 px-8 py-6 bg-gray-900/40 backdrop-blur-sm border-b border-gray-800">
-        <form onSubmit={handleCommand} className="relative max-w-4xl mx-auto">
-          <div className="relative">
-            <div className="flex items-center gap-3 bg-gray-900/50 border border-cyan-500/30 rounded-xl px-5 py-4 shadow-lg hover:border-cyan-500/50 transition-all hover:shadow-cyan-500/20 backdrop-blur-sm">
-              {/* Terminal Prompt */}
-              <div className="flex items-center gap-2">
-                <div className="w-3 h-3 rounded-full bg-green-500 animate-pulse"></div>
-                <span className="text-cyan-400 font-mono text-lg font-bold">→</span>
-              </div>
-
-              <div className="flex-1 relative">
-                {/* Styled overlay with syntax highlighting */}
-                <div className="absolute inset-0 pointer-events-none font-mono text-lg whitespace-pre">
-                  {command ? (
-                    <>
-                      {highlightCommand(command)}
-                      <span className="text-gray-600">{suggestion}</span>
-                    </>
-                  ) : (
-                    <span className="text-gray-600">Type a command or press Tab for suggestions...</span>
-                  )}
-                </div>
-
-                {/* Actual input */}
-                <input
-                  type="text"
-                  value={command}
-                  onChange={(e) => setCommand(e.target.value)}
-                  onKeyDown={handleKeyDown}
-                  onFocus={() => setShowSuggestions(true)}
-                  onBlur={() => setTimeout(() => setShowSuggestions(false), 200)}
-                  className="w-full bg-transparent text-transparent caret-cyan-400 font-mono text-lg outline-none"
-                  autoFocus
-                  placeholder=""
-                />
-              </div>
-
-              {/* Submit button */}
-              <button
-                type="submit"
-                className="px-4 py-2 bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-600 hover:to-blue-700 rounded-lg text-white font-medium transition-all shadow-lg hover:shadow-cyan-500/50 flex items-center gap-2"
-              >
-                <span>Execute</span>
-                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
-                </svg>
-              </button>
-            </div>
-
-            {/* Autocomplete hint */}
-            {suggestion && (
-              <div className="absolute top-full left-0 mt-2 px-5 slide-in">
-                <div className="text-xs text-gray-500 font-mono flex items-center gap-2">
-                  <span>Quick tip:</span>
-                  <kbd className="px-2 py-1 bg-gray-800/80 rounded text-cyan-400 border border-gray-700">Tab</kbd>
-                  <span>or</span>
-                  <kbd className="px-2 py-1 bg-gray-800/80 rounded text-cyan-400 border border-gray-700">→</kbd>
-                  <span>to autocomplete</span>
-                </div>
+        {/* Error/Success Messages */}
+        {(error || success) && (
+          <div className="px-6 pb-3">
+            {error && (
+              <div className="bg-red-500/10 border border-red-500/30 rounded-lg px-4 py-2 flex items-start gap-3">
+                <div className="text-lg text-red-400 font-bold">!</div>
+                <div className="text-red-400 text-sm">{error}</div>
               </div>
             )}
 
-            {/* Dropdown suggestions */}
-            {showSuggestions && command && (
-              <div className="absolute top-full left-0 mt-2 w-full z-50 slide-in">
-                <div className="glass rounded-xl shadow-2xl overflow-hidden border border-cyan-500/30 max-h-96 overflow-y-auto">
-                  {(() => {
-                    const parts = command.toLowerCase().split(/\s+/);
-                    const cmd = parts[0];
-
-                    // Show agent IDs if command is "track"
-                    if (cmd === 'track' && parts.length === 1) {
-                      if (availableAgents.length === 0) {
-                        return (
-                          <div className="px-5 py-6 text-center text-gray-500">
-                            <div className="text-2xl mb-2">-</div>
-                            <div className="text-sm">No agents available</div>
-                            <div className="text-xs mt-1">Create an agent first with: create &lt;prompt&gt;</div>
-                          </div>
-                        );
-                      }
-
-                      return availableAgents.map((agent, index) => (
-                        <div
-                          key={agent.id}
-                          onMouseDown={(e) => {
-                            e.preventDefault();
-                            setCommand(`track ${agent.id}`);
-                            setSuggestion('');
-                            setShowSuggestions(false);
-                          }}
-                          onMouseEnter={() => setSelectedIndex(index)}
-                          className={`px-5 py-3 cursor-pointer transition-all border-b border-gray-800/50 last:border-b-0 ${selectedIndex === index
-                            ? 'bg-cyan-500/20 ring-2 ring-cyan-400/50'
-                            : 'hover:bg-cyan-500/10'
-                            }`}
-                        >
-                          <div className="flex items-center justify-between mb-2">
-                            <div className="flex items-center gap-3">
-                              <span className="text-lg">→</span>
-                              <div>
-                                <div className="font-mono text-sm text-cyan-400">
-                                  {agent.id.slice(0, 16)}...
-                                </div>
-                                <div className="text-xs text-gray-500 mt-0.5">
-                                  Click to track this agent
-                                </div>
-                              </div>
-                            </div>
-                            <span className={`
-                                  px-2 py-1 rounded text-xs font-bold
-                                  ${agent.status === 'active'
-                                ? 'bg-green-500/20 text-green-400 border border-green-500/50'
-                                : 'bg-gray-500/20 text-gray-400 border border-gray-500/50'
-                              }
-                                `}>
-                              {agent.status.toUpperCase()}
-                            </span>
-                          </div>
-                          <div className="text-gray-400 text-xs ml-9 line-clamp-1">
-                            {agent.prompt}
-                          </div>
-                        </div>
-                      ));
-                    }
-
-                    // Show regular command suggestions
-                    return commands
-                      .filter(c => c.toLowerCase().startsWith(command.toLowerCase()))
-                      .map((cmd, index) => {
-                        const info = commandInfo[cmd];
-                        return (
-                          <div
-                            key={cmd}
-                            onMouseDown={(e) => {
-                              e.preventDefault();
-                              setCommand(cmd + ' ');
-                              setSuggestion('');
-                            }}
-                            onMouseEnter={() => setSelectedIndex(index)}
-                            className={`px-5 py-3 cursor-pointer transition-all border-b border-gray-800/50 last:border-b-0 ${selectedIndex === index
-                              ? 'bg-cyan-500/20 ring-2 ring-cyan-400/50'
-                              : 'hover:bg-cyan-500/10'
-                              }`}
-                          >
-                            <div className="flex items-center justify-between mb-1">
-                              <div className="flex items-center gap-3">
-                                <span className="text-xl">{info?.icon}</span>
-                                <span className="font-mono">
-                                  <span className="text-gray-500">{command}</span>
-                                  <span className="text-cyan-400 font-bold">{cmd.slice(command.length)}</span>
-                                  {info?.params && (
-                                    <span className="text-blue-400 ml-2">{info.params}</span>
-                                  )}
-                                </span>
-                              </div>
-                            </div>
-                            <div className="text-gray-400 text-xs ml-9">
-                              {info?.description}
-                            </div>
-                          </div>
-                        );
-                      });
-                  })()}
-                </div>
+            {success && (
+              <div className="bg-green-500/10 border border-green-500/30 rounded-lg px-4 py-2 flex items-start gap-3">
+                <div className="text-lg text-green-400 font-bold">✓</div>
+                <div className="text-green-400 text-sm">{success}</div>
               </div>
             )}
           </div>
-
-          {/* Error/Success Messages */}
-          {error && (
-            <div className="mt-3 slide-in">
-              <div className="glass border-red-500/50 rounded-lg px-4 py-3 flex items-start gap-3">
-                <div className="text-xl text-red-400 font-bold">!</div>
-                <div>
-                  <div className="text-red-400 font-medium text-sm mb-1">Error</div>
-                  <div className="text-gray-300 text-sm">{error}</div>
-                </div>
-              </div>
-            </div>
-          )}
-
-          {success && (
-            <div className="mt-3 slide-in">
-              <div className="glass border-green-500/50 rounded-lg px-4 py-3 flex items-start gap-3">
-                <div className="text-xl text-green-400 font-bold">✓</div>
-                <div>
-                  <div className="text-green-400 font-medium text-sm mb-1">Success</div>
-                  <div className="text-gray-300 text-sm">{success}</div>
-                </div>
-              </div>
-            </div>
-          )}
-        </form>
+        )}
       </div>
 
-      {/* Windows Container */}
-      <div className="relative overflow-hidden h-[100vh]">
+      {/* Windows Container - Now takes full remaining space */}
+      <div className="flex-1 relative overflow-hidden">
         {windows.map((window) => (
           <Window
             key={window.id}
@@ -926,6 +976,7 @@ export default function Home() {
             onClose={closeWindow}
             onFocus={focusWindow}
             onMinimize={minimizeWindow}
+            onPositionChange={handleWindowPositionChange}
           >
             {renderWindowContent(window)}
           </Window>

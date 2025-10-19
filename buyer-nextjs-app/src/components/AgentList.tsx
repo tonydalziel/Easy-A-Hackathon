@@ -3,7 +3,11 @@
 import { useEffect, useState } from 'react';
 import { Agent } from '@/types/agent';
 
-export default function AgentList() {
+interface AgentListProps {
+  onOpenLora?: (walletId: string) => void;
+}
+
+export default function AgentList({ onOpenLora }: AgentListProps = {}) {
   const [agents, setAgents] = useState<Agent[]>([]);
   const [walletBalances, setWalletBalances] = useState<Record<string, number>>({});
   const [isRefreshing, setIsRefreshing] = useState(false);
@@ -175,17 +179,15 @@ export default function AgentList() {
                       <span className="truncate max-w-[150px]">
                         {agent.wallet_id}
                       </span>
-                      <a
-                        href={`https://lora.algokit.io/localnet/account/${agent.wallet_id}`}
-                        target="_blank"
-                        rel="noopener noreferrer"
+                      <button
+                        onClick={() => onOpenLora?.(agent.wallet_id)}
                         className="flex-shrink-0 text-green-400 hover:text-green-300 transition-colors"
                         title="View on Lora Explorer"
                       >
                         <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
                         </svg>
-                      </a>
+                      </button>
                     </div>
                   </td>
                   <td className="py-2 px-2 text-right">
