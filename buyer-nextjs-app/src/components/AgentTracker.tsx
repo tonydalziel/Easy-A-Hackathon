@@ -222,8 +222,19 @@ export default function AgentTracker({ agentId, onNotFound }: AgentTrackerProps)
                 </div>
               </div>
             </div>
-            <div className="text-xs font-mono text-green-400 break-all">
-              {agentData.wallet_id}
+            <div className="text-xs font-mono text-green-400 break-all flex items-center justify-between gap-2">
+              <span>{agentData.wallet_id}</span>
+              <a
+                href={`https://lora.algokit.io/localnet/account/${agentData.wallet_id}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex-shrink-0 text-green-400 hover:text-green-300 transition-colors"
+                title="View on Lora Explorer"
+              >
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                </svg>
+              </a>
             </div>
           </div>
 
