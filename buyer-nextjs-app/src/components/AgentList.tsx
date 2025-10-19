@@ -22,7 +22,26 @@ export default function AgentList() {
       // Get list of agent IDs
       const response = await fetch('/api/agents');
       if (response.ok) {
-        const agentIds: string[] = await response.json();
+        const data = await response.json();
+        console.log('API response:', data);
+
+        // Handle different response formats
+        let agentIds: string[] = [];
+        if (Array.isArray(data)) {
+          agentIds = data;
+        } else if (data.agents && Array.isArray(data.agents)) {
+          agentIds = data.agents;
+        } else if (data.agentIds && Array.isArray(data.agentIds)) {
+          agentIds = data.agentIds;
+        } else {
+          console.error('Unexpected API response format:', data);
+          return;
+        }
+
+        if (agentIds.length === 0) {
+          setAgents([]);
+          return;
+        }
 
         // Fetch details for each agent
         const agentDetails = await Promise.all(
