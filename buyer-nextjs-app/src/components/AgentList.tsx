@@ -16,7 +16,7 @@ export default function AgentList({ onOpenLora }: AgentListProps = {}) {
     fetchAllAgents();
   }, []);
 
-  // Fetch wallet balances for all agents every 20 seconds
+  // Fetch wallet balances for all agents every second
   useEffect(() => {
     const fetchWalletBalances = async () => {
       if (agents.length === 0) return;
@@ -43,8 +43,8 @@ export default function AgentList({ onOpenLora }: AgentListProps = {}) {
     // Fetch immediately
     fetchWalletBalances();
 
-    // Set up 20-second interval
-    const interval = setInterval(fetchWalletBalances, 20000);
+    // Set up 1-second interval
+    const interval = setInterval(fetchWalletBalances, 1000);
     return () => clearInterval(interval);
   }, [agents]);
 

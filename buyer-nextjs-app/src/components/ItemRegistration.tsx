@@ -185,7 +185,6 @@ export default function ItemRegistration() {
                 Price (ALGO) <span className="text-red-400">*</span>
               </label>
               <div className="relative">
-                <span className="absolute left-4 top-1/2 -translate-y-1/2 text-green-400 font-bold">$</span>
                 <input
                   type="number"
                   step="0.01"

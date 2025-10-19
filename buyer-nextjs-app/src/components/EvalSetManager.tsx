@@ -243,7 +243,7 @@ export default function EvalSetManager({ onRunEval, onClose }: EvalSetManagerPro
                     <div className="flex items-start justify-between mb-2">
                       <div>
                         <h4 className="font-semibold text-cyan-400">{decision.itemName}</h4>
-                        <p className="text-sm text-gray-400">Price: ${decision.itemPrice}</p>
+                        <p className="text-sm text-gray-400">Price: {decision.itemPrice} ALGO</p>
                       </div>
                       <div className="flex items-center gap-2">
                         <span

@@ -26,7 +26,7 @@ export default function AgentTracker({ agentId, onNotFound, onOpenLora }: AgentT
     return () => clearInterval(interval);
   }, [agentId]);
 
-  // Poll wallet balance every 250ms
+  // Poll wallet balance every second
   useEffect(() => {
     const fetchWalletBalance = async () => {
       if (!agentData?.wallet_id) return;
@@ -45,8 +45,8 @@ export default function AgentTracker({ agentId, onNotFound, onOpenLora }: AgentT
     // Fetch immediately
     fetchWalletBalance();
 
-    // Poll every 250ms
-    const interval = setInterval(fetchWalletBalance, 250);
+    // Poll every second
+    const interval = setInterval(fetchWalletBalance, 1000);
     return () => clearInterval(interval);
   }, [agentData?.wallet_id]);
 
@@ -315,7 +315,7 @@ export default function AgentTracker({ agentId, onNotFound, onOpenLora }: AgentT
                       </div>
                       {decision.maxPrice && (
                         <div className="text-green-400 font-bold text-sm">
-                          ${decision.maxPrice.toFixed(2)}
+                          {decision.maxPrice.toFixed(2)} ALGO
                         </div>
                       )}
                     </div>
@@ -324,7 +324,7 @@ export default function AgentTracker({ agentId, onNotFound, onOpenLora }: AgentT
                       <div className="text-sm">
                         <span className="text-gray-400">Item:</span>{' '}
                         <span className="text-white font-semibold">{decision.itemName}</span>
-                        <span className="text-gray-500 ml-2">(${decision.itemPrice})</span>
+                        <span className="text-gray-500 ml-2">({decision.itemPrice} ALGO)</span>
                       </div>
                       {decision.reasoning && (
                         <div className="text-xs text-gray-400 mt-2 italic border-l-2 border-gray-700 pl-2">

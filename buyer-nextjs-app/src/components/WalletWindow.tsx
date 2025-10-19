@@ -24,6 +24,9 @@ export default function WalletWindow({ address, balance, onOpenLora }: WalletWin
 
   useEffect(() => {
     fetchWalletData();
+    // Update wallet balance every second
+    const interval = setInterval(fetchWalletData, 1000);
+    return () => clearInterval(interval);
   }, [address]);
 
   	// setTimeout(() => {
@@ -121,7 +124,7 @@ export default function WalletWindow({ address, balance, onOpenLora }: WalletWin
                   />
                 </div>
                 <div className="text-xs text-gray-500 mt-2 opacity-0 group-hover:opacity-100 transition-opacity">
-                  ${data.value}
+                  {data.value} ALGO
                 </div>
               </div>
             );

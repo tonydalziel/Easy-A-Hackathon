@@ -294,7 +294,7 @@ export default function DecisionReview({ agentId, onClose }: DecisionReviewProps
                       <div>
                         <h3 className="text-lg font-semibold text-cyan-400">{decision.itemName}</h3>
                         <p className="text-sm text-gray-400">
-                          Price: <span className="text-green-400 font-semibold">${decision.itemPrice}</span>
+                          Price: <span className="text-green-400 font-semibold">{decision.itemPrice} ALGO</span>
                         </p>
                       </div>
                       <span

@@ -369,8 +369,9 @@ export default function Home() {
         const data = await response.json();
         if (data.success && data.agentId) {
           setSuccess(`Agent created successfully with ${value} ALGO! ID: ${data.agentId}`);
-          setTimeout(() => setSuccess(''), 5000);
         //   createWindow('agent-tracker', `Agent Tracker - ${data.agentId}`, data.agentId);
+          // Optionally open the agent tracker window
+          createWindow('agent-tracker', `Agent Tracker - ${data.agentId}`, data.agentId);
         } else {
           setError(data.message || 'Failed to create agent');
         }
@@ -566,8 +567,7 @@ export default function Home() {
             evalSetId={window.evalSetId}
             onClose={() => closeWindow(window.id)}
             onComplete={() => {
-              setSuccess('Evaluation completed successfully!');
-              setTimeout(() => setSuccess(''), 5000);
+              // Evaluation completed - no UI notification needed
             }}
           />
         ) : null;
@@ -602,8 +602,6 @@ export default function Home() {
       walletId: userData.walletId,
       merchantId: userData.merchantId
     });
-    setSuccess(`Welcome, ${userData.username}! Your Algorand wallet has been created: ${userData.walletId.substring(0, 20)}...`);
-    setTimeout(() => setSuccess(''), 7000);
   };
 
   const handleLogout = async () => {
@@ -947,22 +945,13 @@ export default function Home() {
           </div>
         </div>
 
-        {/* Error/Success Messages */}
-        {(error || success) && (
+        {/* Error Messages */}
+        {error && (
           <div className="px-6 pb-3">
-            {error && (
-              <div className="bg-red-500/10 border border-red-500/30 rounded-lg px-4 py-2 flex items-start gap-3">
-                <div className="text-lg text-red-400 font-bold">!</div>
-                <div className="text-red-400 text-sm">{error}</div>
-              </div>
-            )}
-
-            {success && (
-              <div className="bg-green-500/10 border border-green-500/30 rounded-lg px-4 py-2 flex items-start gap-3">
-                <div className="text-lg text-green-400 font-bold">✓</div>
-                <div className="text-green-400 text-sm">{success}</div>
-              </div>
-            )}
+            <div className="bg-red-500/10 border border-red-500/30 rounded-lg px-4 py-2 flex items-start gap-3">
+              <div className="text-lg text-red-400 font-bold">!</div>
+              <div className="text-red-400 text-sm">{error}</div>
+            </div>
           </div>
         )}
       </div>

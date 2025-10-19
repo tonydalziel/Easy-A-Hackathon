@@ -268,8 +268,8 @@ export default function Dashboard() {
                       Agent: {decision.agentId.slice(0, 8)}...
                     </span>
                     <span className="text-gray-400">
-                      ${decision.itemPrice}
-                      {decision.maxPrice && ` → $${decision.maxPrice}`}
+                      {decision.itemPrice} ALGO
+                      {decision.maxPrice && ` → ${decision.maxPrice} ALGO`}
                     </span>
                   </div>
                 </div>

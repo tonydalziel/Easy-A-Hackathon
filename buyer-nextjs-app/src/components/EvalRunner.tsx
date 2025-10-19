@@ -382,7 +382,7 @@ export default function EvalRunner({ evalSetId, onClose, onComplete }: EvalRunne
                     <div className="flex items-center justify-between">
                       <div>
                         <span className="font-semibold text-cyan-400">{r.itemName}</span>
-                        <span className="text-gray-400 text-sm ml-2">${r.itemPrice}</span>
+                        <span className="text-gray-400 text-sm ml-2">{r.itemPrice} ALGO</span>
                       </div>
                       <div className="flex items-center gap-2">
                         <span className={`px-2 py-1 rounded text-xs ${
