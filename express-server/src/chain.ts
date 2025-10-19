@@ -196,12 +196,14 @@ export function parseMessage(note: Uint8Array | undefined, sender: string, txId:
 async function getNewWallet() {
     // Generate a new wallet using Algorand SDK
     const account = generateAccount();
+    // Convert the public key bytes to an Algorand address string
     const wallet_id = encodeAddress(account.addr.publicKey);
-    
-    return { 
+
+    return {
         wallet_id,
         address: wallet_id,
-        privateKey: encodeAddress(account.sk)
+        // Return the account object for future use if needed
+        account
     };
 }
 
