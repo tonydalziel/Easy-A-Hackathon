@@ -274,7 +274,7 @@ export default function Home() {
     } else if (cmd === 'wallet') {
       createWindow('wallet', 'Wallet Overview');
     } else if (cmd === 'watch') {
-      createWindow('decision-stream', '📡 Live Decision Stream');
+      createWindow('decision-stream', 'Live Decision Stream');
     } else if (cmd === 'track') {
       if (params.length === 0) {
         setError('Error: track command requires an agent ID. Usage: track <agent-id>');
@@ -287,9 +287,9 @@ export default function Home() {
     } else if (cmd === 'events') {
       createWindow('event-history', 'On-Chain Event History');
     } else if (cmd === 'dashboard') {
-      createWindow('dashboard', '📊 System Dashboard');
+      createWindow('dashboard', 'System Dashboard');
     } else if (cmd === 'items') {
-      createWindow('item-registration', '🏪 Item Marketplace');
+      createWindow('item-registration', 'Item Marketplace');
     } else if (cmd === 'create') {
       if (params.length === 0) {
         setError('Error: create command requires a prompt. Usage: create <prompt>');
@@ -318,9 +318,19 @@ export default function Home() {
       if (response.ok) {
         const data = await response.json();
         if (data.success && data.agentId) {
-          setSuccess(`Agent created successfully! ID: ${data.agentId}`);
-          setTimeout(() => setSuccess(''), 5000);
-          // Optionally open the agent tracker window
+          // Enhanced success message with blockchain info
+          let successMsg = `Agent created successfully! ID: ${data.agentId}`;
+
+          // Add blockchain wallet info if available
+          if (data.agent?.wallet_id) {
+            successMsg += ` | Funded with 1000 ALGO`;
+            console.log(`Agent Wallet: ${data.agent.wallet_id}`);
+          }
+
+          setSuccess(successMsg);
+          setTimeout(() => setSuccess(''), 7000);
+
+          // Open the agent tracker window
           createWindow('agent-tracker', `Agent Tracker - ${data.agentId}`, data.agentId);
         } else {
           setError(data.message || 'Failed to create agent');
@@ -652,8 +662,8 @@ export default function Home() {
                           }}
                           onMouseEnter={() => setSelectedIndex(index)}
                           className={`px-5 py-3 cursor-pointer transition-all border-b border-gray-800/50 last:border-b-0 ${selectedIndex === index
-                              ? 'bg-cyan-500/20 ring-2 ring-cyan-400/50'
-                              : 'hover:bg-cyan-500/10'
+                            ? 'bg-cyan-500/20 ring-2 ring-cyan-400/50'
+                            : 'hover:bg-cyan-500/10'
                             }`}
                         >
                           <div className="flex items-center justify-between mb-2">
@@ -700,8 +710,8 @@ export default function Home() {
                             }}
                             onMouseEnter={() => setSelectedIndex(index)}
                             className={`px-5 py-3 cursor-pointer transition-all border-b border-gray-800/50 last:border-b-0 ${selectedIndex === index
-                                ? 'bg-cyan-500/20 ring-2 ring-cyan-400/50'
-                                : 'hover:bg-cyan-500/10'
+                              ? 'bg-cyan-500/20 ring-2 ring-cyan-400/50'
+                              : 'hover:bg-cyan-500/10'
                               }`}
                           >
                             <div className="flex items-center justify-between mb-1">

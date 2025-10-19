@@ -46,8 +46,11 @@ export async function POST(request: Request) {
       );
     }
 
-    // Register agent with express-server
+    // Register agent with express-server (with blockchain funding)
     try {
+      // Default: 1000 ALGO = 1,000,000,000 microALGO
+      const initialWalletBalance = 1000000000;
+
       const expressResponse = await fetch(`${EXPRESS_SERVER_URL}/agents`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -55,7 +58,8 @@ export async function POST(request: Request) {
           provider_id: agent.provider_id,
           model_id: agent.model_id,
           prompt: agent.prompt,
-          user_id: agent.id // Pass agent ID as user_id
+          user_id: agent.id, // Pass agent ID as user_id
+          walletBalance: initialWalletBalance // Fund with 1000 ALGO
         })
       });
 
@@ -63,7 +67,13 @@ export async function POST(request: Request) {
         console.warn('Failed to register agent with express-server:', await expressResponse.text());
         // Continue anyway - agent is still created locally
       } else {
+        const expressData = await expressResponse.json();
         console.log(`✅ Agent ${agentId} registered with express-server`);
+        if (expressData.blockchainTxId) {
+          console.log(`💰 Agent funded on blockchain! Tx: ${expressData.blockchainTxId}`);
+          // Update local agent with blockchain info
+          agent.wallet_id = expressData.blockchainTxId;
+        }
       }
     } catch (error) {
       console.error('Error calling express-server:', error);

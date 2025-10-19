@@ -150,9 +150,9 @@ router.get('/', (req: Request, res: Response) => {
 });
 
 // Create/Register a new agent
-router.post('/', (req: Request, res: Response) => {
+router.post('/', async (req: Request, res: Response) => {
     try {
-        const { provider_id, model_id, prompt, user_id } = req.body;
+        const { provider_id, model_id, prompt, user_id, walletBalance } = req.body;
 
         // Validate required fields
         if (!provider_id || !model_id || !prompt || !user_id) {
@@ -169,25 +169,47 @@ router.post('/', (req: Request, res: Response) => {
             });
         }
 
-        // Create agent state (wallet info would come from buyer-nextjs-app or be generated here)
+        // Default wallet balance: 1000 ALGO (in microALGO)
+        const initialBalance = walletBalance || 1000000000; // 1000 ALGO = 1,000,000,000 microALGO
+
+        let blockchainAgentId: string | null = null;
+        let wallet_id = `wallet-${Date.now()}`;
+
+        // Post agent to blockchain with funding
+        try {
+            console.log(`💰 Creating agent on blockchain with ${initialBalance / 1000000} ALGO...`);
+            blockchainAgentId = await postAgentToChain(
+                provider_id,
+                model_id,
+                prompt,
+                initialBalance
+            );
+
+            console.log(`✅ Agent posted to blockchain! Transaction ID: ${blockchainAgentId}`);
+
+            // Use blockchain transaction ID as wallet_id
+            wallet_id = blockchainAgentId;
+        } catch (error) {
+            console.error('⚠️  Failed to post agent to blockchain:', error);
+            // Continue with local registration even if blockchain fails
+        }
+
+        // Create agent state
         const agentState: AgentState = {
             agent_id: user_id,
             prompt,
             model_id,
             provider_id,
             currentItemsAcquired: [],
-            wallet_id: `wallet-${Date.now()}`,
+            wallet_id,
             wallet_pwd: 'temp-pwd', // In production, this should be properly managed
-            walletBalance: 0 // Initialize with 0 balance
+            walletBalance: initialBalance
         };
 
         // Store agent
         registeredAgents.set(user_id, agentState);
-        
-        console.log(`✅ Registered agent: ${user_id} - "${prompt}"`);
 
-        // Optionally post to blockchain
-        // postAgentToChain(provider_id, model_id, prompt, user_id);
+        console.log(`✅ Registered agent: ${user_id} - "${prompt}" with ${initialBalance / 1000000} ALGO`);
 
         // Process all existing items with this new agent
         const allItems = Array.from(registeredItems.values());
@@ -202,6 +224,7 @@ router.post('/', (req: Request, res: Response) => {
             message: 'Agent registered successfully',
             agentId: user_id,
             agent: agentState,
+            blockchainTxId: blockchainAgentId,
             itemsToProcess: allItems.length
         });
     } catch (error) {

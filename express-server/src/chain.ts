@@ -55,14 +55,15 @@ export async function transferIntoWallet(wallet_id: string, sender_addr: string,
     if (!algorand) {
         throw new Error('Algorand client not initialized');
     }
-    
+
     const result = await algorand.send.payment({
         sender: sender_addr,
-        receiver: sender_addr, // Send to self to just store data
+        receiver: wallet_id, // Send to the new agent wallet
         amount: (amount).microAlgo(), // Convert to microAlgos
         note: prompt,
     });
 
+    console.log(`💰 Transferred ${amount / 1000000} ALGO to wallet ${wallet_id}`);
     return result.txIds[0];
 };
 
@@ -195,12 +196,14 @@ export function parseMessage(note: Uint8Array | undefined, sender: string, txId:
 async function getNewWallet() {
     // Generate a new wallet using Algorand SDK
     const account = generateAccount();
+    // Convert the public key bytes to an Algorand address string
     const wallet_id = encodeAddress(account.addr.publicKey);
-    
-    return { 
+
+    return {
         wallet_id,
         address: wallet_id,
-        privateKey: encodeAddress(account.sk)
+        // Return the account object for future use if needed
+        account
     };
 }
 
