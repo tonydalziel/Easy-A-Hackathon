@@ -1,5 +1,6 @@
 import express, { Request, Response } from 'express';
 import agentRouter from './agentRouter';
+import merchantRouter from './merchantRouter';
 import { BlockchainSubscriber } from './blockchainSubscriber';
 import { initializeSmartContract } from './chain';
 
@@ -41,6 +42,7 @@ app.get('/', (req: Request, res: Response) => {
 });
 
 app.use('/agents', agentRouter);
+app.use('/merchants', merchantRouter);
 
 // Initialize blockchain monitoring
 async function initializeBlockchain() {

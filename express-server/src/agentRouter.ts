@@ -339,15 +339,25 @@ import { openListingOnChain, getListingStatusFromChain } from './chain';
 // Open a new listing
 router.post('/listings', async (req: Request, res: Response) => {
     try {
-        const { targetWallet, targetAmount } = req.body;
-
-        if (!targetWallet || !targetAmount) {
-            return res.status(400).json({ error: 'targetWallet and targetAmount are required' });
+        const { merchantUsername, targetAmount } = req.body;
+        
+        if (!merchantUsername || !targetAmount) {
+            return res.status(400).json({ error: 'merchantUsername and targetAmount are required' });
         }
-
-        const result = await openListingOnChain(targetAmount);
-        res.json({
+        
+        // Get merchant wallet address
+        const merchantResponse = await fetch(`http://localhost:3000/merchants/${merchantUsername}/wallet`);
+        if (!merchantResponse.ok) {
+            return res.status(404).json({ error: 'Merchant not found' });
+        }
+        
+        const { wallet_address } = await merchantResponse.json();
+        
+        const result = await openListingOnChain(wallet_address, targetAmount);
+        res.json({ 
             message: 'Listing opened successfully',
+            merchant: merchantUsername,
+            wallet_address: wallet_address,
             result: result
         });
     } catch (error) {
