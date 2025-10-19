@@ -29,6 +29,8 @@ export async function GET(request: Request) {
 
   try {
     console.log('🔍 Fetching balance for wallet:', walletId);
+
+	console.log(walletId);
     const accountInfo = await client.accountInformation(walletId).do();
 
     return NextResponse.json({

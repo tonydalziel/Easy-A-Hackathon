@@ -25,12 +25,20 @@ export default function WalletWindow({ address, balance }: WalletWindowProps) {
     fetchWalletData();
   }, [address]);
 
+  	// setTimeout(() => {
+	// 	fetchWalletData();
+	// 	setWalletHistory(prevHistory => {
+	// 		const newEntry: WalletData = {
+	// 			date: new Date().toLocaleDateString(),
+	// 			value: currentValue / 1000000 // Convert microALGO to ALGO
+	// 		};
+	// 		const updatedHistory = [...prevHistory, newEntry];
+	// 		return updatedHistory;
+	// 	});
+	// }, 10000); // Refresh every 10 seconds
+
   const fetchWalletData = async () => {
     try {
-<<<<<<< HEAD
-      if (!address || address === 'DLGQ6LNZXWXE2BH34CEI3DRKYAXPFVPOOW6C3XKH7BU4DOIW7V7TAIMFDM') {
-        console.log('No valid wallet address configured');
-=======
       if (!address) {
         // No address provided, let the API use the authenticated user's wallet
         console.log('No address provided, using authenticated user wallet');
@@ -46,7 +54,6 @@ export default function WalletWindow({ address, balance }: WalletWindowProps) {
 
       if (address === 'REPLACE_WITH_YOUR_WALLET_ADDRESS') {
         console.log('Placeholder wallet address detected');
->>>>>>> 8d746e449476035afea3cbc844066f23c22cc44d
         return;
       }
 
