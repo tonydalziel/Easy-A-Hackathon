@@ -117,7 +117,7 @@ export default function Home() {
     };
 
     fetchStats();
-    const interval = setInterval(fetchStats, 10000); // Update every 10 seconds
+    const interval = setInterval(fetchStats, 2000); // Update every 2 seconds
 
     return () => clearInterval(interval);
   }, []);

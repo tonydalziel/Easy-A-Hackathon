@@ -5,25 +5,23 @@ import { EventEmitter } from 'events';
 class AgentStore extends EventEmitter {
   private agents: Map<string, Agent> = new Map();
 
-  // Create a new agent
+  // Create a new agent (or update if exists)
   createAgent(agent: Agent): { success: boolean; message: string; agent?: Agent } {
-    if (this.agents.has(agent.id)) {
-      return {
-        success: false,
-        message: 'Agent already exists',
-        agent: this.agents.get(agent.id)
-      };
-    }
+    const exists = this.agents.has(agent.id);
 
     this.agents.set(agent.id, agent);
-    console.log(`✅ Created new agent: ${agent.id} - "${agent.prompt}"`);
-    
-    // Emit event for real-time updates
-    this.emit('agentCreated', agent);
-    
+
+    if (exists) {
+      console.log(`✅ Updated agent: ${agent.id} - "${agent.prompt}"`);
+      this.emit('agentUpdated', agent);
+    } else {
+      console.log(`✅ Created new agent: ${agent.id} - "${agent.prompt}"`);
+      this.emit('agentCreated', agent);
+    }
+
     return {
       success: true,
-      message: 'Agent created successfully',
+      message: exists ? 'Agent updated successfully' : 'Agent created successfully',
       agent
     };
   }

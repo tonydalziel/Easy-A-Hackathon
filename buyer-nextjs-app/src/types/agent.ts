@@ -35,9 +35,11 @@ export type Agent = {
   provider_id: string;
   wallet_id: string;
   wallet_pwd: string;
+  walletBalance?: number; // Balance in microALGO
   currentItemsAcquired: string[];
   createdAt: number;
   status: 'active' | 'inactive' | 'error';
+  blockchainTxId?: string; // Transaction ID from blockchain creation
 };
 
 export type CreateAgentRequest = {

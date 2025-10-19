@@ -1,8 +1,10 @@
-import { AlgorandClient } from '@algorandfoundation/algokit-utils';
+import { AlgorandClient, microAlgo, mnemonicAccount } from '@algorandfoundation/algokit-utils';
 import { ItemState, AgentState } from './types';
 import { TransactionType, generateAccount, encodeAddress } from 'algosdk';
+import { AlgoAmount } from '@algorandfoundation/algokit-utils/types/amount';
 
 const SENDER_ADDR = process.env.SENDER_ADDR || '';
+const SENDER_MNEMONIC = "govern hawk project purpose blur major sword artist fit benefit rely expire extend spell admit fluid grace refuse cigar project bulk often sea abstract region"
 
 // Initialize Algorand client with error handling
 let algorand: AlgorandClient | null = null;
@@ -56,8 +58,15 @@ export async function transferIntoWallet(wallet_id: string, sender_addr: string,
         throw new Error('Algorand client not initialized');
     }
 
+    if (!SENDER_MNEMONIC) {
+        throw new Error('SENDER_ACCOUNT_MNEMONIC not configured in environment');
+    }
+
+    // Create account from mnemonic to sign the transaction
+    const senderAccount = mnemonicAccount(SENDER_MNEMONIC);
+
     const result = await algorand.send.payment({
-        sender: sender_addr,
+        sender: senderAccount.addr,
         receiver: wallet_id, // Send to the new agent wallet
         amount: (amount).microAlgo(), // Convert to microAlgos
         note: prompt,
@@ -70,15 +79,23 @@ export async function transferIntoWallet(wallet_id: string, sender_addr: string,
 /**
  * Post agent information to the chain using a payment transaction with note field
  */
-export async function postAgentToChain(provider_id: string, model_id: string, prompt: string, walletBalance: number): Promise<string> {
+export async function postAgentToChain(sender: string, provider_id: string, model_id: string, prompt: string, walletBalance: number): Promise<string> {
     if (!algorand) {
         throw new Error('Algorand client not initialized');
     }
-    // Get or create account from environment
-    const sender = await algorand.account.fromEnvironment('SENDER_ACCOUNT');
 
-    const {wallet_id} = await getNewWallet();
-    await transferIntoWallet(wallet_id, String(sender.addr), walletBalance, prompt);
+    if (!SENDER_MNEMONIC) {
+        throw new Error('SENDER_ACCOUNT_MNEMONIC not configured in environment');
+    }
+
+    // Create account from mnemonic to sign transactions
+    const senderAccount = algorand.account.fromMnemonic(SENDER_MNEMONIC);
+
+    const { wallet_id, account } = await getNewWallet();
+    console.log(`New agent wallet created: ${wallet_id}`);
+
+    //await transferIntoWallet(wallet_id, sender, walletBalance, prompt);
+
     // Create agent data object
     const agentData: AgentState = {
         agent_id: '', // Will be set to transaction ID
@@ -91,17 +108,18 @@ export async function postAgentToChain(provider_id: string, model_id: string, pr
         walletBalance,
     };
 
-
     // Encode agent data as note (must be base64 encoded)
     const noteData = new TextEncoder().encode(JSON.stringify(agentData));
 
     // Send a payment transaction with the agent data in the note field
     const result = await algorand.send.payment({
-        sender: sender.addr,
-        receiver: sender.addr, // Send to self to just store data
-        amount: (0).microAlgo(), // Minimum amount
+        sender: senderAccount.addr, // Use mnemonic account to sign
+        receiver: account.addr, // Send to self to just store data
+        amount: microAlgo(walletBalance), // Minimum amount
         note: noteData,
     });
+
+    console.log(`✅ Agent metadata posted to blockchain. TX: ${result.txIds[0]}`);
 
     // Return the transaction ID as the agent_id
     return result.txIds[0];
@@ -114,7 +132,7 @@ export async function postResponseToChain(originalTxId: string, messageType: Mes
     if (!algorand) {
         throw new Error('Algorand client not initialized');
     }
-    
+
     // Get or create account from environment
     const sender = await algorand.account.fromEnvironment('SENDER_ACCOUNT');
 
@@ -176,9 +194,9 @@ export function parseMessage(note: Uint8Array | undefined, sender: string, txId:
         } else if (upperContent.includes('QUERY') || upperContent.includes('?')) {
             messageType = MessageType.QUERY;
         }
-        
-        if(messageType !== MessageType.UNKNOWN){
-            throw new Error('Not a valid message');   
+
+        if (messageType !== MessageType.UNKNOWN) {
+            throw new Error('Not a valid message');
         }
 
         return {
@@ -196,13 +214,13 @@ export function parseMessage(note: Uint8Array | undefined, sender: string, txId:
 async function getNewWallet() {
     // Generate a new wallet using Algorand SDK
     const account = generateAccount();
+    console.log(account);
     // Convert the public key bytes to an Algorand address string
     const wallet_id = encodeAddress(account.addr.publicKey);
 
     return {
         wallet_id,
         address: wallet_id,
-        // Return the account object for future use if needed
         account
     };
 }
@@ -217,14 +235,14 @@ export async function initializeSmartContract() {
     try {
         // Import the mock client for now
         const { ChAiNFactory } = await import('../../algokit/ch_ai_n/projects/ch_ai_n/artifacts/ch_ai_n/ChAiNClient');
-        
+
         const factory = new ChAiNFactory();
-        
-        const { appClient: client } = await factory.deploy({ 
-            onUpdate: 'append', 
-            onSchemaBreak: 'append' 
+
+        const { appClient: client } = await factory.deploy({
+            onUpdate: 'append',
+            onSchemaBreak: 'append'
         });
-        
+
         appClient = client;
         console.log('Smart contract client initialized');
         return client;
@@ -241,11 +259,11 @@ export async function openListingOnChain(targetAmount: number): Promise<string> 
     if (!appClient) {
         await initializeSmartContract();
     }
-    
+
     const response = await appClient.send.openListing({
         args: { targetAmount }
     });
-    
+
     console.log('Listing opened on chain:', response.return);
     return response.return;
 }
@@ -257,12 +275,12 @@ export async function processListingPayment(sender: string, amount: number): Pro
     if (!appClient) {
         await initializeSmartContract();
     }
-    
+
     try {
         const response = await appClient.send.processPayment({
             args: { sender, amount }
         });
-        
+
         console.log('Payment processed:', response.return);
         return response.return;
     } catch (error) {
@@ -278,10 +296,10 @@ export async function getListingStatusFromChain(): Promise<string> {
     if (!appClient) {
         await initializeSmartContract();
     }
-    
+
     const response = await appClient.send.getListingStatus({
         args: {}
     });
-    
+
     return response.return;
 }
