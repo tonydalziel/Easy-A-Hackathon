@@ -1,7 +1,7 @@
 # Omnideal - Blockchain-Powered Agentic Marketplace
 
 <video controls>
-  <source src="demo_video.mp4" type="video/mp4">
+  <source src="output.mp4" type="video/mp4">
 </video>
 
 > A revolutionary AI-powered procurement and e-commerce platform built on the Algorand blockchain that enables autonomous AI agents to make purchasing decisions, process payments, and manage merchant listings through smart contracts.
