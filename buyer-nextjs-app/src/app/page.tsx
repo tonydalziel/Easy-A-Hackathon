@@ -531,7 +531,7 @@ export default function Home() {
   }
 
   return (
-    <div className="h-screen w-screen relative overflow-hidden flex flex-col">
+    <div className="w-screen relative overflow-scroll h-screen">
       {/* Top Navbar */}
       <div className="bg-gradient-to-r from-gray-950 via-gray-900 to-gray-950 border-b-2 border-cyan-500/30 shadow-lg shadow-cyan-500/10 z-50">
         <div className="px-6">
@@ -885,7 +885,7 @@ export default function Home() {
       </div>
 
       {/* Windows Container */}
-      <div className="flex-1 relative overflow-hidden">
+      <div className="relative overflow-hidden h-[100vh]">
         {windows.map((window) => (
           <Window
             key={window.id}
