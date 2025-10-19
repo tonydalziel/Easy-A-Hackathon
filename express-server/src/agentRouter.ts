@@ -345,7 +345,7 @@ router.post('/listings', async (req: Request, res: Response) => {
             return res.status(400).json({ error: 'targetWallet and targetAmount are required' });
         }
 
-        const result = await openListingOnChain(targetWallet, targetAmount);
+        const result = await openListingOnChain(targetAmount);
         res.json({
             message: 'Listing opened successfully',
             result: result

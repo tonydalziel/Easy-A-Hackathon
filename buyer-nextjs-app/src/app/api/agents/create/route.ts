@@ -2,7 +2,7 @@ import { NextResponse } from 'next/server';
 import { agentStore } from '@/lib/agentStore';
 import { Agent } from '@/types/agent';
 
-const EXPRESS_SERVER_URL = process.env.EXPRESS_SERVER_URL || 'http://localhost:3000';
+export const EXPRESS_SERVER_URL = process.env.EXPRESS_SERVER_URL || 'http://localhost:3000';
 const DEFAULT_MODEL_ID = process.env.DEFAULT_MODEL_ID || 'qwen2.5:7b-instruct-q4_K_M';
 const DEFAULT_PROVIDER_ID = process.env.DEFAULT_PROVIDER_ID || 'ollama';
 
