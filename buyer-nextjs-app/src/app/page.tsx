@@ -652,9 +652,9 @@ export default function Home() {
             {/* Brand Logo */}
             <div className="flex items-center gap-3 py-4 px-4 border-r border-gray-800">
               <div className="text-2xl font-bold bg-gradient-to-r from-cyan-400 via-blue-500 to-purple-600 bg-clip-text text-transparent">
-                Delphi
+                Omnideal
               </div>
-              <div className="text-xs text-gray-500 hidden sm:block">Crypto Marketplace</div>
+              <div className="text-xs text-gray-500 hidden sm:block">Agentic Commerce</div>
             </div>
 
             {/* Menu Dropdown - Now outside terminal */}
