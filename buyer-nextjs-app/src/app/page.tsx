@@ -37,6 +37,9 @@ import EventHistory from '@/components/EventHistory';
 import DecisionStream from '@/components/DecisionStream';
 import Dashboard from '@/components/Dashboard';
 import ItemRegistration from '@/components/ItemRegistration';
+import DecisionReview from '@/components/DecisionReview';
+import EvalSetManager from '@/components/EvalSetManager';
+import EvalRunner from '@/components/EvalRunner';
 import SignupForm from '@/components/SignupForm';
 import LoraExplorer from '@/components/LoraExplorer';
 import { WindowData } from '@/types/window';
@@ -70,7 +73,7 @@ export default function Home() {
     successRate: 0,
   });
 
-  const commands = ['-h', 'wallet', 'watch', 'track', 'list', 'events', 'create', 'dashboard', 'lora'];
+  const commands = ['-h', 'wallet', 'watch', 'track', 'list', 'events', 'create', 'dashboard', 'items', 'review', 'evals', 'lora'];
 
   const commandInfo: Record<string, { params?: string; description: string; icon?: string }> = {
     '-h': { description: 'Display help window', icon: '?' },
@@ -315,6 +318,10 @@ export default function Home() {
       createWindow('item-registration', 'Item Marketplace');
     } else if (cmd === 'lora') {
       createWindow('lora-explorer', 'Lora Explorer');
+    } else if (cmd === 'review') {
+      createWindow('decision-review', '📝 Review Agent Decisions');
+    } else if (cmd === 'evals') {
+      createWindow('eval-manager', '🎯 Evaluation Sets');
     } else if (cmd === 'create') {
       if (params.length === 0) {
         setError('Error: create command requires a prompt. Usage: create <prompt>');
@@ -370,9 +377,10 @@ export default function Home() {
   };
 
   const createWindow = (
-    type: 'help' | 'wallet' | 'agent-tracker' | 'agent-list' | 'event-history' | 'decision-stream' | 'dashboard' | 'item-registration' | 'lora-explorer',
+    type: 'help' | 'wallet' | 'agent-tracker' | 'agent-list' | 'event-history' | 'decision-stream' | 'dashboard' | 'item-registration' | 'decision-review' | 'eval-manager' | 'eval-runner' | 'lora-explorer',
     title: string,
-    agentId?: string
+    agentId?: string,
+    evalSetId?: string
   ) => {
     // Determine window size based on type
     let width = 500;
@@ -404,6 +412,15 @@ export default function Home() {
     } else if (type === 'lora-explorer') {
       width = 1000;
       height = 700;
+    } else if (type === 'decision-review') {
+      width = 900;
+      height = 700;
+    } else if (type === 'eval-manager') {
+      width = 1000;
+      height = 700;
+    } else if (type === 'eval-runner') {
+      width = 800;
+      height = 700;
     }
 
     const newWindow: WindowData = {
@@ -416,6 +433,7 @@ export default function Home() {
       height,
       zIndex: nextZIndex,
       agentId,
+      evalSetId,
     };
 
     setWindows([...windows, newWindow]);
@@ -460,6 +478,28 @@ export default function Home() {
         return <ItemRegistration />;
       case 'lora-explorer':
         return <LoraExplorer />;
+      case 'decision-review':
+        return <DecisionReview onClose={() => closeWindow(window.id)} />;
+      case 'eval-manager':
+        return (
+          <EvalSetManager
+            onRunEval={(evalSetId) => {
+              createWindow('eval-runner', 'Run Evaluation', evalSetId);
+            }}
+            onClose={() => closeWindow(window.id)}
+          />
+        );
+      case 'eval-runner':
+        return window.evalSetId ? (
+          <EvalRunner
+            evalSetId={window.evalSetId}
+            onClose={() => closeWindow(window.id)}
+            onComplete={() => {
+              setSuccess('Evaluation completed successfully!');
+              setTimeout(() => setSuccess(''), 5000);
+            }}
+          />
+        ) : null;
       case 'agent-tracker':
         return window.agentId ? (
           <AgentTracker
@@ -553,6 +593,8 @@ export default function Home() {
                 { cmd: 'list', label: 'Agents', icon: '≡' },
                 { cmd: 'watch', label: 'Live Feed', icon: '◉' },
                 { cmd: 'items', label: 'Marketplace', icon: '🏪' },
+                { cmd: 'review', label: 'Review', icon: '📝' },
+                { cmd: 'evals', label: 'Evals', icon: '🎯' },
                 { cmd: 'dashboard', label: 'Dashboard', icon: '▣' },
               ].map((action, index) => (
                 <div
@@ -639,6 +681,9 @@ export default function Home() {
                           {window.type === 'decision-stream' && '◉'}
                           {window.type === 'dashboard' && '▣'}
                           {window.type === 'item-registration' && '🏪'}
+                          {window.type === 'decision-review' && '📝'}
+                          {window.type === 'eval-manager' && '🎯'}
+                          {window.type === 'eval-runner' && '🧪'}
                           {window.type === 'agent-tracker' && '→'}
                           {window.type === 'lora-explorer' && '🔍'}
                         </span>

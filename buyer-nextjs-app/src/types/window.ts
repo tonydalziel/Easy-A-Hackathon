@@ -1,6 +1,6 @@
 export interface WindowData {
   id: string;
-  type: 'help' | 'wallet' | 'agent-tracker' | 'agent-list' | 'event-history' | 'decision-stream' | 'dashboard' | 'item-registration' | 'lora-explorer';
+  type: 'help' | 'wallet' | 'agent-tracker' | 'agent-list' | 'event-history' | 'decision-stream' | 'dashboard' | 'item-registration' | 'decision-review' | 'eval-manager' | 'eval-runner' | 'lora-explorer';
   title: string;
   x: number;
   y: number;
@@ -8,5 +8,6 @@ export interface WindowData {
   height: number;
   zIndex: number;
   agentId?: string; // For agent-tracker windows
+  evalSetId?: string; // For eval-runner windows
   isMinimized?: boolean; // Whether the window is minimized to dock
 }
