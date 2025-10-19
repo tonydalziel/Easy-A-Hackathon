@@ -1,0 +1,55 @@
+
+> express-server@1.0.0 start
+> ts-node src/index.ts
+
+✅ Algorand client initialized successfully
+🔄 Item Processor initialized
+📡 Frontend URL: http://localhost:3001
+🚀 Starting server...
+Server running at http://localhost:3000
+Smart contract client initialized
+Starting blockchain subscriber for wallet: DLGQ6LNZXWXE2BH34CEI3DRKYAXPFVPOOW6C3XKH7BU4DOIW7V7TAIMFDM
+Starting from round: 9
+Blockchain monitoring started
+📡 GET /agents/items
+📥 GET /agents/items
+📊 Returning 0 items
+📡 GET /agents/items
+📥 GET /agents/items
+📊 Returning 0 items
+✅ CORS preflight: OPTIONS /agents/items
+📡 POST /agents/items
+📥 POST /agents/items - Request body: {
+  name: 'android',
+  description: 'android',
+  price: 999.98,
+  sellerId: ''
+}
+📝 Creating smart contract listing for item "android" with target amount 999.98...
+Listing opened on chain: Mock: Listing opened for 999.98 microAlgos to undefined
+✅ Smart contract listing created: Mock: Listing opened for 999.98 microAlgos to undefined
+✅ Registered item: item-1760848364290-g8re58pjl - "android" (999.98 ALGO)
+🔗 Blockchain listing ID: Mock: Listing opened for 999.98 microAlgos to undefined
+📊 Total items registered: 1
+📡 GET /agents/items
+📥 GET /agents/items
+📊 Returning 1 items
+📡 GET /agents/items
+📥 GET /agents/items
+📊 Returning 1 items
+📡 GET /agents/items
+📥 GET /agents/items
+📊 Returning 1 items
+
+> express-server@1.0.0 start
+> ts-node src/index.ts
+
+✅ Algorand client initialized successfully
+🔄 Item Processor initialized
+📡 Frontend URL: http://localhost:3001
+🚀 Starting server...
+Server running at http://localhost:3000
+
+> express-server@1.0.0 start
+> ts-node src/index.ts
+

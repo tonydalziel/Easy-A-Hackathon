@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { Agent } from '@/types/agent';
 
 interface AgentListProps {
@@ -10,6 +10,9 @@ interface AgentListProps {
 export default function AgentList({ onOpenLora }: AgentListProps = {}) {
   const [agents, setAgents] = useState<Agent[]>([]);
   const [walletBalances, setWalletBalances] = useState<Record<string, number>>({});
+  const [displayBalances, setDisplayBalances] = useState<Record<string, number>>({});
+  const [animatingWallets, setAnimatingWallets] = useState<Set<string>>(new Set());
+  const previousBalancesRef = useRef<Record<string, number>>({});
   const [isRefreshing, setIsRefreshing] = useState(false);
 
   useEffect(() => {
@@ -47,6 +50,53 @@ export default function AgentList({ onOpenLora }: AgentListProps = {}) {
     const interval = setInterval(fetchWalletBalances, 1000);
     return () => clearInterval(interval);
   }, [agents]);
+
+  // Animate balance changes with slot machine effect
+  useEffect(() => {
+    Object.keys(walletBalances).forEach((walletId) => {
+      const newBalance = walletBalances[walletId];
+      const previousBalance = previousBalancesRef.current[walletId] || 0;
+
+      if (newBalance !== previousBalance && newBalance > 0) {
+        setAnimatingWallets((prev) => new Set(prev).add(walletId));
+        
+        const difference = newBalance - previousBalance;
+        const steps = 20;
+        const stepValue = difference / steps;
+        let currentStep = 0;
+
+        const interval = setInterval(() => {
+          currentStep++;
+          if (currentStep <= steps) {
+            setDisplayBalances((prev) => ({
+              ...prev,
+              [walletId]: (prev[walletId] || previousBalance) + stepValue,
+            }));
+          } else {
+            setDisplayBalances((prev) => ({
+              ...prev,
+              [walletId]: newBalance,
+            }));
+            setAnimatingWallets((prev) => {
+              const next = new Set(prev);
+              next.delete(walletId);
+              return next;
+            });
+            clearInterval(interval);
+          }
+        }, 30);
+
+        previousBalancesRef.current[walletId] = newBalance;
+      } else if (newBalance === 0 && previousBalance !== 0) {
+        // Handle reset to 0
+        setDisplayBalances((prev) => ({
+          ...prev,
+          [walletId]: 0,
+        }));
+        previousBalancesRef.current[walletId] = 0;
+      }
+    });
+  }, [walletBalances]);
 
   const fetchAllAgents = async () => {
     try {
@@ -160,6 +210,8 @@ export default function AgentList({ onOpenLora }: AgentListProps = {}) {
           <tbody>
             {agents.map((agent) => {
               const balance = walletBalances[agent.wallet_id] || 0;
+              const displayBalance = displayBalances[agent.wallet_id] ?? balance;
+              const isAnimating = animatingWallets.has(agent.wallet_id);
               return (
                 <tr key={agent.id} className="border-b border-gray-800 hover:bg-gray-900 transition-colors">
                   <td className="py-2 px-2">
@@ -191,14 +243,14 @@ export default function AgentList({ onOpenLora }: AgentListProps = {}) {
                     </div>
                   </td>
                   <td className="py-2 px-2 text-right">
-                    <div className="text-green-400 font-semibold text-xs">
-                      {(balance / 1000000).toLocaleString(undefined, {
+                    <div className={`text-green-400 font-semibold text-xs transition-transform ${isAnimating ? 'scale-110' : ''}`}>
+                      {(displayBalance / 1000000).toLocaleString(undefined, {
                         minimumFractionDigits: 2,
                         maximumFractionDigits: 6
                       })} ALGO
                     </div>
-                    <div className="text-gray-500 text-xs">
-                      {balance.toLocaleString()} μALGO
+                    <div className={`text-gray-500 text-xs transition-transform ${isAnimating ? 'scale-110' : ''}`}>
+                      {Math.round(displayBalance).toLocaleString()} μALGO
                     </div>
                   </td>
                   <td className="py-2 px-2">

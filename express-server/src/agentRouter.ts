@@ -1,11 +1,14 @@
 // router for agent endpoints
 import express, { Request, Response } from 'express';
-import { postAgentToChain, openListingOnChain, getListingStatusFromChain } from './chain';
+import { postAgentToChain, openListingOnChain, getListingStatusFromChain, getSmartContractInfo } from './chain';
 import { AgentState, ItemState } from './types';
 import { haveLLMConsiderPurchase } from './llms';
 import { itemProcessor } from './itemProcessor';
 
 const router = express.Router();
+
+// Default sender address (fallback)
+const DEFAULT_SENDER = process.env.SENDER_ADDR || 'DLGQ6LNZXWXE2BH34CEI3DRKYAXPFVPOOW6C3XKH7BU4DOIW7V7TAIMFDM';
 
 // In-memory storage for registered agents
 const registeredAgents = new Map<string, AgentState>();
@@ -22,6 +25,12 @@ router.get('/status', (req: Request, res: Response) => {
         items: registeredItems.size,
         processor: processorStatus
     });
+});
+
+// Smart contract status endpoint
+router.get('/contract', (req: Request, res: Response) => {
+    const contractInfo = getSmartContractInfo();
+    res.json(contractInfo);
 });
 
 // ========== ITEM ENDPOINTS (must come before /:agentId to avoid conflicts) ==========
@@ -91,7 +100,30 @@ router.post('/items', async (req: Request, res: Response) => {
         let listingId: string | undefined = undefined;
         try {
             console.log(`📝 Creating smart contract listing for item "${name}" with target amount ${itemPrice}...`);
-            listingId = await openListingOnChain(itemPrice);
+            
+            // Get merchant wallet credentials if seller_id is provided
+            let targetWallet = seller_id || DEFAULT_SENDER;
+            let deployerPrivateKey: Uint8Array | undefined;
+            
+            if (seller_id) {
+                // Fetch merchant credentials
+                try {
+                    const merchantResponse = await fetch(`http://localhost:3000/merchants/${seller_id}/wallet`);
+                    if (merchantResponse.ok) {
+                        const { wallet_address, private_key } = await merchantResponse.json();
+                        targetWallet = wallet_address;
+                        deployerPrivateKey = new Uint8Array(private_key);
+                        console.log(`Using merchant wallet as deployer: ${wallet_address}`);
+                    } else {
+                        console.log(`⚠️  Merchant ${seller_id} not found, using default`);
+                    }
+                } catch (err) {
+                    console.error('Failed to fetch merchant credentials:', err);
+                }
+            }
+            
+            // Use seller_id as targetWallet (this should be the merchant's wallet address)
+            listingId = await openListingOnChain(targetWallet, itemPrice, targetWallet, deployerPrivateKey);
             itemState.listingId = listingId;
             console.log(`✅ Smart contract listing created: ${listingId}`);
         } catch (error) {
@@ -379,8 +411,9 @@ router.post('/listings', async (req: Request, res: Response) => {
         }
 
         const { wallet_address, private_key } = await merchantResponse.json();
+        const privateKeyUint8 = new Uint8Array(private_key);
 
-        const result = await openListingOnChain(targetAmount);
+        const result = await openListingOnChain(wallet_address, targetAmount, wallet_address, privateKeyUint8);
         res.json({
             message: 'Listing opened successfully',
             merchant: merchantUsername,

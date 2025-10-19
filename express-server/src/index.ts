@@ -2,7 +2,6 @@ import express, { Request, Response } from 'express';
 import agentRouter from './agentRouter';
 import merchantRouter from './merchantRouter';
 import { BlockchainSubscriber } from './blockchainSubscriber';
-import { initializeSmartContract } from './chain';
 
 // Handle uncaught errors
 process.on('uncaughtException', (error) => {
@@ -47,8 +46,8 @@ app.use('/merchants', merchantRouter);
 // Initialize blockchain monitoring
 async function initializeBlockchain() {
   try {
-    // Initialize smart contract
-    await initializeSmartContract();
+    // Smart contract will be deployed lazily when first merchant creates a listing
+    console.log('⏳ Smart contract will be deployed on first merchant listing creation');
 
     // Start blockchain subscriber
     const walletAddress = process.env.WALLET_ADDRESS || 'DLGQ6LNZXWXE2BH34CEI3DRKYAXPFVPOOW6C3XKH7BU4DOIW7V7TAIMFDM';

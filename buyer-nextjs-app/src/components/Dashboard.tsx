@@ -19,6 +19,7 @@
 
 import { useEffect, useState } from 'react';
 import { Agent, AgentDecision } from '@/types/agent';
+import ContractStatus from './ContractStatus';
 
 interface DashboardStats {
   totalAgents: number;
@@ -182,6 +183,9 @@ export default function Dashboard() {
           </div>
         </div>
       </div>
+
+      {/* Smart Contract Status */}
+      <ContractStatus />
 
       {/* Two Column Layout */}
       <div className="grid grid-cols-2 gap-6">

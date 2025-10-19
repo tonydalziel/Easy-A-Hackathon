@@ -11,9 +11,6 @@ class ChAiN extends algorand_typescript_1.Contract {
         this.targetAmount = 0;
         this.receivedAmount = 0;
     }
-    hello(name) {
-        return `Hello, ${name}`;
-    }
     /**
      * Opens a new listing with target wallet and amount
      */

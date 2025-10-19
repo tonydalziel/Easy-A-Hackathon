@@ -244,26 +244,67 @@ async function getNewWallet() {
     };
 }
 
-// Smart contract integration functions (commented out until artifacts are generated)
+// Smart contract integration functions
 let appClient: any = null;
+let appFactory: any = null;
+let contractAppId: number | null = null;
 
 /**
- * Initialize smart contract client
+ * Initialize smart contract client with a specific deployer account
+ * @param deployerAddress - The address of the account that will deploy the contract
+ * @param deployerPrivateKey - The private key of the deployer account (optional, uses KMD if not provided)
  */
-export async function initializeSmartContract() {
+export async function initializeSmartContract(deployerAddress?: string, deployerPrivateKey?: Uint8Array) {
+    if (!algorand) {
+        console.error('Algorand client not initialized');
+        throw new Error('Algorand client not initialized');
+    }
+
     try {
-        // Import the mock client for now
+        // Import the generated client
         const { ChAiNFactory } = await import('../../algokit/ch_ai_n/projects/ch_ai_n/artifacts/ch_ai_n/ChAiNClient');
 
-        const factory = new ChAiNFactory();
+        let deployerAccount;
+        
+        if (deployerAddress && deployerPrivateKey) {
+            // Use provided merchant account
+            const algosdk = await import('algosdk');
+            deployerAccount = {
+                addr: deployerAddress,
+                signer: algosdk.makeBasicAccountTransactionSigner({
+                    addr: deployerAddress as any,
+                    sk: deployerPrivateKey
+                })
+            };
+            console.log(`Using merchant account as deployer: ${deployerAddress}`);
+        } else {
+            // Fallback to environment deployer (for testing)
+            deployerAccount = await algorand.account.fromEnvironment('DEPLOYER');
+            console.log(`Using DEPLOYER account: ${deployerAccount.addr}`);
+        }
 
-        const { appClient: client } = await factory.deploy({
+        // Create factory with algorand client (v9 uses 'algorand' not 'algorandClient')
+        const factory = new ChAiNFactory({
+            algorand: algorand,
+            defaultSender: deployerAccount.addr,
+        });
+
+        appFactory = factory;
+
+        // Deploy or get existing contract
+        const { result, appClient: client } = await factory.deploy({
             onUpdate: 'append',
-            onSchemaBreak: 'append'
+            onSchemaBreak: 'append',
+            deployTimeParams: {},
         });
 
         appClient = client;
-        console.log('Smart contract client initialized');
+        contractAppId = Number(appClient.appId);
+        
+        console.log('✅ Smart contract initialized');
+        console.log(`   App ID: ${contractAppId}`);
+        console.log(`   App Address: ${appClient.appAddress}`);
+        
         return client;
     } catch (error) {
         console.error('Failed to initialize smart contract:', error);
@@ -272,18 +313,50 @@ export async function initializeSmartContract() {
 }
 
 /**
- * Open a listing on the smart contract
+ * Get smart contract information
  */
-export async function openListingOnChain(targetAmount: number): Promise<string> {
+export function getSmartContractInfo() {
     if (!appClient) {
-        await initializeSmartContract();
+        return {
+            initialized: false,
+            appId: null,
+            appAddress: null,
+        };
+    }
+
+    return {
+        initialized: true,
+        appId: contractAppId,
+        appAddress: appClient.appAddress,
+        appName: 'ChAiN',
+    };
+}
+
+/**
+ * Open a listing on the smart contract
+ * @param targetWallet - The wallet address that will receive funds
+ * @param targetAmount - The target amount in microAlgos
+ * @param deployerAddress - Optional: Address to deploy contract if not yet deployed
+ * @param deployerPrivateKey - Optional: Private key for deployment
+ */
+export async function openListingOnChain(
+    targetWallet: string, 
+    targetAmount: number,
+    deployerAddress?: string,
+    deployerPrivateKey?: Uint8Array
+): Promise<string> {
+    if (!appClient) {
+        await initializeSmartContract(deployerAddress, deployerPrivateKey);
     }
 
     const response = await appClient.send.openListing({
-        args: { targetAmount }
+        args: { 
+            targetWallet,
+            targetAmount: targetAmount.toString()
+        }
     });
 
-    console.log('Listing opened on chain:', response.return);
+    console.log('✅ Listing opened on chain:', response.return);
     return response.return;
 }
 
