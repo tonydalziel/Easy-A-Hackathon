@@ -165,24 +165,27 @@ export class BlockchainSubscriber {
 
     /**
      * Check if payment is for an active listing
+     * NOTE: This functionality is currently disabled because with multiple contract instances,
+     * we need to know which specific contract/item the payment is for.
+     * Payment processing is handled by itemProcessor when agents make purchases.
      */
     private async checkListingPayment(sender: string, amount: number, txId: string): Promise<void> {
         try {
-            console.log(`\n Checking listing payment: ${amount} microAlgos from ${sender}`);
+            console.log(`\n💰 Detected payment: ${amount} microAlgos from ${sender}`);
+            console.log(`⚠️  Payment matching disabled - itemProcessor handles agent purchases`);
             
-            const result = await processListingPayment(sender, amount);
+            // TODO: To enable this, we would need to:
+            // 1. Determine which item/contract this payment is for (by amount, receiver, or note field)
+            // 2. Look up the contractAppId for that item
+            // 3. Call processListingPayment(appId, sender, amount)
             
-            if (result.includes('Listing closed')) {
-                console.log('LISTING COMPLETED! Payment target reached!');
-                // You can add notification logic here (webhook, email, etc.)
-                await this.notifyListingCompleted(result);
-            } else if (result.includes('Payment received')) {
-                console.log(`Listing progress: ${result}`);
-            } else {
-                console.log('Payment not for active listing');
-            }
+            // const result = await processListingPayment(appId, sender, amount);
+            // if (result.includes('Listing closed')) {
+            //     console.log('🎉 LISTING COMPLETED! Payment target reached!');
+            //     await this.notifyListingCompleted(result);
+            // }
         } catch (error) {
-            console.log('Payment not for active listing or no listing open');
+            console.log('Payment processing skipped:', error);
         }
     }
 

@@ -7,19 +7,61 @@ interface WalletData {
   value: number;
 }
 
-export default function WalletWindow() {
+interface WalletWindowProps {
+  address: string;
+  balance: number;
+  onOpenLora?: (walletId: string) => void;
+}
+
+export default function WalletWindow({ address, balance, onOpenLora }: WalletWindowProps) {
   const [walletHistory, setWalletHistory] = useState<WalletData[]>([]);
-  const [currentValue, setCurrentValue] = useState(0);
+  const [currentValue, setCurrentValue] = useState(balance);
+
+  // Update current value when balance prop changes
+  useEffect(() => {
+    setCurrentValue(balance);
+  }, [balance]);
 
   useEffect(() => {
     fetchWalletData();
-  }, []);
+    // Update wallet balance every second
+    const interval = setInterval(fetchWalletData, 1000);
+    return () => clearInterval(interval);
+  }, [address]);
+
+  	// setTimeout(() => {
+	// 	fetchWalletData();
+	// 	setWalletHistory(prevHistory => {
+	// 		const newEntry: WalletData = {
+	// 			date: new Date().toLocaleDateString(),
+	// 			value: currentValue / 1000000 // Convert microALGO to ALGO
+	// 		};
+	// 		const updatedHistory = [...prevHistory, newEntry];
+	// 		return updatedHistory;
+	// 	});
+	// }, 10000); // Refresh every 10 seconds
 
   const fetchWalletData = async () => {
     try {
-      const walletId = process.env.NEXT_PUBLIC_USER_WALLET_ID || 'user-wallet';
+      if (!address) {
+        // No address provided, let the API use the authenticated user's wallet
+        console.log('No address provided, using authenticated user wallet');
+        const response = await fetch(`/api/wallet`);
+        if (response.ok) {
+          const data = await response.json();
+          setCurrentValue(data.currentValue || 0);
+        } else {
+          console.error('Failed to fetch wallet data');
+        }
+        return;
+      }
 
-      const response = await fetch(`/api/wallet?id=${walletId}`);
+      if (address === 'REPLACE_WITH_YOUR_WALLET_ADDRESS') {
+        console.log('Placeholder wallet address detected');
+        return;
+      }
+
+      const response = await fetch(`/api/wallet?id=${address}`);
       if (response.ok) {
         const data = await response.json();
         setCurrentValue(data.currentValue || 0);
@@ -38,11 +80,34 @@ export default function WalletWindow() {
   return (
     <div className="text-white font-mono">
       <div className="mb-6">
-        <div className="text-gray-400 text-sm mb-1">Total Balance</div>
-        <div className="text-3xl font-bold text-green-400">${currentValue.toFixed(2)}</div>
-        <div className={`text-sm mt-1 ${valueChange >= 0 ? 'text-green-500' : 'text-red-500'}`}>
-          {valueChange >= 0 ? '↑' : '↓'} {Math.abs(valueChange).toFixed(2)}% (7 days)
+        <div className="text-gray-400 text-sm mb-2">Wallet Address</div>
+        <div className="text-xs text-cyan-400 bg-gray-800/50 p-2 rounded mb-4 break-all flex items-center justify-between gap-2">
+          <span>{address}</span>
+          <button
+            onClick={() => onOpenLora?.(address)}
+            className="flex-shrink-0 text-cyan-400 hover:text-cyan-300 transition-colors"
+            title="View on Lora Explorer"
+          >
+            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+            </svg>
+          </button>
         </div>
+        <div className="text-gray-400 text-sm mb-1">Total Balance</div>
+        <div className="text-3xl font-bold text-green-400">
+          {(currentValue / 1000000).toLocaleString(undefined, {
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 6
+          })} ALGO
+        </div>
+        <div className="text-xs text-gray-500 mt-1">
+          {currentValue.toLocaleString()} microALGO
+        </div>
+        {walletHistory.length > 1 && (
+          <div className={`text-sm mt-1 ${valueChange >= 0 ? 'text-green-500' : 'text-red-500'}`}>
+            {valueChange >= 0 ? '↑' : '↓'} {Math.abs(valueChange).toFixed(2)}% (7 days)
+          </div>
+        )}
       </div>
 
       <div className="border-t border-gray-700 pt-4">
@@ -59,7 +124,7 @@ export default function WalletWindow() {
                   />
                 </div>
                 <div className="text-xs text-gray-500 mt-2 opacity-0 group-hover:opacity-100 transition-opacity">
-                  ${data.value}
+                  {data.value} ALGO
                 </div>
               </div>
             );

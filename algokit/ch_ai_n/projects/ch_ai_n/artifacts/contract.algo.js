@@ -11,9 +11,6 @@ class ChAiN extends algorand_typescript_1.Contract {
         this.targetAmount = 0;
         this.receivedAmount = 0;
     }
-    hello(name) {
-        return `Hello, ${name}`;
-    }
     /**
      * Opens a new listing with target wallet and amount
      */
@@ -36,9 +33,7 @@ class ChAiN extends algorand_typescript_1.Contract {
             throw new Error("No listing is currently open");
         }
         // Check if payment is to the target wallet
-        if (sender !== this.targetWallet) {
-            return "Payment not to target wallet, listing remains open";
-        }
+  
         // Add to received amount
         this.receivedAmount += amount;
         // Check if target amount is reached

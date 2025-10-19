@@ -1,0 +1,1648 @@
+
+> express-server@1.0.0 start
+> ts-node src/index.ts
+
+✅ Algorand client initialized successfully
+🔄 Item Processor initialized
+📡 Frontend URL: http://localhost:3001
+🚀 Starting server...
+Server running at http://localhost:3000
+Smart contract client initialized
+Starting blockchain subscriber for wallet: DLGQ6LNZXWXE2BH34CEI3DRKYAXPFVPOOW6C3XKH7BU4DOIW7V7TAIMFDM
+Starting from round: 9
+Blockchain monitoring started
+📡 GET /agents/items
+📥 GET /agents/items
+📊 Returning 0 items
+📡 GET /agents/items
+📥 GET /agents/items
+📊 Returning 0 items
+✅ CORS preflight: OPTIONS /agents/items
+📡 POST /agents/items
+📥 POST /agents/items - Request body: {
+  name: 'android',
+  description: 'android',
+  price: 999.98,
+  sellerId: ''
+}
+📝 Creating smart contract listing for item "android" with target amount 999.98...
+Listing opened on chain: Mock: Listing opened for 999.98 microAlgos to undefined
+✅ Smart contract listing created: Mock: Listing opened for 999.98 microAlgos to undefined
+✅ Registered item: item-1760848364290-g8re58pjl - "android" (999.98 ALGO)
+🔗 Blockchain listing ID: Mock: Listing opened for 999.98 microAlgos to undefined
+📊 Total items registered: 1
+📡 GET /agents/items
+📥 GET /agents/items
+📊 Returning 1 items
+📡 GET /agents/items
+📥 GET /agents/items
+📊 Returning 1 items
+📡 GET /agents/items
+📥 GET /agents/items
+📊 Returning 1 items
+
+> express-server@1.0.0 start
+> ts-node src/index.ts
+
+✅ Algorand client initialized successfully
+🔄 Item Processor initialized
+📡 Frontend URL: http://localhost:3001
+🚀 Starting server...
+Server running at http://localhost:3000
+
+> express-server@1.0.0 start
+> ts-node src/index.ts
+
+
+> express-server@1.0.0 start
+> ts-node src/index.ts
+
+✅ Algorand client initialized successfully
+🔄 Item Processor initialized
+📡 Frontend URL: http://localhost:3001
+🚀 Starting server...
+Server running at http://localhost:3000
+⏳ Smart contract will be deployed on first merchant listing creation
+Starting blockchain subscriber for wallet: DLGQ6LNZXWXE2BH34CEI3DRKYAXPFVPOOW6C3XKH7BU4DOIW7V7TAIMFDM
+Starting from round: 19
+Blockchain monitoring started
+📡 POST /agents
+USER ID:
+agent-1760852615722-c356u7nxr
+USER WALLET ID:
+CFJC732RQDTTU77AAYSVETKZ37S6K3ZLEUNCTR6DVW32LX2ELAL4TI37OY
+Initial wallet balance (microALGO): 20000000
+💰 Creating agent on blockchain with 20 ALGO...
+💳 Funding from user wallet: CFJC732RQDTTU77AAYSVETKZ37S6K3ZLEUNCTR6DVW32LX2ELAL4TI37OY
+Creating new agent wallet funded by DEPLOYER account...
+{
+  addr: Address {
+    publicKey: Uint8Array(32) [
+      250, 237,  34, 242, 159, 190,  50, 161,
+       14,  22, 222,  91, 208,  51,  44, 191,
+      172,  75, 131,  15, 186, 241,  35,  84,
+       45,  51,  31, 104, 152,  66, 208,  86
+    ]
+  },
+  sk: Uint8Array(64) [
+    226,   1,  57,  20,   7,   9, 184,  65, 224,  64,  51,
+    221, 180, 133,  35,   8,  35, 181,  92, 139, 163, 188,
+     13,  62, 173, 193, 190,  95,  24,  52, 200, 240, 250,
+    237,  34, 242, 159, 190,  50, 161,  14,  22, 222,  91,
+    208,  51,  44, 191, 172,  75, 131,  15, 186, 241,  35,
+     84,  45,  51,  31, 104, 152,  66, 208,  86
+  ]
+}
+New agent wallet created: 7LWSF4U7XYZKCDQW3ZN5AMZMX6WEXAYPXLYSGVBNGMPWRGCC2BLOCF4CQY
+Sending 20000000 µALGO from KFT3JXQTRF6WBR7NMBPGOD6QSVJHSO7JY4TMVOYNTQD5TEBPGRRLMBWI54 to 7LWSF4U7XYZKCDQW3ZN5AMZMX6WEXAYPXLYSGVBNGMPWRGCC2BLOCF4CQY via transaction PEX2N4VQB276LLDNRFEI6DAXYVO3QEUAZUOZDDIKQWL54OYHREUA
+✅ Agent wallet funded and metadata posted to blockchain. TX: PEX2N4VQB276LLDNRFEI6DAXYVO3QEUAZUOZDDIKQWL54OYHREUA
+✅ Agent wallet 7LWSF4U7XYZKCDQW3ZN5AMZMX6WEXAYPXLYSGVBNGMPWRGCC2BLOCF4CQY funded with 20 ALGO
+✅ Agent posted to blockchain! Transaction ID: PEX2N4VQB276LLDNRFEI6DAXYVO3QEUAZUOZDDIKQWL54OYHREUA
+✅ Registered agent: agent-1760852615722-c356u7nxr - "fruit" with 20 ALGO
+Checking rounds 20 to 20
+Processing round 20 - mock implementation
+📡 POST /agents
+USER ID:
+agent-1760852626406-1254wazdf
+USER WALLET ID:
+CFJC732RQDTTU77AAYSVETKZ37S6K3ZLEUNCTR6DVW32LX2ELAL4TI37OY
+Initial wallet balance (microALGO): 2000000000
+💰 Creating agent on blockchain with 2000 ALGO...
+💳 Funding from user wallet: CFJC732RQDTTU77AAYSVETKZ37S6K3ZLEUNCTR6DVW32LX2ELAL4TI37OY
+Creating new agent wallet funded by DEPLOYER account...
+{
+  addr: Address {
+    publicKey: Uint8Array(32) [
+      33, 158,  92,  51, 211, 247, 128,  39,
+      19,  30, 188, 226, 117,  86, 205, 226,
+      82,   2, 122, 146, 186,  99,  33, 161,
+      97, 109,  47, 219,  23, 162, 230, 156
+    ]
+  },
+  sk: Uint8Array(64) [
+    136, 184,  25, 176, 118, 244, 236, 138, 219,  93, 110,
+    184, 184, 198, 189,  58, 106, 105, 191, 136, 119,  36,
+    202,  12,   3, 173, 236,  76,  93, 219, 194, 213,  33,
+    158,  92,  51, 211, 247, 128,  39,  19,  30, 188, 226,
+    117,  86, 205, 226,  82,   2, 122, 146, 186,  99,  33,
+    161,  97, 109,  47, 219,  23, 162, 230, 156
+  ]
+}
+New agent wallet created: EGPFYM6T66ACOEY6XTRHKVWN4JJAE6USXJRSDILBNUX5WF5C42OJGMY5FI
+Sending 2000000000 µALGO from KFT3JXQTRF6WBR7NMBPGOD6QSVJHSO7JY4TMVOYNTQD5TEBPGRRLMBWI54 to EGPFYM6T66ACOEY6XTRHKVWN4JJAE6USXJRSDILBNUX5WF5C42OJGMY5FI via transaction XWGRJ3CNEDOE5F5YWKKZ2U4BG3QJEU7YOGA7Y2F75EOA7K4235KA
+Received error executing Atomic Transaction Composer, for more information enable the debug flag Error [URLTokenBaseHTTPError]: Network request error. Received status 400 (Bad Request): TransactionPool.Remember: transaction XWGRJ3CNEDOE5F5YWKKZ2U4BG3QJEU7YOGA7Y2F75EOA7K4235KA: overspend (account KFT3JXQTRF6WBR7NMBPGOD6QSVJHSO7JY4TMVOYNTQD5TEBPGRRLMBWI54, data {AccountBaseData:{Status:Offline MicroAlgos:{Raw:979985000} RewardsBase:0 RewardedMicroAlgos:{Raw:0} AuthAddr:AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAY5HFKQ IncentiveEligible:false TotalAppSchema:{_struct:{} NumUint:4 NumByteSlice:12} TotalExtraAppPages:0 TotalAppParams:4 TotalAppLocalStates:0 TotalAssetParams:0 TotalAssets:0 TotalBoxes:0 TotalBoxBytes:0 LastProposed:0 LastHeartbeat:0} VotingData:{VoteID:[0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0] SelectionID:[0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0] StateProofID:[0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0] VoteFirstValid:0 VoteLastValid:0 VoteKeyDilution:0}}, tried to spend {2000000000})
+    at Object.sendAtomicTransactionComposer (/Users/danielpointon/easya/Easy-A-Hackathon/express-server/node_modules/@algorandfoundation/src/transaction/transaction.ts:868:17)
+    at processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async TransactionComposer.send (/Users/danielpointon/easya/Easy-A-Hackathon/express-server/node_modules/@algorandfoundation/src/types/composer.ts:2014:14)
+    at async AlgorandClientTransactionSender.payment (/Users/danielpointon/easya/Easy-A-Hackathon/express-server/node_modules/@algorandfoundation/src/types/algorand-client-transaction-sender.ts:86:25) {
+  cause: URLTokenBaseHTTPError: Network request error. Received status 400 (Bad Request): TransactionPool.Remember: transaction XWGRJ3CNEDOE5F5YWKKZ2U4BG3QJEU7YOGA7Y2F75EOA7K4235KA: overspend (account KFT3JXQTRF6WBR7NMBPGOD6QSVJHSO7JY4TMVOYNTQD5TEBPGRRLMBWI54, data {AccountBaseData:{Status:Offline MicroAlgos:{Raw:979985000} RewardsBase:0 RewardedMicroAlgos:{Raw:0} AuthAddr:AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAY5HFKQ IncentiveEligible:false TotalAppSchema:{_struct:{} NumUint:4 NumByteSlice:12} TotalExtraAppPages:0 TotalAppParams:4 TotalAppLocalStates:0 TotalAssetParams:0 TotalAssets:0 TotalBoxes:0 TotalBoxBytes:0 LastProposed:0 LastHeartbeat:0} VotingData:{VoteID:[0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0] SelectionID:[0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0] StateProofID:[0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0] VoteFirstValid:0 VoteLastValid:0 VoteKeyDilution:0}}, tried to spend {2000000000})
+      at URLTokenBaseHTTPClient.checkHttpError (/Users/danielpointon/easya/Easy-A-Hackathon/express-server/node_modules/algosdk/src/client/urlTokenBaseHTTPClient.ts:139:11)
+      at processTicksAndRejections (node:internal/process/task_queues:105:5)
+      at async URLTokenBaseHTTPClient.formatFetchResponse (/Users/danielpointon/easya/Easy-A-Hackathon/express-server/node_modules/algosdk/src/client/urlTokenBaseHTTPClient.ts:149:5)
+      at async AlgoHttpClientWithRetry.callWithRetry (/Users/danielpointon/easya/Easy-A-Hackathon/express-server/node_modules/@algorandfoundation/src/types/algo-http-client-with-retry.ts:30:20)
+      at async AlgoHttpClientWithRetry.post (/Users/danielpointon/easya/Easy-A-Hackathon/express-server/node_modules/@algorandfoundation/src/types/algo-http-client-with-retry.ts:97:12)
+      at async HTTPClient.post (/Users/danielpointon/easya/Easy-A-Hackathon/express-server/node_modules/algosdk/src/client/client.ts:327:19)
+      at async SendRawTransaction.do (/Users/danielpointon/easya/Easy-A-Hackathon/express-server/node_modules/algosdk/src/client/v2/jsonrequest.ts:65:17)
+      at async AtomicTransactionComposer.submit (/Users/danielpointon/easya/Easy-A-Hackathon/express-server/node_modules/algosdk/src/composer.ts:639:5)
+      at async AtomicTransactionComposer.execute (/Users/danielpointon/easya/Easy-A-Hackathon/express-server/node_modules/algosdk/src/composer.ts:749:19)
+      at async Object.sendAtomicTransactionComposer (/Users/danielpointon/easya/Easy-A-Hackathon/express-server/node_modules/@algorandfoundation/src/transaction/transaction.ts:835:20) {
+    response: HTTPClientResponse {
+      text: '{"message":"TransactionPool.Remember: transaction XWGRJ3CNEDOE5F5YWKKZ2U4BG3QJEU7YOGA7Y2F75EOA7K4235KA: overspend (account KFT3JXQTRF6WBR7NMBPGOD6QSVJHSO7JY4TMVOYNTQD5TEBPGRRLMBWI54, data {AccountBaseData:{Status:Offline MicroAlgos:{Raw:979985000} RewardsBase:0 RewardedMicroAlgos:{Raw:0} AuthAddr:AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAY5HFKQ IncentiveEligible:false TotalAppSchema:{_struct:{} NumUint:4 NumByteSlice:12} TotalExtraAppPages:0 TotalAppParams:4 TotalAppLocalStates:0 TotalAssetParams:0 TotalAssets:0 TotalBoxes:0 TotalBoxBytes:0 LastProposed:0 LastHeartbeat:0} VotingData:{VoteID:[0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0] SelectionID:[0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0] StateProofID:[0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0] VoteFirstValid:0 VoteLastValid:0 VoteKeyDilution:0}}, tried to spend {2000000000})"}\n',
+      format: 'application/json',
+      status: 400,
+      ok: false
+    },
+    status: 400
+  },
+  response: HTTPClientResponse {
+    text: '{"message":"TransactionPool.Remember: transaction XWGRJ3CNEDOE5F5YWKKZ2U4BG3QJEU7YOGA7Y2F75EOA7K4235KA: overspend (account KFT3JXQTRF6WBR7NMBPGOD6QSVJHSO7JY4TMVOYNTQD5TEBPGRRLMBWI54, data {AccountBaseData:{Status:Offline MicroAlgos:{Raw:979985000} RewardsBase:0 RewardedMicroAlgos:{Raw:0} AuthAddr:AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAY5HFKQ IncentiveEligible:false TotalAppSchema:{_struct:{} NumUint:4 NumByteSlice:12} TotalExtraAppPages:0 TotalAppParams:4 TotalAppLocalStates:0 TotalAssetParams:0 TotalAssets:0 TotalBoxes:0 TotalBoxBytes:0 LastProposed:0 LastHeartbeat:0} VotingData:{VoteID:[0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0] SelectionID:[0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0] StateProofID:[0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0] VoteFirstValid:0 VoteLastValid:0 VoteKeyDilution:0}}, tried to spend {2000000000})"}\n',
+    format: 'application/json',
+    status: 400,
+    ok: false
+  }
+}
+⚠️  Failed to post agent to blockchain: Error [URLTokenBaseHTTPError]: Network request error. Received status 400 (Bad Request): TransactionPool.Remember: transaction XWGRJ3CNEDOE5F5YWKKZ2U4BG3QJEU7YOGA7Y2F75EOA7K4235KA: overspend (account KFT3JXQTRF6WBR7NMBPGOD6QSVJHSO7JY4TMVOYNTQD5TEBPGRRLMBWI54, data {AccountBaseData:{Status:Offline MicroAlgos:{Raw:979985000} RewardsBase:0 RewardedMicroAlgos:{Raw:0} AuthAddr:AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAY5HFKQ IncentiveEligible:false TotalAppSchema:{_struct:{} NumUint:4 NumByteSlice:12} TotalExtraAppPages:0 TotalAppParams:4 TotalAppLocalStates:0 TotalAssetParams:0 TotalAssets:0 TotalBoxes:0 TotalBoxBytes:0 LastProposed:0 LastHeartbeat:0} VotingData:{VoteID:[0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0] SelectionID:[0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0] StateProofID:[0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0] VoteFirstValid:0 VoteLastValid:0 VoteKeyDilution:0}}, tried to spend {2000000000})
+    at Object.sendAtomicTransactionComposer (/Users/danielpointon/easya/Easy-A-Hackathon/express-server/node_modules/@algorandfoundation/src/transaction/transaction.ts:868:17)
+    at processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async TransactionComposer.send (/Users/danielpointon/easya/Easy-A-Hackathon/express-server/node_modules/@algorandfoundation/src/types/composer.ts:2014:14)
+    at async AlgorandClientTransactionSender.payment (/Users/danielpointon/easya/Easy-A-Hackathon/express-server/node_modules/@algorandfoundation/src/types/algorand-client-transaction-sender.ts:86:25) {
+  cause: URLTokenBaseHTTPError: Network request error. Received status 400 (Bad Request): TransactionPool.Remember: transaction XWGRJ3CNEDOE5F5YWKKZ2U4BG3QJEU7YOGA7Y2F75EOA7K4235KA: overspend (account KFT3JXQTRF6WBR7NMBPGOD6QSVJHSO7JY4TMVOYNTQD5TEBPGRRLMBWI54, data {AccountBaseData:{Status:Offline MicroAlgos:{Raw:979985000} RewardsBase:0 RewardedMicroAlgos:{Raw:0} AuthAddr:AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAY5HFKQ IncentiveEligible:false TotalAppSchema:{_struct:{} NumUint:4 NumByteSlice:12} TotalExtraAppPages:0 TotalAppParams:4 TotalAppLocalStates:0 TotalAssetParams:0 TotalAssets:0 TotalBoxes:0 TotalBoxBytes:0 LastProposed:0 LastHeartbeat:0} VotingData:{VoteID:[0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0] SelectionID:[0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0] StateProofID:[0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0] VoteFirstValid:0 VoteLastValid:0 VoteKeyDilution:0}}, tried to spend {2000000000})
+      at URLTokenBaseHTTPClient.checkHttpError (/Users/danielpointon/easya/Easy-A-Hackathon/express-server/node_modules/algosdk/src/client/urlTokenBaseHTTPClient.ts:139:11)
+      at processTicksAndRejections (node:internal/process/task_queues:105:5)
+      at async URLTokenBaseHTTPClient.formatFetchResponse (/Users/danielpointon/easya/Easy-A-Hackathon/express-server/node_modules/algosdk/src/client/urlTokenBaseHTTPClient.ts:149:5)
+      at async AlgoHttpClientWithRetry.callWithRetry (/Users/danielpointon/easya/Easy-A-Hackathon/express-server/node_modules/@algorandfoundation/src/types/algo-http-client-with-retry.ts:30:20)
+      at async AlgoHttpClientWithRetry.post (/Users/danielpointon/easya/Easy-A-Hackathon/express-server/node_modules/@algorandfoundation/src/types/algo-http-client-with-retry.ts:97:12)
+      at async HTTPClient.post (/Users/danielpointon/easya/Easy-A-Hackathon/express-server/node_modules/algosdk/src/client/client.ts:327:19)
+      at async SendRawTransaction.do (/Users/danielpointon/easya/Easy-A-Hackathon/express-server/node_modules/algosdk/src/client/v2/jsonrequest.ts:65:17)
+      at async AtomicTransactionComposer.submit (/Users/danielpointon/easya/Easy-A-Hackathon/express-server/node_modules/algosdk/src/composer.ts:639:5)
+      at async AtomicTransactionComposer.execute (/Users/danielpointon/easya/Easy-A-Hackathon/express-server/node_modules/algosdk/src/composer.ts:749:19)
+      at async Object.sendAtomicTransactionComposer (/Users/danielpointon/easya/Easy-A-Hackathon/express-server/node_modules/@algorandfoundation/src/transaction/transaction.ts:835:20) {
+    response: HTTPClientResponse {
+      text: '{"message":"TransactionPool.Remember: transaction XWGRJ3CNEDOE5F5YWKKZ2U4BG3QJEU7YOGA7Y2F75EOA7K4235KA: overspend (account KFT3JXQTRF6WBR7NMBPGOD6QSVJHSO7JY4TMVOYNTQD5TEBPGRRLMBWI54, data {AccountBaseData:{Status:Offline MicroAlgos:{Raw:979985000} RewardsBase:0 RewardedMicroAlgos:{Raw:0} AuthAddr:AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAY5HFKQ IncentiveEligible:false TotalAppSchema:{_struct:{} NumUint:4 NumByteSlice:12} TotalExtraAppPages:0 TotalAppParams:4 TotalAppLocalStates:0 TotalAssetParams:0 TotalAssets:0 TotalBoxes:0 TotalBoxBytes:0 LastProposed:0 LastHeartbeat:0} VotingData:{VoteID:[0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0] SelectionID:[0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0] StateProofID:[0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0] VoteFirstValid:0 VoteLastValid:0 VoteKeyDilution:0}}, tried to spend {2000000000})"}\n',
+      format: 'application/json',
+      status: 400,
+      ok: false
+    },
+    status: 400
+  },
+  response: HTTPClientResponse {
+    text: '{"message":"TransactionPool.Remember: transaction XWGRJ3CNEDOE5F5YWKKZ2U4BG3QJEU7YOGA7Y2F75EOA7K4235KA: overspend (account KFT3JXQTRF6WBR7NMBPGOD6QSVJHSO7JY4TMVOYNTQD5TEBPGRRLMBWI54, data {AccountBaseData:{Status:Offline MicroAlgos:{Raw:979985000} RewardsBase:0 RewardedMicroAlgos:{Raw:0} AuthAddr:AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAY5HFKQ IncentiveEligible:false TotalAppSchema:{_struct:{} NumUint:4 NumByteSlice:12} TotalExtraAppPages:0 TotalAppParams:4 TotalAppLocalStates:0 TotalAssetParams:0 TotalAssets:0 TotalBoxes:0 TotalBoxBytes:0 LastProposed:0 LastHeartbeat:0} VotingData:{VoteID:[0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0] SelectionID:[0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0] StateProofID:[0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0] VoteFirstValid:0 VoteLastValid:0 VoteKeyDilution:0}}, tried to spend {2000000000})"}\n',
+    format: 'application/json',
+    status: 400,
+    ok: false
+  },
+  sentTransactions: [
+    Transaction {
+      type: 'pay',
+      sender: [Address],
+      note: [Uint8Array],
+      lease: undefined,
+      rekeyTo: undefined,
+      group: undefined,
+      firstValid: 20n,
+      lastValid: 1020n,
+      genesisID: 'dockernet-v1',
+      genesisHash: [Uint8Array],
+      payment: [Object],
+      fee: 1000n
+    }
+  ]
+}
+✅ Registered agent: agent-1760852626406-1254wazdf - "fruit" with 2000 ALGO
+
+> express-server@1.0.0 start
+> ts-node src/index.ts
+
+✅ Algorand client initialized successfully
+🔄 Item Processor initialized
+📡 Frontend URL: http://localhost:3001
+🚀 Starting server...
+Server running at http://localhost:3000
+⏳ Smart contract will be deployed on first merchant listing creation
+Starting blockchain subscriber for wallet: DLGQ6LNZXWXE2BH34CEI3DRKYAXPFVPOOW6C3XKH7BU4DOIW7V7TAIMFDM
+Starting from round: 20
+Blockchain monitoring started
+📡 POST /agents
+USER ID:
+agent-1760852715597-akug8dai7
+USER WALLET ID:
+CFJC732RQDTTU77AAYSVETKZ37S6K3ZLEUNCTR6DVW32LX2ELAL4TI37OY
+Initial wallet balance (microALGO): 2000
+💰 Creating agent on blockchain with 0.002 ALGO...
+💳 Funding from user wallet: CFJC732RQDTTU77AAYSVETKZ37S6K3ZLEUNCTR6DVW32LX2ELAL4TI37OY
+Creating new agent wallet funded by DEPLOYER account...
+{
+  addr: Address {
+    publicKey: Uint8Array(32) [
+       94, 160, 109,  62, 226, 251,  55,  74,
+      169,  13,  62,  26,   8,  13, 101,   5,
+       56, 203, 225, 210,  20, 170, 165, 230,
+      103,  58, 127, 153, 224, 191, 182, 175
+    ]
+  },
+  sk: Uint8Array(64) [
+      2,  81, 135, 130,  88, 233, 127,  31,  79, 169,  85,
+     85, 186,  55, 162, 158, 195,  75,   0,   4, 230, 224,
+    160,  16,  84, 197,  77, 178, 166,  44, 188, 120,  94,
+    160, 109,  62, 226, 251,  55,  74, 169,  13,  62,  26,
+      8,  13, 101,   5,  56, 203, 225, 210,  20, 170, 165,
+    230, 103,  58, 127, 153, 224, 191, 182, 175
+  ]
+}
+New agent wallet created: L2QG2PXC7M3UVKINHYNAQDLFAU4MXYOSCSVKLZTHHJ7ZTYF7W2X7GCTGNY
+Sending 2000 µALGO from KFT3JXQTRF6WBR7NMBPGOD6QSVJHSO7JY4TMVOYNTQD5TEBPGRRLMBWI54 to L2QG2PXC7M3UVKINHYNAQDLFAU4MXYOSCSVKLZTHHJ7ZTYF7W2X7GCTGNY via transaction 3VQNLIXBKDR5KMGJZY2V4QTVVIHMD53OG5ZACZTKQRVILYO4C6WQ
+Received error executing Atomic Transaction Composer, for more information enable the debug flag Error [URLTokenBaseHTTPError]: Network request error. Received status 400 (Bad Request): TransactionPool.Remember: transaction 3VQNLIXBKDR5KMGJZY2V4QTVVIHMD53OG5ZACZTKQRVILYO4C6WQ: account L2QG2PXC7M3UVKINHYNAQDLFAU4MXYOSCSVKLZTHHJ7ZTYF7W2X7GCTGNY balance 2000 below min 100000 (0 assets)
+    at Object.sendAtomicTransactionComposer (/Users/danielpointon/easya/Easy-A-Hackathon/express-server/node_modules/@algorandfoundation/src/transaction/transaction.ts:868:17)
+    at processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async TransactionComposer.send (/Users/danielpointon/easya/Easy-A-Hackathon/express-server/node_modules/@algorandfoundation/src/types/composer.ts:2014:14)
+    at async AlgorandClientTransactionSender.payment (/Users/danielpointon/easya/Easy-A-Hackathon/express-server/node_modules/@algorandfoundation/src/types/algorand-client-transaction-sender.ts:86:25) {
+  cause: URLTokenBaseHTTPError: Network request error. Received status 400 (Bad Request): TransactionPool.Remember: transaction 3VQNLIXBKDR5KMGJZY2V4QTVVIHMD53OG5ZACZTKQRVILYO4C6WQ: account L2QG2PXC7M3UVKINHYNAQDLFAU4MXYOSCSVKLZTHHJ7ZTYF7W2X7GCTGNY balance 2000 below min 100000 (0 assets)
+      at URLTokenBaseHTTPClient.checkHttpError (/Users/danielpointon/easya/Easy-A-Hackathon/express-server/node_modules/algosdk/src/client/urlTokenBaseHTTPClient.ts:139:11)
+      at processTicksAndRejections (node:internal/process/task_queues:105:5)
+      at async URLTokenBaseHTTPClient.formatFetchResponse (/Users/danielpointon/easya/Easy-A-Hackathon/express-server/node_modules/algosdk/src/client/urlTokenBaseHTTPClient.ts:149:5)
+      at async AlgoHttpClientWithRetry.callWithRetry (/Users/danielpointon/easya/Easy-A-Hackathon/express-server/node_modules/@algorandfoundation/src/types/algo-http-client-with-retry.ts:30:20)
+      at async AlgoHttpClientWithRetry.post (/Users/danielpointon/easya/Easy-A-Hackathon/express-server/node_modules/@algorandfoundation/src/types/algo-http-client-with-retry.ts:97:12)
+      at async HTTPClient.post (/Users/danielpointon/easya/Easy-A-Hackathon/express-server/node_modules/algosdk/src/client/client.ts:327:19)
+      at async SendRawTransaction.do (/Users/danielpointon/easya/Easy-A-Hackathon/express-server/node_modules/algosdk/src/client/v2/jsonrequest.ts:65:17)
+      at async AtomicTransactionComposer.submit (/Users/danielpointon/easya/Easy-A-Hackathon/express-server/node_modules/algosdk/src/composer.ts:639:5)
+      at async AtomicTransactionComposer.execute (/Users/danielpointon/easya/Easy-A-Hackathon/express-server/node_modules/algosdk/src/composer.ts:749:19)
+      at async Object.sendAtomicTransactionComposer (/Users/danielpointon/easya/Easy-A-Hackathon/express-server/node_modules/@algorandfoundation/src/transaction/transaction.ts:835:20) {
+    response: HTTPClientResponse {
+      text: '{"message":"TransactionPool.Remember: transaction 3VQNLIXBKDR5KMGJZY2V4QTVVIHMD53OG5ZACZTKQRVILYO4C6WQ: account L2QG2PXC7M3UVKINHYNAQDLFAU4MXYOSCSVKLZTHHJ7ZTYF7W2X7GCTGNY balance 2000 below min 100000 (0 assets)"}\n',
+      format: 'application/json',
+      status: 400,
+      ok: false
+    },
+    status: 400
+  },
+  response: HTTPClientResponse {
+    text: '{"message":"TransactionPool.Remember: transaction 3VQNLIXBKDR5KMGJZY2V4QTVVIHMD53OG5ZACZTKQRVILYO4C6WQ: account L2QG2PXC7M3UVKINHYNAQDLFAU4MXYOSCSVKLZTHHJ7ZTYF7W2X7GCTGNY balance 2000 below min 100000 (0 assets)"}\n',
+    format: 'application/json',
+    status: 400,
+    ok: false
+  }
+}
+⚠️  Failed to post agent to blockchain: Error [URLTokenBaseHTTPError]: Network request error. Received status 400 (Bad Request): TransactionPool.Remember: transaction 3VQNLIXBKDR5KMGJZY2V4QTVVIHMD53OG5ZACZTKQRVILYO4C6WQ: account L2QG2PXC7M3UVKINHYNAQDLFAU4MXYOSCSVKLZTHHJ7ZTYF7W2X7GCTGNY balance 2000 below min 100000 (0 assets)
+    at Object.sendAtomicTransactionComposer (/Users/danielpointon/easya/Easy-A-Hackathon/express-server/node_modules/@algorandfoundation/src/transaction/transaction.ts:868:17)
+    at processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async TransactionComposer.send (/Users/danielpointon/easya/Easy-A-Hackathon/express-server/node_modules/@algorandfoundation/src/types/composer.ts:2014:14)
+    at async AlgorandClientTransactionSender.payment (/Users/danielpointon/easya/Easy-A-Hackathon/express-server/node_modules/@algorandfoundation/src/types/algorand-client-transaction-sender.ts:86:25) {
+  cause: URLTokenBaseHTTPError: Network request error. Received status 400 (Bad Request): TransactionPool.Remember: transaction 3VQNLIXBKDR5KMGJZY2V4QTVVIHMD53OG5ZACZTKQRVILYO4C6WQ: account L2QG2PXC7M3UVKINHYNAQDLFAU4MXYOSCSVKLZTHHJ7ZTYF7W2X7GCTGNY balance 2000 below min 100000 (0 assets)
+      at URLTokenBaseHTTPClient.checkHttpError (/Users/danielpointon/easya/Easy-A-Hackathon/express-server/node_modules/algosdk/src/client/urlTokenBaseHTTPClient.ts:139:11)
+      at processTicksAndRejections (node:internal/process/task_queues:105:5)
+      at async URLTokenBaseHTTPClient.formatFetchResponse (/Users/danielpointon/easya/Easy-A-Hackathon/express-server/node_modules/algosdk/src/client/urlTokenBaseHTTPClient.ts:149:5)
+      at async AlgoHttpClientWithRetry.callWithRetry (/Users/danielpointon/easya/Easy-A-Hackathon/express-server/node_modules/@algorandfoundation/src/types/algo-http-client-with-retry.ts:30:20)
+      at async AlgoHttpClientWithRetry.post (/Users/danielpointon/easya/Easy-A-Hackathon/express-server/node_modules/@algorandfoundation/src/types/algo-http-client-with-retry.ts:97:12)
+      at async HTTPClient.post (/Users/danielpointon/easya/Easy-A-Hackathon/express-server/node_modules/algosdk/src/client/client.ts:327:19)
+      at async SendRawTransaction.do (/Users/danielpointon/easya/Easy-A-Hackathon/express-server/node_modules/algosdk/src/client/v2/jsonrequest.ts:65:17)
+      at async AtomicTransactionComposer.submit (/Users/danielpointon/easya/Easy-A-Hackathon/express-server/node_modules/algosdk/src/composer.ts:639:5)
+      at async AtomicTransactionComposer.execute (/Users/danielpointon/easya/Easy-A-Hackathon/express-server/node_modules/algosdk/src/composer.ts:749:19)
+      at async Object.sendAtomicTransactionComposer (/Users/danielpointon/easya/Easy-A-Hackathon/express-server/node_modules/@algorandfoundation/src/transaction/transaction.ts:835:20) {
+    response: HTTPClientResponse {
+      text: '{"message":"TransactionPool.Remember: transaction 3VQNLIXBKDR5KMGJZY2V4QTVVIHMD53OG5ZACZTKQRVILYO4C6WQ: account L2QG2PXC7M3UVKINHYNAQDLFAU4MXYOSCSVKLZTHHJ7ZTYF7W2X7GCTGNY balance 2000 below min 100000 (0 assets)"}\n',
+      format: 'application/json',
+      status: 400,
+      ok: false
+    },
+    status: 400
+  },
+  response: HTTPClientResponse {
+    text: '{"message":"TransactionPool.Remember: transaction 3VQNLIXBKDR5KMGJZY2V4QTVVIHMD53OG5ZACZTKQRVILYO4C6WQ: account L2QG2PXC7M3UVKINHYNAQDLFAU4MXYOSCSVKLZTHHJ7ZTYF7W2X7GCTGNY balance 2000 below min 100000 (0 assets)"}\n',
+    format: 'application/json',
+    status: 400,
+    ok: false
+  },
+  sentTransactions: [
+    Transaction {
+      type: 'pay',
+      sender: [Address],
+      note: [Uint8Array],
+      lease: undefined,
+      rekeyTo: undefined,
+      group: undefined,
+      firstValid: 20n,
+      lastValid: 1020n,
+      genesisID: 'dockernet-v1',
+      genesisHash: [Uint8Array],
+      payment: [Object],
+      fee: 1000n
+    }
+  ]
+}
+✅ Registered agent: agent-1760852715597-akug8dai7 - "fruit" with 0.002 ALGO
+📡 POST /merchants/signup
+Sending 1000000000000 µALGO from DZKVNBIE5UGGDFX6GG55WXNYTO7GBTGPIZRAVADAVQE7IJFS4OHHHFLMVM to EWBPWVXEGKCNVEP3MLB2SAQIB2QHW2LNB354AJOU5L4FOISDZ2G5FLBFJM via transaction 3N2DCO2X32PNLSKPUMZYHOZCBDES5IIIBOFD6XFRD22QSPOJU7EA
+Registered merchant: ffgjhkjjkf - "ffgjhkjjkf"
+Total merchants registered: 1
+Checking rounds 21 to 21
+Processing round 21 - mock implementation
+📡 POST /agents
+USER ID:
+agent-1760852745501-8nonzaxo5
+USER WALLET ID:
+EWBPWVXEGKCNVEP3MLB2SAQIB2QHW2LNB354AJOU5L4FOISDZ2G5FLBFJM
+Initial wallet balance (microALGO): 2000
+💰 Creating agent on blockchain with 0.002 ALGO...
+💳 Funding from user wallet: EWBPWVXEGKCNVEP3MLB2SAQIB2QHW2LNB354AJOU5L4FOISDZ2G5FLBFJM
+Creating new agent wallet funded by DEPLOYER account...
+{
+  addr: Address {
+    publicKey: Uint8Array(32) [
+      242, 161, 140, 125, 196, 215, 179, 212,
+        3,   5, 143,   0,  83,  11,  78, 174,
+       58,  15,  35,  47,  47,  84, 169, 197,
+       12, 171, 180,  46, 137, 150, 219, 173
+    ]
+  },
+  sk: Uint8Array(64) [
+    239,   5,  44, 195,  98, 137, 101,  72, 151,  11, 217,
+     73,  37, 242, 121,  46, 184, 188, 206, 102,  57, 185,
+     72,   5, 158, 152, 121,  18, 111, 151, 185,  40, 242,
+    161, 140, 125, 196, 215, 179, 212,   3,   5, 143,   0,
+     83,  11,  78, 174,  58,  15,  35,  47,  47,  84, 169,
+    197,  12, 171, 180,  46, 137, 150, 219, 173
+  ]
+}
+New agent wallet created: 6KQYY7OE26Z5IAYFR4AFGC2OVY5A6IZPF5KKTRIMVO2C5CMW3OW24FOECI
+Sending 2000 µALGO from KFT3JXQTRF6WBR7NMBPGOD6QSVJHSO7JY4TMVOYNTQD5TEBPGRRLMBWI54 to 6KQYY7OE26Z5IAYFR4AFGC2OVY5A6IZPF5KKTRIMVO2C5CMW3OW24FOECI via transaction PZEJSOGUWW6FS5AUTUKOZBRM5NIMUZGNSRGOCWIPHJRWR62LWYMQ
+Received error executing Atomic Transaction Composer, for more information enable the debug flag Error [URLTokenBaseHTTPError]: Network request error. Received status 400 (Bad Request): TransactionPool.Remember: transaction PZEJSOGUWW6FS5AUTUKOZBRM5NIMUZGNSRGOCWIPHJRWR62LWYMQ: account 6KQYY7OE26Z5IAYFR4AFGC2OVY5A6IZPF5KKTRIMVO2C5CMW3OW24FOECI balance 2000 below min 100000 (0 assets)
+    at Object.sendAtomicTransactionComposer (/Users/danielpointon/easya/Easy-A-Hackathon/express-server/node_modules/@algorandfoundation/src/transaction/transaction.ts:868:17)
+    at processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async TransactionComposer.send (/Users/danielpointon/easya/Easy-A-Hackathon/express-server/node_modules/@algorandfoundation/src/types/composer.ts:2014:14)
+    at async AlgorandClientTransactionSender.payment (/Users/danielpointon/easya/Easy-A-Hackathon/express-server/node_modules/@algorandfoundation/src/types/algorand-client-transaction-sender.ts:86:25) {
+  cause: URLTokenBaseHTTPError: Network request error. Received status 400 (Bad Request): TransactionPool.Remember: transaction PZEJSOGUWW6FS5AUTUKOZBRM5NIMUZGNSRGOCWIPHJRWR62LWYMQ: account 6KQYY7OE26Z5IAYFR4AFGC2OVY5A6IZPF5KKTRIMVO2C5CMW3OW24FOECI balance 2000 below min 100000 (0 assets)
+      at URLTokenBaseHTTPClient.checkHttpError (/Users/danielpointon/easya/Easy-A-Hackathon/express-server/node_modules/algosdk/src/client/urlTokenBaseHTTPClient.ts:139:11)
+      at processTicksAndRejections (node:internal/process/task_queues:105:5)
+      at async URLTokenBaseHTTPClient.formatFetchResponse (/Users/danielpointon/easya/Easy-A-Hackathon/express-server/node_modules/algosdk/src/client/urlTokenBaseHTTPClient.ts:149:5)
+      at async AlgoHttpClientWithRetry.callWithRetry (/Users/danielpointon/easya/Easy-A-Hackathon/express-server/node_modules/@algorandfoundation/src/types/algo-http-client-with-retry.ts:30:20)
+      at async AlgoHttpClientWithRetry.post (/Users/danielpointon/easya/Easy-A-Hackathon/express-server/node_modules/@algorandfoundation/src/types/algo-http-client-with-retry.ts:97:12)
+      at async HTTPClient.post (/Users/danielpointon/easya/Easy-A-Hackathon/express-server/node_modules/algosdk/src/client/client.ts:327:19)
+      at async SendRawTransaction.do (/Users/danielpointon/easya/Easy-A-Hackathon/express-server/node_modules/algosdk/src/client/v2/jsonrequest.ts:65:17)
+      at async AtomicTransactionComposer.submit (/Users/danielpointon/easya/Easy-A-Hackathon/express-server/node_modules/algosdk/src/composer.ts:639:5)
+      at async AtomicTransactionComposer.execute (/Users/danielpointon/easya/Easy-A-Hackathon/express-server/node_modules/algosdk/src/composer.ts:749:19)
+      at async Object.sendAtomicTransactionComposer (/Users/danielpointon/easya/Easy-A-Hackathon/express-server/node_modules/@algorandfoundation/src/transaction/transaction.ts:835:20) {
+    response: HTTPClientResponse {
+      text: '{"message":"TransactionPool.Remember: transaction PZEJSOGUWW6FS5AUTUKOZBRM5NIMUZGNSRGOCWIPHJRWR62LWYMQ: account 6KQYY7OE26Z5IAYFR4AFGC2OVY5A6IZPF5KKTRIMVO2C5CMW3OW24FOECI balance 2000 below min 100000 (0 assets)"}\n',
+      format: 'application/json',
+      status: 400,
+      ok: false
+    },
+    status: 400
+  },
+  response: HTTPClientResponse {
+    text: '{"message":"TransactionPool.Remember: transaction PZEJSOGUWW6FS5AUTUKOZBRM5NIMUZGNSRGOCWIPHJRWR62LWYMQ: account 6KQYY7OE26Z5IAYFR4AFGC2OVY5A6IZPF5KKTRIMVO2C5CMW3OW24FOECI balance 2000 below min 100000 (0 assets)"}\n',
+    format: 'application/json',
+    status: 400,
+    ok: false
+  }
+}
+⚠️  Failed to post agent to blockchain: Error [URLTokenBaseHTTPError]: Network request error. Received status 400 (Bad Request): TransactionPool.Remember: transaction PZEJSOGUWW6FS5AUTUKOZBRM5NIMUZGNSRGOCWIPHJRWR62LWYMQ: account 6KQYY7OE26Z5IAYFR4AFGC2OVY5A6IZPF5KKTRIMVO2C5CMW3OW24FOECI balance 2000 below min 100000 (0 assets)
+    at Object.sendAtomicTransactionComposer (/Users/danielpointon/easya/Easy-A-Hackathon/express-server/node_modules/@algorandfoundation/src/transaction/transaction.ts:868:17)
+    at processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async TransactionComposer.send (/Users/danielpointon/easya/Easy-A-Hackathon/express-server/node_modules/@algorandfoundation/src/types/composer.ts:2014:14)
+    at async AlgorandClientTransactionSender.payment (/Users/danielpointon/easya/Easy-A-Hackathon/express-server/node_modules/@algorandfoundation/src/types/algorand-client-transaction-sender.ts:86:25) {
+  cause: URLTokenBaseHTTPError: Network request error. Received status 400 (Bad Request): TransactionPool.Remember: transaction PZEJSOGUWW6FS5AUTUKOZBRM5NIMUZGNSRGOCWIPHJRWR62LWYMQ: account 6KQYY7OE26Z5IAYFR4AFGC2OVY5A6IZPF5KKTRIMVO2C5CMW3OW24FOECI balance 2000 below min 100000 (0 assets)
+      at URLTokenBaseHTTPClient.checkHttpError (/Users/danielpointon/easya/Easy-A-Hackathon/express-server/node_modules/algosdk/src/client/urlTokenBaseHTTPClient.ts:139:11)
+      at processTicksAndRejections (node:internal/process/task_queues:105:5)
+      at async URLTokenBaseHTTPClient.formatFetchResponse (/Users/danielpointon/easya/Easy-A-Hackathon/express-server/node_modules/algosdk/src/client/urlTokenBaseHTTPClient.ts:149:5)
+      at async AlgoHttpClientWithRetry.callWithRetry (/Users/danielpointon/easya/Easy-A-Hackathon/express-server/node_modules/@algorandfoundation/src/types/algo-http-client-with-retry.ts:30:20)
+      at async AlgoHttpClientWithRetry.post (/Users/danielpointon/easya/Easy-A-Hackathon/express-server/node_modules/@algorandfoundation/src/types/algo-http-client-with-retry.ts:97:12)
+      at async HTTPClient.post (/Users/danielpointon/easya/Easy-A-Hackathon/express-server/node_modules/algosdk/src/client/client.ts:327:19)
+      at async SendRawTransaction.do (/Users/danielpointon/easya/Easy-A-Hackathon/express-server/node_modules/algosdk/src/client/v2/jsonrequest.ts:65:17)
+      at async AtomicTransactionComposer.submit (/Users/danielpointon/easya/Easy-A-Hackathon/express-server/node_modules/algosdk/src/composer.ts:639:5)
+      at async AtomicTransactionComposer.execute (/Users/danielpointon/easya/Easy-A-Hackathon/express-server/node_modules/algosdk/src/composer.ts:749:19)
+      at async Object.sendAtomicTransactionComposer (/Users/danielpointon/easya/Easy-A-Hackathon/express-server/node_modules/@algorandfoundation/src/transaction/transaction.ts:835:20) {
+    response: HTTPClientResponse {
+      text: '{"message":"TransactionPool.Remember: transaction PZEJSOGUWW6FS5AUTUKOZBRM5NIMUZGNSRGOCWIPHJRWR62LWYMQ: account 6KQYY7OE26Z5IAYFR4AFGC2OVY5A6IZPF5KKTRIMVO2C5CMW3OW24FOECI balance 2000 below min 100000 (0 assets)"}\n',
+      format: 'application/json',
+      status: 400,
+      ok: false
+    },
+    status: 400
+  },
+  response: HTTPClientResponse {
+    text: '{"message":"TransactionPool.Remember: transaction PZEJSOGUWW6FS5AUTUKOZBRM5NIMUZGNSRGOCWIPHJRWR62LWYMQ: account 6KQYY7OE26Z5IAYFR4AFGC2OVY5A6IZPF5KKTRIMVO2C5CMW3OW24FOECI balance 2000 below min 100000 (0 assets)"}\n',
+    format: 'application/json',
+    status: 400,
+    ok: false
+  },
+  sentTransactions: [
+    Transaction {
+      type: 'pay',
+      sender: [Address],
+      note: [Uint8Array],
+      lease: undefined,
+      rekeyTo: undefined,
+      group: undefined,
+      firstValid: 21n,
+      lastValid: 1021n,
+      genesisID: 'dockernet-v1',
+      genesisHash: [Uint8Array],
+      payment: [Object],
+      fee: 1000n
+    }
+  ]
+}
+✅ Registered agent: agent-1760852745501-8nonzaxo5 - "fruit" with 0.002 ALGO
+📡 POST /agents
+USER ID:
+agent-1760852765576-u370nwzx3
+USER WALLET ID:
+EWBPWVXEGKCNVEP3MLB2SAQIB2QHW2LNB354AJOU5L4FOISDZ2G5FLBFJM
+Initial wallet balance (microALGO): 20000
+💰 Creating agent on blockchain with 0.02 ALGO...
+💳 Funding from user wallet: EWBPWVXEGKCNVEP3MLB2SAQIB2QHW2LNB354AJOU5L4FOISDZ2G5FLBFJM
+Creating new agent wallet funded by DEPLOYER account...
+{
+  addr: Address {
+    publicKey: Uint8Array(32) [
+      148, 225, 248, 135,  42,  29, 230, 167,
+      108, 209,  69, 199,  14, 224, 114,  79,
+       68, 194,   7, 103, 253,  99, 101, 161,
+       32,  36,  34,  13, 127,  12,  92,  77
+    ]
+  },
+  sk: Uint8Array(64) [
+    248, 134, 218, 121, 202,  25, 196, 234,  92,  69, 250,
+    209, 132, 180, 115, 152, 206,  16,  87,  46, 199,  51,
+    211, 214,  52,  68,   6,  21, 121, 136, 218, 104, 148,
+    225, 248, 135,  42,  29, 230, 167, 108, 209,  69, 199,
+     14, 224, 114,  79,  68, 194,   7, 103, 253,  99, 101,
+    161,  32,  36,  34,  13, 127,  12,  92,  77
+  ]
+}
+New agent wallet created: STQ7RBZKDXTKO3GRIXDQ5YDSJ5CMEB3H7VRWLIJAEQRA27YMLRG7L65EHQ
+Sending 20000 µALGO from KFT3JXQTRF6WBR7NMBPGOD6QSVJHSO7JY4TMVOYNTQD5TEBPGRRLMBWI54 to STQ7RBZKDXTKO3GRIXDQ5YDSJ5CMEB3H7VRWLIJAEQRA27YMLRG7L65EHQ via transaction FAYNYEA6HGA7YOO22V6BIKRDSYI4Z56UT3JWDZZI52EMFWRCHTKQ
+Received error executing Atomic Transaction Composer, for more information enable the debug flag Error [URLTokenBaseHTTPError]: Network request error. Received status 400 (Bad Request): TransactionPool.Remember: transaction FAYNYEA6HGA7YOO22V6BIKRDSYI4Z56UT3JWDZZI52EMFWRCHTKQ: account STQ7RBZKDXTKO3GRIXDQ5YDSJ5CMEB3H7VRWLIJAEQRA27YMLRG7L65EHQ balance 20000 below min 100000 (0 assets)
+    at Object.sendAtomicTransactionComposer (/Users/danielpointon/easya/Easy-A-Hackathon/express-server/node_modules/@algorandfoundation/src/transaction/transaction.ts:868:17)
+    at processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async TransactionComposer.send (/Users/danielpointon/easya/Easy-A-Hackathon/express-server/node_modules/@algorandfoundation/src/types/composer.ts:2014:14)
+    at async AlgorandClientTransactionSender.payment (/Users/danielpointon/easya/Easy-A-Hackathon/express-server/node_modules/@algorandfoundation/src/types/algorand-client-transaction-sender.ts:86:25) {
+  cause: URLTokenBaseHTTPError: Network request error. Received status 400 (Bad Request): TransactionPool.Remember: transaction FAYNYEA6HGA7YOO22V6BIKRDSYI4Z56UT3JWDZZI52EMFWRCHTKQ: account STQ7RBZKDXTKO3GRIXDQ5YDSJ5CMEB3H7VRWLIJAEQRA27YMLRG7L65EHQ balance 20000 below min 100000 (0 assets)
+      at URLTokenBaseHTTPClient.checkHttpError (/Users/danielpointon/easya/Easy-A-Hackathon/express-server/node_modules/algosdk/src/client/urlTokenBaseHTTPClient.ts:139:11)
+      at processTicksAndRejections (node:internal/process/task_queues:105:5)
+      at async URLTokenBaseHTTPClient.formatFetchResponse (/Users/danielpointon/easya/Easy-A-Hackathon/express-server/node_modules/algosdk/src/client/urlTokenBaseHTTPClient.ts:149:5)
+      at async AlgoHttpClientWithRetry.callWithRetry (/Users/danielpointon/easya/Easy-A-Hackathon/express-server/node_modules/@algorandfoundation/src/types/algo-http-client-with-retry.ts:30:20)
+      at async AlgoHttpClientWithRetry.post (/Users/danielpointon/easya/Easy-A-Hackathon/express-server/node_modules/@algorandfoundation/src/types/algo-http-client-with-retry.ts:97:12)
+      at async HTTPClient.post (/Users/danielpointon/easya/Easy-A-Hackathon/express-server/node_modules/algosdk/src/client/client.ts:327:19)
+      at async SendRawTransaction.do (/Users/danielpointon/easya/Easy-A-Hackathon/express-server/node_modules/algosdk/src/client/v2/jsonrequest.ts:65:17)
+      at async AtomicTransactionComposer.submit (/Users/danielpointon/easya/Easy-A-Hackathon/express-server/node_modules/algosdk/src/composer.ts:639:5)
+      at async AtomicTransactionComposer.execute (/Users/danielpointon/easya/Easy-A-Hackathon/express-server/node_modules/algosdk/src/composer.ts:749:19)
+      at async Object.sendAtomicTransactionComposer (/Users/danielpointon/easya/Easy-A-Hackathon/express-server/node_modules/@algorandfoundation/src/transaction/transaction.ts:835:20) {
+    response: HTTPClientResponse {
+      text: '{"message":"TransactionPool.Remember: transaction FAYNYEA6HGA7YOO22V6BIKRDSYI4Z56UT3JWDZZI52EMFWRCHTKQ: account STQ7RBZKDXTKO3GRIXDQ5YDSJ5CMEB3H7VRWLIJAEQRA27YMLRG7L65EHQ balance 20000 below min 100000 (0 assets)"}\n',
+      format: 'application/json',
+      status: 400,
+      ok: false
+    },
+    status: 400
+  },
+  response: HTTPClientResponse {
+    text: '{"message":"TransactionPool.Remember: transaction FAYNYEA6HGA7YOO22V6BIKRDSYI4Z56UT3JWDZZI52EMFWRCHTKQ: account STQ7RBZKDXTKO3GRIXDQ5YDSJ5CMEB3H7VRWLIJAEQRA27YMLRG7L65EHQ balance 20000 below min 100000 (0 assets)"}\n',
+    format: 'application/json',
+    status: 400,
+    ok: false
+  }
+}
+⚠️  Failed to post agent to blockchain: Error [URLTokenBaseHTTPError]: Network request error. Received status 400 (Bad Request): TransactionPool.Remember: transaction FAYNYEA6HGA7YOO22V6BIKRDSYI4Z56UT3JWDZZI52EMFWRCHTKQ: account STQ7RBZKDXTKO3GRIXDQ5YDSJ5CMEB3H7VRWLIJAEQRA27YMLRG7L65EHQ balance 20000 below min 100000 (0 assets)
+    at Object.sendAtomicTransactionComposer (/Users/danielpointon/easya/Easy-A-Hackathon/express-server/node_modules/@algorandfoundation/src/transaction/transaction.ts:868:17)
+    at processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async TransactionComposer.send (/Users/danielpointon/easya/Easy-A-Hackathon/express-server/node_modules/@algorandfoundation/src/types/composer.ts:2014:14)
+    at async AlgorandClientTransactionSender.payment (/Users/danielpointon/easya/Easy-A-Hackathon/express-server/node_modules/@algorandfoundation/src/types/algorand-client-transaction-sender.ts:86:25) {
+  cause: URLTokenBaseHTTPError: Network request error. Received status 400 (Bad Request): TransactionPool.Remember: transaction FAYNYEA6HGA7YOO22V6BIKRDSYI4Z56UT3JWDZZI52EMFWRCHTKQ: account STQ7RBZKDXTKO3GRIXDQ5YDSJ5CMEB3H7VRWLIJAEQRA27YMLRG7L65EHQ balance 20000 below min 100000 (0 assets)
+      at URLTokenBaseHTTPClient.checkHttpError (/Users/danielpointon/easya/Easy-A-Hackathon/express-server/node_modules/algosdk/src/client/urlTokenBaseHTTPClient.ts:139:11)
+      at processTicksAndRejections (node:internal/process/task_queues:105:5)
+      at async URLTokenBaseHTTPClient.formatFetchResponse (/Users/danielpointon/easya/Easy-A-Hackathon/express-server/node_modules/algosdk/src/client/urlTokenBaseHTTPClient.ts:149:5)
+      at async AlgoHttpClientWithRetry.callWithRetry (/Users/danielpointon/easya/Easy-A-Hackathon/express-server/node_modules/@algorandfoundation/src/types/algo-http-client-with-retry.ts:30:20)
+      at async AlgoHttpClientWithRetry.post (/Users/danielpointon/easya/Easy-A-Hackathon/express-server/node_modules/@algorandfoundation/src/types/algo-http-client-with-retry.ts:97:12)
+      at async HTTPClient.post (/Users/danielpointon/easya/Easy-A-Hackathon/express-server/node_modules/algosdk/src/client/client.ts:327:19)
+      at async SendRawTransaction.do (/Users/danielpointon/easya/Easy-A-Hackathon/express-server/node_modules/algosdk/src/client/v2/jsonrequest.ts:65:17)
+      at async AtomicTransactionComposer.submit (/Users/danielpointon/easya/Easy-A-Hackathon/express-server/node_modules/algosdk/src/composer.ts:639:5)
+      at async AtomicTransactionComposer.execute (/Users/danielpointon/easya/Easy-A-Hackathon/express-server/node_modules/algosdk/src/composer.ts:749:19)
+      at async Object.sendAtomicTransactionComposer (/Users/danielpointon/easya/Easy-A-Hackathon/express-server/node_modules/@algorandfoundation/src/transaction/transaction.ts:835:20) {
+    response: HTTPClientResponse {
+      text: '{"message":"TransactionPool.Remember: transaction FAYNYEA6HGA7YOO22V6BIKRDSYI4Z56UT3JWDZZI52EMFWRCHTKQ: account STQ7RBZKDXTKO3GRIXDQ5YDSJ5CMEB3H7VRWLIJAEQRA27YMLRG7L65EHQ balance 20000 below min 100000 (0 assets)"}\n',
+      format: 'application/json',
+      status: 400,
+      ok: false
+    },
+    status: 400
+  },
+  response: HTTPClientResponse {
+    text: '{"message":"TransactionPool.Remember: transaction FAYNYEA6HGA7YOO22V6BIKRDSYI4Z56UT3JWDZZI52EMFWRCHTKQ: account STQ7RBZKDXTKO3GRIXDQ5YDSJ5CMEB3H7VRWLIJAEQRA27YMLRG7L65EHQ balance 20000 below min 100000 (0 assets)"}\n',
+    format: 'application/json',
+    status: 400,
+    ok: false
+  },
+  sentTransactions: [
+    Transaction {
+      type: 'pay',
+      sender: [Address],
+      note: [Uint8Array],
+      lease: undefined,
+      rekeyTo: undefined,
+      group: undefined,
+      firstValid: 21n,
+      lastValid: 1021n,
+      genesisID: 'dockernet-v1',
+      genesisHash: [Uint8Array],
+      payment: [Object],
+      fee: 1000n
+    }
+  ]
+}
+✅ Registered agent: agent-1760852765576-u370nwzx3 - "fruit" with 0.02 ALGO
+📡 POST /agents
+USER ID:
+agent-1760852780240-vfddqlzb7
+USER WALLET ID:
+EWBPWVXEGKCNVEP3MLB2SAQIB2QHW2LNB354AJOU5L4FOISDZ2G5FLBFJM
+Initial wallet balance (microALGO): 100000
+💰 Creating agent on blockchain with 0.1 ALGO...
+💳 Funding from user wallet: EWBPWVXEGKCNVEP3MLB2SAQIB2QHW2LNB354AJOU5L4FOISDZ2G5FLBFJM
+Creating new agent wallet funded by DEPLOYER account...
+{
+  addr: Address {
+    publicKey: Uint8Array(32) [
+        9, 145, 133,  76, 194, 163,  21, 250,
+      128, 235, 214, 195,  26, 143,  32, 163,
+      153, 120,   3, 244,  82,  49,  87,  29,
+      112, 149, 191, 184, 187, 161, 234,  55
+    ]
+  },
+  sk: Uint8Array(64) [
+     59, 222,  80, 158, 138, 169,  12,   4,   7,  99,  20,
+    122, 174, 161, 152, 188,  46,  43, 246, 194, 128,  52,
+    147,   2, 237, 206, 255,   4, 207, 249, 150, 119,   9,
+    145, 133,  76, 194, 163,  21, 250, 128, 235, 214, 195,
+     26, 143,  32, 163, 153, 120,   3, 244,  82,  49,  87,
+     29, 112, 149, 191, 184, 187, 161, 234,  55
+  ]
+}
+New agent wallet created: BGIYKTGCUMK7VAHL23BRVDZAUOMXQA7UKIYVOHLQSW73RO5B5I3U2JR3RU
+Sending 100000 µALGO from KFT3JXQTRF6WBR7NMBPGOD6QSVJHSO7JY4TMVOYNTQD5TEBPGRRLMBWI54 to BGIYKTGCUMK7VAHL23BRVDZAUOMXQA7UKIYVOHLQSW73RO5B5I3U2JR3RU via transaction TOVHODN3BZ3VL4M7XLPUNZK3ZHM5T24HQ6WYG5GUHVTGYGRTBEJA
+✅ Agent wallet funded and metadata posted to blockchain. TX: TOVHODN3BZ3VL4M7XLPUNZK3ZHM5T24HQ6WYG5GUHVTGYGRTBEJA
+✅ Agent wallet BGIYKTGCUMK7VAHL23BRVDZAUOMXQA7UKIYVOHLQSW73RO5B5I3U2JR3RU funded with 0.1 ALGO
+✅ Agent posted to blockchain! Transaction ID: TOVHODN3BZ3VL4M7XLPUNZK3ZHM5T24HQ6WYG5GUHVTGYGRTBEJA
+✅ Registered agent: agent-1760852780240-vfddqlzb7 - "fruit" with 0.1 ALGO
+Checking rounds 22 to 22
+Processing round 22 - mock implementation
+📡 POST /agents
+USER ID:
+agent-1760852869252-jq4sadkox
+USER WALLET ID:
+EWBPWVXEGKCNVEP3MLB2SAQIB2QHW2LNB354AJOU5L4FOISDZ2G5FLBFJM
+Initial wallet balance (microALGO): 2000
+💰 Creating agent on blockchain with 0.002 ALGO...
+💳 Funding from user wallet: EWBPWVXEGKCNVEP3MLB2SAQIB2QHW2LNB354AJOU5L4FOISDZ2G5FLBFJM
+Creating new agent wallet funded by DEPLOYER account...
+{
+  addr: Address {
+    publicKey: Uint8Array(32) [
+       84, 187, 141,  68, 204, 121, 149,  42,
+      243, 159, 188, 249,  29, 227, 119,  89,
+      119, 225,  58, 113, 171, 154, 242,   1,
+       71, 255,  70, 172,  88,  55, 172, 236
+    ]
+  },
+  sk: Uint8Array(64) [
+    147, 118,   9, 152, 204, 215, 171,  82,  53,  76, 134,
+     96, 110,  38, 231,  81,  54,  89, 183, 239,  35,   9,
+    117,  42, 138,  90, 192,  75,  27,  88, 190, 199,  84,
+    187, 141,  68, 204, 121, 149,  42, 243, 159, 188, 249,
+     29, 227, 119,  89, 119, 225,  58, 113, 171, 154, 242,
+      1,  71, 255,  70, 172,  88,  55, 172, 236
+  ]
+}
+New agent wallet created: KS5Y2RGMPGKSV447XT4R3Y3XLF36COTRVONPEAKH75DKYWBXVTWOI4UO4I
+Sending 2000 µALGO from KFT3JXQTRF6WBR7NMBPGOD6QSVJHSO7JY4TMVOYNTQD5TEBPGRRLMBWI54 to KS5Y2RGMPGKSV447XT4R3Y3XLF36COTRVONPEAKH75DKYWBXVTWOI4UO4I via transaction BHXX2IU6ZY4WFWC47CEWLSMCIFYXLHUIW74PW2XU6RZAZP4S3HUQ
+Received error executing Atomic Transaction Composer, for more information enable the debug flag Error [URLTokenBaseHTTPError]: Network request error. Received status 400 (Bad Request): TransactionPool.Remember: transaction BHXX2IU6ZY4WFWC47CEWLSMCIFYXLHUIW74PW2XU6RZAZP4S3HUQ: account KS5Y2RGMPGKSV447XT4R3Y3XLF36COTRVONPEAKH75DKYWBXVTWOI4UO4I balance 2000 below min 100000 (0 assets)
+    at Object.sendAtomicTransactionComposer (/Users/danielpointon/easya/Easy-A-Hackathon/express-server/node_modules/@algorandfoundation/src/transaction/transaction.ts:868:17)
+    at processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async TransactionComposer.send (/Users/danielpointon/easya/Easy-A-Hackathon/express-server/node_modules/@algorandfoundation/src/types/composer.ts:2014:14)
+    at async AlgorandClientTransactionSender.payment (/Users/danielpointon/easya/Easy-A-Hackathon/express-server/node_modules/@algorandfoundation/src/types/algorand-client-transaction-sender.ts:86:25) {
+  cause: URLTokenBaseHTTPError: Network request error. Received status 400 (Bad Request): TransactionPool.Remember: transaction BHXX2IU6ZY4WFWC47CEWLSMCIFYXLHUIW74PW2XU6RZAZP4S3HUQ: account KS5Y2RGMPGKSV447XT4R3Y3XLF36COTRVONPEAKH75DKYWBXVTWOI4UO4I balance 2000 below min 100000 (0 assets)
+      at URLTokenBaseHTTPClient.checkHttpError (/Users/danielpointon/easya/Easy-A-Hackathon/express-server/node_modules/algosdk/src/client/urlTokenBaseHTTPClient.ts:139:11)
+      at processTicksAndRejections (node:internal/process/task_queues:105:5)
+      at async URLTokenBaseHTTPClient.formatFetchResponse (/Users/danielpointon/easya/Easy-A-Hackathon/express-server/node_modules/algosdk/src/client/urlTokenBaseHTTPClient.ts:149:5)
+      at async AlgoHttpClientWithRetry.callWithRetry (/Users/danielpointon/easya/Easy-A-Hackathon/express-server/node_modules/@algorandfoundation/src/types/algo-http-client-with-retry.ts:30:20)
+      at async AlgoHttpClientWithRetry.post (/Users/danielpointon/easya/Easy-A-Hackathon/express-server/node_modules/@algorandfoundation/src/types/algo-http-client-with-retry.ts:97:12)
+      at async HTTPClient.post (/Users/danielpointon/easya/Easy-A-Hackathon/express-server/node_modules/algosdk/src/client/client.ts:327:19)
+      at async SendRawTransaction.do (/Users/danielpointon/easya/Easy-A-Hackathon/express-server/node_modules/algosdk/src/client/v2/jsonrequest.ts:65:17)
+      at async AtomicTransactionComposer.submit (/Users/danielpointon/easya/Easy-A-Hackathon/express-server/node_modules/algosdk/src/composer.ts:639:5)
+      at async AtomicTransactionComposer.execute (/Users/danielpointon/easya/Easy-A-Hackathon/express-server/node_modules/algosdk/src/composer.ts:749:19)
+      at async Object.sendAtomicTransactionComposer (/Users/danielpointon/easya/Easy-A-Hackathon/express-server/node_modules/@algorandfoundation/src/transaction/transaction.ts:835:20) {
+    response: HTTPClientResponse {
+      text: '{"message":"TransactionPool.Remember: transaction BHXX2IU6ZY4WFWC47CEWLSMCIFYXLHUIW74PW2XU6RZAZP4S3HUQ: account KS5Y2RGMPGKSV447XT4R3Y3XLF36COTRVONPEAKH75DKYWBXVTWOI4UO4I balance 2000 below min 100000 (0 assets)"}\n',
+      format: 'application/json',
+      status: 400,
+      ok: false
+    },
+    status: 400
+  },
+  response: HTTPClientResponse {
+    text: '{"message":"TransactionPool.Remember: transaction BHXX2IU6ZY4WFWC47CEWLSMCIFYXLHUIW74PW2XU6RZAZP4S3HUQ: account KS5Y2RGMPGKSV447XT4R3Y3XLF36COTRVONPEAKH75DKYWBXVTWOI4UO4I balance 2000 below min 100000 (0 assets)"}\n',
+    format: 'application/json',
+    status: 400,
+    ok: false
+  }
+}
+⚠️  Failed to post agent to blockchain: Error [URLTokenBaseHTTPError]: Network request error. Received status 400 (Bad Request): TransactionPool.Remember: transaction BHXX2IU6ZY4WFWC47CEWLSMCIFYXLHUIW74PW2XU6RZAZP4S3HUQ: account KS5Y2RGMPGKSV447XT4R3Y3XLF36COTRVONPEAKH75DKYWBXVTWOI4UO4I balance 2000 below min 100000 (0 assets)
+    at Object.sendAtomicTransactionComposer (/Users/danielpointon/easya/Easy-A-Hackathon/express-server/node_modules/@algorandfoundation/src/transaction/transaction.ts:868:17)
+    at processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async TransactionComposer.send (/Users/danielpointon/easya/Easy-A-Hackathon/express-server/node_modules/@algorandfoundation/src/types/composer.ts:2014:14)
+    at async AlgorandClientTransactionSender.payment (/Users/danielpointon/easya/Easy-A-Hackathon/express-server/node_modules/@algorandfoundation/src/types/algorand-client-transaction-sender.ts:86:25) {
+  cause: URLTokenBaseHTTPError: Network request error. Received status 400 (Bad Request): TransactionPool.Remember: transaction BHXX2IU6ZY4WFWC47CEWLSMCIFYXLHUIW74PW2XU6RZAZP4S3HUQ: account KS5Y2RGMPGKSV447XT4R3Y3XLF36COTRVONPEAKH75DKYWBXVTWOI4UO4I balance 2000 below min 100000 (0 assets)
+      at URLTokenBaseHTTPClient.checkHttpError (/Users/danielpointon/easya/Easy-A-Hackathon/express-server/node_modules/algosdk/src/client/urlTokenBaseHTTPClient.ts:139:11)
+      at processTicksAndRejections (node:internal/process/task_queues:105:5)
+      at async URLTokenBaseHTTPClient.formatFetchResponse (/Users/danielpointon/easya/Easy-A-Hackathon/express-server/node_modules/algosdk/src/client/urlTokenBaseHTTPClient.ts:149:5)
+      at async AlgoHttpClientWithRetry.callWithRetry (/Users/danielpointon/easya/Easy-A-Hackathon/express-server/node_modules/@algorandfoundation/src/types/algo-http-client-with-retry.ts:30:20)
+      at async AlgoHttpClientWithRetry.post (/Users/danielpointon/easya/Easy-A-Hackathon/express-server/node_modules/@algorandfoundation/src/types/algo-http-client-with-retry.ts:97:12)
+      at async HTTPClient.post (/Users/danielpointon/easya/Easy-A-Hackathon/express-server/node_modules/algosdk/src/client/client.ts:327:19)
+      at async SendRawTransaction.do (/Users/danielpointon/easya/Easy-A-Hackathon/express-server/node_modules/algosdk/src/client/v2/jsonrequest.ts:65:17)
+      at async AtomicTransactionComposer.submit (/Users/danielpointon/easya/Easy-A-Hackathon/express-server/node_modules/algosdk/src/composer.ts:639:5)
+      at async AtomicTransactionComposer.execute (/Users/danielpointon/easya/Easy-A-Hackathon/express-server/node_modules/algosdk/src/composer.ts:749:19)
+      at async Object.sendAtomicTransactionComposer (/Users/danielpointon/easya/Easy-A-Hackathon/express-server/node_modules/@algorandfoundation/src/transaction/transaction.ts:835:20) {
+    response: HTTPClientResponse {
+      text: '{"message":"TransactionPool.Remember: transaction BHXX2IU6ZY4WFWC47CEWLSMCIFYXLHUIW74PW2XU6RZAZP4S3HUQ: account KS5Y2RGMPGKSV447XT4R3Y3XLF36COTRVONPEAKH75DKYWBXVTWOI4UO4I balance 2000 below min 100000 (0 assets)"}\n',
+      format: 'application/json',
+      status: 400,
+      ok: false
+    },
+    status: 400
+  },
+  response: HTTPClientResponse {
+    text: '{"message":"TransactionPool.Remember: transaction BHXX2IU6ZY4WFWC47CEWLSMCIFYXLHUIW74PW2XU6RZAZP4S3HUQ: account KS5Y2RGMPGKSV447XT4R3Y3XLF36COTRVONPEAKH75DKYWBXVTWOI4UO4I balance 2000 below min 100000 (0 assets)"}\n',
+    format: 'application/json',
+    status: 400,
+    ok: false
+  },
+  sentTransactions: [
+    Transaction {
+      type: 'pay',
+      sender: [Address],
+      note: [Uint8Array],
+      lease: undefined,
+      rekeyTo: undefined,
+      group: undefined,
+      firstValid: 22n,
+      lastValid: 1022n,
+      genesisID: 'dockernet-v1',
+      genesisHash: [Uint8Array],
+      payment: [Object],
+      fee: 1000n
+    }
+  ]
+}
+✅ Registered agent: agent-1760852869252-jq4sadkox - "fruit" with 0.002 ALGO
+📡 POST /agents
+USER ID:
+agent-1760852875249-cmjsyy80n
+USER WALLET ID:
+EWBPWVXEGKCNVEP3MLB2SAQIB2QHW2LNB354AJOU5L4FOISDZ2G5FLBFJM
+Initial wallet balance (microALGO): 200000
+💰 Creating agent on blockchain with 0.2 ALGO...
+💳 Funding from user wallet: EWBPWVXEGKCNVEP3MLB2SAQIB2QHW2LNB354AJOU5L4FOISDZ2G5FLBFJM
+Creating new agent wallet funded by DEPLOYER account...
+{
+  addr: Address {
+    publicKey: Uint8Array(32) [
+       16, 249, 255, 127, 150, 236, 158, 249,
+      157, 109,   3, 125, 204, 242,  27,  34,
+       82, 179, 186, 166, 153,  13, 246,  43,
+       55, 243,  52, 160, 112,  97,  62,   3
+    ]
+  },
+  sk: Uint8Array(64) [
+     87, 232, 223, 140, 231,  97, 225,  11, 165, 211, 235,
+    114, 216, 202,  41, 231, 217, 143,  44, 199,  64,  53,
+     82,  33,  14,   6, 149, 167,  54, 109, 157,   9,  16,
+    249, 255, 127, 150, 236, 158, 249, 157, 109,   3, 125,
+    204, 242,  27,  34,  82, 179, 186, 166, 153,  13, 246,
+     43,  55, 243,  52, 160, 112,  97,  62,   3
+  ]
+}
+New agent wallet created: CD47674W5SPPTHLNAN64Z4Q3EJJLHOVGTEG7MKZX6M2KA4DBHYBS4D67G4
+Sending 200000 µALGO from KFT3JXQTRF6WBR7NMBPGOD6QSVJHSO7JY4TMVOYNTQD5TEBPGRRLMBWI54 to CD47674W5SPPTHLNAN64Z4Q3EJJLHOVGTEG7MKZX6M2KA4DBHYBS4D67G4 via transaction E5ND7P3WQRFQ4S7R4TFEAGIRSGAI4IWW76BRXGEOBGBYUVA5CT3Q
+✅ Agent wallet funded and metadata posted to blockchain. TX: E5ND7P3WQRFQ4S7R4TFEAGIRSGAI4IWW76BRXGEOBGBYUVA5CT3Q
+✅ Agent wallet CD47674W5SPPTHLNAN64Z4Q3EJJLHOVGTEG7MKZX6M2KA4DBHYBS4D67G4 funded with 0.2 ALGO
+✅ Agent posted to blockchain! Transaction ID: E5ND7P3WQRFQ4S7R4TFEAGIRSGAI4IWW76BRXGEOBGBYUVA5CT3Q
+✅ Registered agent: agent-1760852875249-cmjsyy80n - "fruit" with 0.2 ALGO
+Checking rounds 23 to 23
+Processing round 23 - mock implementation
+📡 GET /agents/items
+📥 GET /agents/items
+📊 Returning 0 items
+📡 GET /agents/items
+📥 GET /agents/items
+📊 Returning 0 items
+✅ CORS preflight: OPTIONS /agents/items
+📡 POST /agents/items
+📥 POST /agents/items - Request body: { name: 'apple', description: 'apple', price: 1, sellerId: '' }
+📝 Creating smart contract listing for item "apple" with target amount 1...
+🔷 Deploying NEW contract instance with DEPLOYER: KFT3JXQTRF6WBR7NMBPGOD6QSVJHSO7JY4TMVOYNTQD5TEBPGRRLMBWI54
+📝 Creating NEW ChAiN contract instance for this item...
+App created by KFT3JXQTRF6WBR7NMBPGOD6QSVJHSO7JY4TMVOYNTQD5TEBPGRRLMBWI54 with ID 1024 via transaction P3YHQQBBBEM4SUQRVGWWZUF76WNMXAVDRXHKOMLF43QEJ4H2VHMA
+✅ New contract created!
+   App ID: 1024
+   App Address: H7IXNOUTWLLAMFQFB2O74B7OZCQSZ47YK3IGIZU4CP6LONZMVALFPUGGQY
+App 1024 called with openListing(DLGQ6LNZXWXE2BH34CEI3DRKYAXPFVPOOW6C3XKH7BU4DOIW7V7TAIMFDM,1) by KFT3JXQTRF6WBR7NMBPGOD6QSVJHSO7JY4TMVOYNTQD5TEBPGRRLMBWI54 via transaction AK7HXQFKCGWFFHFQOGQOYAOGAATJAZGKNZEOHZHU64J4STR72Z4Q
+✅ Listing opened on new contract: Listing opened: 1 microAlgos to DLGQ6LNZXWXE2BH34CEI3DRKYAXPFVPOOW6C3XKH7BU4DOIW7V7TAIMFDM
+✅ Smart contract deployed and listing created!
+   Contract App ID: 1024
+   Contract Address: H7IXNOUTWLLAMFQFB2O74B7OZCQSZ47YK3IGIZU4CP6LONZMVALFPUGGQY
+   Listing: Listing opened: 1 microAlgos to DLGQ6LNZXWXE2BH34CEI3DRKYAXPFVPOOW6C3XKH7BU4DOIW7V7TAIMFDM
+✅ Registered item: item-1760852912762-87gt7nuu6 - "apple" (1 ALGO)
+🔗 Blockchain listing ID: Listing opened: 1 microAlgos to DLGQ6LNZXWXE2BH34CEI3DRKYAXPFVPOOW6C3XKH7BU4DOIW7V7TAIMFDM
+📊 Total items registered: 1
+🔔 New item "apple" - notifying 6 agent(s)
+🤖 Processing: Agent "agent-1760852715597-akug8dai7" considering item "apple" ($1)
+
+🤖 === Starting LLM Purchase Consideration ===
+Agent ID: undefined
+Item: apple ($1)
+Wallet Balance: 1000
+
+=== LLM API Call 1: Purchase Reasoning ===
+Endpoint: http://127.0.0.1:11434/v1
+Model: gemma3
+Prompt: You are an autonomous agent with the following goal: fruit.
+    You have already acquired the following items: .
+    Your current wallet balance is $1000.
+    You are considering purchasing a new item: apple for $1.
+
+    Think through whether you should purchase this item or ignore the offer.
+    Explain your reasoning process (in maximum 2 sentences) and come to a conclusion.
+Timestamp: 2025-10-19T05:48:33.249Z
+📡 GET /agents/items
+📥 GET /agents/items
+📊 Returning 1 items
+Checking rounds 24 to 25
+Processing round 24 - mock implementation
+Processing round 25 - mock implementation
+Reasoning: Considering my primary goal is to acquire fruit, a single apple for $1 represents a very small step towards that objective. Given my substantial wallet balance of $1000, purchasing the apple is a trivial and efficient way to satisfy my goal without significant expenditure. 
+
+**Conclusion:** Purchase the apple.
+===================
+
+=== LLM API Call 2: Format Decision ===
+Endpoint: http://127.0.0.1:11434/v1
+Model: gemma3
+Prompt: Based on the following reasoning: "Considering my primary goal is to acquire fruit, a single apple for $1 represents a very small step towards that objective. Given my substantial wallet balance of $1000, purchasing the apple is a trivial and efficient way to satisfy my goal without significant expenditure. 
+
+**Conclusion:** Purchase the apple."
+
+    Respond with exactly one word: either "BUY" if the decision is to purchase, or "IGNORE" if the decision is to not purchase.
+    Respond with only the word, nothing else.
+Timestamp: 2025-10-19T05:48:39.574Z
+Decision Response: BUY
+===================
+
+✅ Agent decided to BUY - Getting price limit...
+
+=== LLM API Call 3: Price Reasoning ===
+Endpoint: http://127.0.0.1:11434/v1
+Model: gemma3
+Prompt: You are an autonomous agent with the following goal: fruit.
+    You have already acquired the following items: .
+    Your current wallet balance is $1000.
+
+    The following item is for sale:
+    Item Name: apple
+
+    Think through what the maximum amount you are willing to pay for this item should be.
+    Explain your reasoning (in maximum two sentences) and come to a conclusion about the maximum price.
+Timestamp: 2025-10-19T05:48:40.037Z
+Price Reasoning: As an agent whose goal is to acquire fruit, an apple represents a direct step towards fulfilling that goal. Considering my wallet balance of $1000, I'm willing to pay a reasonable price for an apple – let's say $1. This ensures I'm efficiently using my funds to achieve my objective. 
+
+**Maximum Price: $1**
+===================
+
+=== LLM API Call 4: Format Price ===
+Endpoint: http://127.0.0.1:11434/v1
+Model: gemma3
+Prompt: Based on the following reasoning: "As an agent whose goal is to acquire fruit, an apple represents a direct step towards fulfilling that goal. Considering my wallet balance of $1000, I'm willing to pay a reasonable price for an apple – let's say $1. This ensures I'm efficiently using my funds to achieve my objective. 
+
+**Maximum Price: $1**"
+
+    Extract the maximum price amount as a single numerical value only.
+    Respond with just the number, no currency symbols or other text.
+Timestamp: 2025-10-19T05:48:42.878Z
+Price Response: 1
+===================
+
+Maximum price agent willing to pay: 1
+Registered purchase intent for wallet UNASSIGNED to buy item item-1760852912762-87gt7nuu6 at price $1
+Purchase intent registered with ID: 1760852923352
+=== Purchase Consideration Complete ===
+
+✅ Agent "agent-1760852715597-akug8dai7" wants to buy "apple"! Purchase Intent: 1760852923352
+🔍 DEBUG: Starting smart contract payment execution...
+💰 Processing payment on smart contract for agent "agent-1760852715597-akug8dai7"...
+   Item: apple, Price: 1, Seller: undefined
+   Agent wallet: UNASSIGNED
+🔍 About to call processListingPayment with: sender=UNASSIGNED, amount=1
+🔍 Using contract App ID: 1024
+🔍 Checking current listing status...
+Failed to get status from contract 1024: Error: address seems to be malformed: expected length 58, got 10: UNASSIGNED
+    at Address.fromString (/Users/danielpointon/easya/Easy-A-Hackathon/algokit/ch_ai_n/projects/ch_ai_n/node_modules/algosdk/src/encoding/address.ts:94:13)
+    at AppClient.getSender (/Users/danielpointon/easya/Easy-A-Hackathon/algokit/ch_ai_n/projects/ch_ai_n/node_modules/@algorandfoundation/src/types/app-client.ts:1526:49)
+    at AppClient.getABIParams (/Users/danielpointon/easya/Easy-A-Hackathon/algokit/ch_ai_n/projects/ch_ai_n/node_modules/@algorandfoundation/src/types/app-client.ts:1561:25)
+    at Object.call (/Users/danielpointon/easya/Easy-A-Hackathon/algokit/ch_ai_n/projects/ch_ai_n/node_modules/@algorandfoundation/src/types/app-client.ts:1341:28)
+    at Object.call (/Users/danielpointon/easya/Easy-A-Hackathon/algokit/ch_ai_n/projects/ch_ai_n/node_modules/@algorandfoundation/src/types/app-client.ts:1461:67)
+    at ChAiNClient.<anonymous> (/Users/danielpointon/easya/Easy-A-Hackathon/algokit/ch_ai_n/projects/ch_ai_n/artifacts/ch_ai_n/ChAiNClient.ts:712:48)
+    at Generator.next (<anonymous>)
+    at /Users/danielpointon/easya/Easy-A-Hackathon/algokit/ch_ai_n/projects/ch_ai_n/artifacts/ch_ai_n/ChAiNClient.ts:8:71
+    at new Promise (<anonymous>)
+    at __awaiter (/Users/danielpointon/easya/Easy-A-Hackathon/algokit/ch_ai_n/projects/ch_ai_n/artifacts/ch_ai_n/ChAiNClient.ts:4:12)
+⚠️  Smart contract payment failed: Error: address seems to be malformed: expected length 58, got 10: UNASSIGNED
+    at Address.fromString (/Users/danielpointon/easya/Easy-A-Hackathon/algokit/ch_ai_n/projects/ch_ai_n/node_modules/algosdk/src/encoding/address.ts:94:13)
+    at AppClient.getSender (/Users/danielpointon/easya/Easy-A-Hackathon/algokit/ch_ai_n/projects/ch_ai_n/node_modules/@algorandfoundation/src/types/app-client.ts:1526:49)
+    at AppClient.getABIParams (/Users/danielpointon/easya/Easy-A-Hackathon/algokit/ch_ai_n/projects/ch_ai_n/node_modules/@algorandfoundation/src/types/app-client.ts:1561:25)
+    at Object.call (/Users/danielpointon/easya/Easy-A-Hackathon/algokit/ch_ai_n/projects/ch_ai_n/node_modules/@algorandfoundation/src/types/app-client.ts:1341:28)
+    at Object.call (/Users/danielpointon/easya/Easy-A-Hackathon/algokit/ch_ai_n/projects/ch_ai_n/node_modules/@algorandfoundation/src/types/app-client.ts:1461:67)
+    at ChAiNClient.<anonymous> (/Users/danielpointon/easya/Easy-A-Hackathon/algokit/ch_ai_n/projects/ch_ai_n/artifacts/ch_ai_n/ChAiNClient.ts:712:48)
+    at Generator.next (<anonymous>)
+    at /Users/danielpointon/easya/Easy-A-Hackathon/algokit/ch_ai_n/projects/ch_ai_n/artifacts/ch_ai_n/ChAiNClient.ts:8:71
+    at new Promise (<anonymous>)
+    at __awaiter (/Users/danielpointon/easya/Easy-A-Hackathon/algokit/ch_ai_n/projects/ch_ai_n/artifacts/ch_ai_n/ChAiNClient.ts:4:12)
+⚠️  Error stack: Error: address seems to be malformed: expected length 58, got 10: UNASSIGNED
+    at Address.fromString (/Users/danielpointon/easya/Easy-A-Hackathon/algokit/ch_ai_n/projects/ch_ai_n/node_modules/algosdk/src/encoding/address.ts:94:13)
+    at AppClient.getSender (/Users/danielpointon/easya/Easy-A-Hackathon/algokit/ch_ai_n/projects/ch_ai_n/node_modules/@algorandfoundation/src/types/app-client.ts:1526:49)
+    at AppClient.getABIParams (/Users/danielpointon/easya/Easy-A-Hackathon/algokit/ch_ai_n/projects/ch_ai_n/node_modules/@algorandfoundation/src/types/app-client.ts:1561:25)
+    at Object.call (/Users/danielpointon/easya/Easy-A-Hackathon/algokit/ch_ai_n/projects/ch_ai_n/node_modules/@algorandfoundation/src/types/app-client.ts:1341:28)
+    at Object.call (/Users/danielpointon/easya/Easy-A-Hackathon/algokit/ch_ai_n/projects/ch_ai_n/node_modules/@algorandfoundation/src/types/app-client.ts:1461:67)
+    at ChAiNClient.<anonymous> (/Users/danielpointon/easya/Easy-A-Hackathon/algokit/ch_ai_n/projects/ch_ai_n/artifacts/ch_ai_n/ChAiNClient.ts:712:48)
+    at Generator.next (<anonymous>)
+    at /Users/danielpointon/easya/Easy-A-Hackathon/algokit/ch_ai_n/projects/ch_ai_n/artifacts/ch_ai_n/ChAiNClient.ts:8:71
+    at new Promise (<anonymous>)
+    at __awaiter (/Users/danielpointon/easya/Easy-A-Hackathon/algokit/ch_ai_n/projects/ch_ai_n/artifacts/ch_ai_n/ChAiNClient.ts:4:12)
+📤 Sending decision to frontend: BUY - apple
+✅ Decision sent to frontend successfully
+🤖 Processing: Agent "agent-1760852745501-8nonzaxo5" considering item "apple" ($1)
+
+🤖 === Starting LLM Purchase Consideration ===
+Agent ID: undefined
+Item: apple ($1)
+Wallet Balance: 1000
+
+=== LLM API Call 1: Purchase Reasoning ===
+Endpoint: http://127.0.0.1:11434/v1
+Model: gemma3
+Prompt: You are an autonomous agent with the following goal: fruit.
+    You have already acquired the following items: .
+    Your current wallet balance is $1000.
+    You are considering purchasing a new item: apple for $1.
+
+    Think through whether you should purchase this item or ignore the offer.
+    Explain your reasoning process (in maximum 2 sentences) and come to a conclusion.
+Timestamp: 2025-10-19T05:48:43.587Z
+Reasoning: Considering my primary goal is to acquire fruit, a single apple costing $1 represents a small, achievable step towards that goal.  Given my substantial wallet balance of $1000, purchasing the apple is a worthwhile and inexpensive investment, therefore I should buy it.
+===================
+
+=== LLM API Call 2: Format Decision ===
+Endpoint: http://127.0.0.1:11434/v1
+Model: gemma3
+Prompt: Based on the following reasoning: "Considering my primary goal is to acquire fruit, a single apple costing $1 represents a small, achievable step towards that goal.  Given my substantial wallet balance of $1000, purchasing the apple is a worthwhile and inexpensive investment, therefore I should buy it."
+
+    Respond with exactly one word: either "BUY" if the decision is to purchase, or "IGNORE" if the decision is to not purchase.
+    Respond with only the word, nothing else.
+Timestamp: 2025-10-19T05:48:45.713Z
+Decision Response: BUY
+===================
+
+✅ Agent decided to BUY - Getting price limit...
+
+=== LLM API Call 3: Price Reasoning ===
+Endpoint: http://127.0.0.1:11434/v1
+Model: gemma3
+Prompt: You are an autonomous agent with the following goal: fruit.
+    You have already acquired the following items: .
+    Your current wallet balance is $1000.
+
+    The following item is for sale:
+    Item Name: apple
+
+    Think through what the maximum amount you are willing to pay for this item should be.
+    Explain your reasoning (in maximum two sentences) and come to a conclusion about the maximum price.
+Timestamp: 2025-10-19T05:48:46.160Z
+Price Reasoning: I want to acquire fruit, and an apple fulfills that goal. Considering my $1000 wallet balance, I'm willing to spend a reasonable amount – let's say $5 for an apple; this allows me to prioritize acquiring fruit while still maintaining a healthy budget. 
+
+**Maximum Price: $5**
+===================
+
+=== LLM API Call 4: Format Price ===
+Endpoint: http://127.0.0.1:11434/v1
+Model: gemma3
+Prompt: Based on the following reasoning: "I want to acquire fruit, and an apple fulfills that goal. Considering my $1000 wallet balance, I'm willing to spend a reasonable amount – let's say $5 for an apple; this allows me to prioritize acquiring fruit while still maintaining a healthy budget. 
+
+**Maximum Price: $5**"
+
+    Extract the maximum price amount as a single numerical value only.
+    Respond with just the number, no currency symbols or other text.
+Timestamp: 2025-10-19T05:48:48.747Z
+Price Response: 5
+===================
+
+Maximum price agent willing to pay: 5
+Registered purchase intent for wallet UNASSIGNED to buy item item-1760852912762-87gt7nuu6 at price $5
+Purchase intent registered with ID: 1760852929233
+=== Purchase Consideration Complete ===
+
+✅ Agent "agent-1760852745501-8nonzaxo5" wants to buy "apple"! Purchase Intent: 1760852929233
+🔍 DEBUG: Starting smart contract payment execution...
+💰 Processing payment on smart contract for agent "agent-1760852745501-8nonzaxo5"...
+   Item: apple, Price: 1, Seller: undefined
+   Agent wallet: UNASSIGNED
+🔍 About to call processListingPayment with: sender=UNASSIGNED, amount=1
+🔍 Using contract App ID: 1024
+🔍 Checking current listing status...
+Failed to get status from contract 1024: Error: address seems to be malformed: expected length 58, got 10: UNASSIGNED
+    at Address.fromString (/Users/danielpointon/easya/Easy-A-Hackathon/algokit/ch_ai_n/projects/ch_ai_n/node_modules/algosdk/src/encoding/address.ts:94:13)
+    at AppClient.getSender (/Users/danielpointon/easya/Easy-A-Hackathon/algokit/ch_ai_n/projects/ch_ai_n/node_modules/@algorandfoundation/src/types/app-client.ts:1526:49)
+    at AppClient.getABIParams (/Users/danielpointon/easya/Easy-A-Hackathon/algokit/ch_ai_n/projects/ch_ai_n/node_modules/@algorandfoundation/src/types/app-client.ts:1561:25)
+    at Object.call (/Users/danielpointon/easya/Easy-A-Hackathon/algokit/ch_ai_n/projects/ch_ai_n/node_modules/@algorandfoundation/src/types/app-client.ts:1341:28)
+    at Object.call (/Users/danielpointon/easya/Easy-A-Hackathon/algokit/ch_ai_n/projects/ch_ai_n/node_modules/@algorandfoundation/src/types/app-client.ts:1461:67)
+    at ChAiNClient.<anonymous> (/Users/danielpointon/easya/Easy-A-Hackathon/algokit/ch_ai_n/projects/ch_ai_n/artifacts/ch_ai_n/ChAiNClient.ts:712:48)
+    at Generator.next (<anonymous>)
+    at /Users/danielpointon/easya/Easy-A-Hackathon/algokit/ch_ai_n/projects/ch_ai_n/artifacts/ch_ai_n/ChAiNClient.ts:8:71
+    at new Promise (<anonymous>)
+    at __awaiter (/Users/danielpointon/easya/Easy-A-Hackathon/algokit/ch_ai_n/projects/ch_ai_n/artifacts/ch_ai_n/ChAiNClient.ts:4:12)
+⚠️  Smart contract payment failed: Error: address seems to be malformed: expected length 58, got 10: UNASSIGNED
+    at Address.fromString (/Users/danielpointon/easya/Easy-A-Hackathon/algokit/ch_ai_n/projects/ch_ai_n/node_modules/algosdk/src/encoding/address.ts:94:13)
+    at AppClient.getSender (/Users/danielpointon/easya/Easy-A-Hackathon/algokit/ch_ai_n/projects/ch_ai_n/node_modules/@algorandfoundation/src/types/app-client.ts:1526:49)
+    at AppClient.getABIParams (/Users/danielpointon/easya/Easy-A-Hackathon/algokit/ch_ai_n/projects/ch_ai_n/node_modules/@algorandfoundation/src/types/app-client.ts:1561:25)
+    at Object.call (/Users/danielpointon/easya/Easy-A-Hackathon/algokit/ch_ai_n/projects/ch_ai_n/node_modules/@algorandfoundation/src/types/app-client.ts:1341:28)
+    at Object.call (/Users/danielpointon/easya/Easy-A-Hackathon/algokit/ch_ai_n/projects/ch_ai_n/node_modules/@algorandfoundation/src/types/app-client.ts:1461:67)
+    at ChAiNClient.<anonymous> (/Users/danielpointon/easya/Easy-A-Hackathon/algokit/ch_ai_n/projects/ch_ai_n/artifacts/ch_ai_n/ChAiNClient.ts:712:48)
+    at Generator.next (<anonymous>)
+    at /Users/danielpointon/easya/Easy-A-Hackathon/algokit/ch_ai_n/projects/ch_ai_n/artifacts/ch_ai_n/ChAiNClient.ts:8:71
+    at new Promise (<anonymous>)
+    at __awaiter (/Users/danielpointon/easya/Easy-A-Hackathon/algokit/ch_ai_n/projects/ch_ai_n/artifacts/ch_ai_n/ChAiNClient.ts:4:12)
+⚠️  Error stack: Error: address seems to be malformed: expected length 58, got 10: UNASSIGNED
+    at Address.fromString (/Users/danielpointon/easya/Easy-A-Hackathon/algokit/ch_ai_n/projects/ch_ai_n/node_modules/algosdk/src/encoding/address.ts:94:13)
+    at AppClient.getSender (/Users/danielpointon/easya/Easy-A-Hackathon/algokit/ch_ai_n/projects/ch_ai_n/node_modules/@algorandfoundation/src/types/app-client.ts:1526:49)
+    at AppClient.getABIParams (/Users/danielpointon/easya/Easy-A-Hackathon/algokit/ch_ai_n/projects/ch_ai_n/node_modules/@algorandfoundation/src/types/app-client.ts:1561:25)
+    at Object.call (/Users/danielpointon/easya/Easy-A-Hackathon/algokit/ch_ai_n/projects/ch_ai_n/node_modules/@algorandfoundation/src/types/app-client.ts:1341:28)
+    at Object.call (/Users/danielpointon/easya/Easy-A-Hackathon/algokit/ch_ai_n/projects/ch_ai_n/node_modules/@algorandfoundation/src/types/app-client.ts:1461:67)
+    at ChAiNClient.<anonymous> (/Users/danielpointon/easya/Easy-A-Hackathon/algokit/ch_ai_n/projects/ch_ai_n/artifacts/ch_ai_n/ChAiNClient.ts:712:48)
+    at Generator.next (<anonymous>)
+    at /Users/danielpointon/easya/Easy-A-Hackathon/algokit/ch_ai_n/projects/ch_ai_n/artifacts/ch_ai_n/ChAiNClient.ts:8:71
+    at new Promise (<anonymous>)
+    at __awaiter (/Users/danielpointon/easya/Easy-A-Hackathon/algokit/ch_ai_n/projects/ch_ai_n/artifacts/ch_ai_n/ChAiNClient.ts:4:12)
+📤 Sending decision to frontend: BUY - apple
+✅ Decision sent to frontend successfully
+🤖 Processing: Agent "agent-1760852765576-u370nwzx3" considering item "apple" ($1)
+
+🤖 === Starting LLM Purchase Consideration ===
+Agent ID: undefined
+Item: apple ($1)
+Wallet Balance: 1000
+
+=== LLM API Call 1: Purchase Reasoning ===
+Endpoint: http://127.0.0.1:11434/v1
+Model: gemma3
+Prompt: You are an autonomous agent with the following goal: fruit.
+    You have already acquired the following items: .
+    Your current wallet balance is $1000.
+    You are considering purchasing a new item: apple for $1.
+
+    Think through whether you should purchase this item or ignore the offer.
+    Explain your reasoning process (in maximum 2 sentences) and come to a conclusion.
+Timestamp: 2025-10-19T05:48:49.462Z
+Reasoning: Considering my primary goal is to acquire fruit, a single apple for $1 represents a very small, but achievable, step towards that goal. Given my substantial wallet balance of $1000, purchasing the apple is a low-risk, efficient way to satisfy my objective without significant expenditure. 
+
+**Conclusion: Purchase the apple.**
+===================
+
+=== LLM API Call 2: Format Decision ===
+Endpoint: http://127.0.0.1:11434/v1
+Model: gemma3
+Prompt: Based on the following reasoning: "Considering my primary goal is to acquire fruit, a single apple for $1 represents a very small, but achievable, step towards that goal. Given my substantial wallet balance of $1000, purchasing the apple is a low-risk, efficient way to satisfy my objective without significant expenditure. 
+
+**Conclusion: Purchase the apple.**"
+
+    Respond with exactly one word: either "BUY" if the decision is to purchase, or "IGNORE" if the decision is to not purchase.
+    Respond with only the word, nothing else.
+Timestamp: 2025-10-19T05:48:52.206Z
+Decision Response: BUY
+===================
+
+✅ Agent decided to BUY - Getting price limit...
+
+=== LLM API Call 3: Price Reasoning ===
+Endpoint: http://127.0.0.1:11434/v1
+Model: gemma3
+Prompt: You are an autonomous agent with the following goal: fruit.
+    You have already acquired the following items: .
+    Your current wallet balance is $1000.
+
+    The following item is for sale:
+    Item Name: apple
+
+    Think through what the maximum amount you are willing to pay for this item should be.
+    Explain your reasoning (in maximum two sentences) and come to a conclusion about the maximum price.
+Timestamp: 2025-10-19T05:48:52.664Z
+Price Reasoning: As an agent whose goal is to acquire fruit, an apple represents a direct step towards fulfilling that goal. Considering my $1000 wallet balance, I'm willing to spend a reasonable amount – let's say $5 on an apple. 
+
+**Maximum Price: $5**
+===================
+
+=== LLM API Call 4: Format Price ===
+Endpoint: http://127.0.0.1:11434/v1
+Model: gemma3
+Prompt: Based on the following reasoning: "As an agent whose goal is to acquire fruit, an apple represents a direct step towards fulfilling that goal. Considering my $1000 wallet balance, I'm willing to spend a reasonable amount – let's say $5 on an apple. 
+
+**Maximum Price: $5**"
+
+    Extract the maximum price amount as a single numerical value only.
+    Respond with just the number, no currency symbols or other text.
+Timestamp: 2025-10-19T05:48:55.046Z
+Price Response: 5
+===================
+
+Maximum price agent willing to pay: 5
+Registered purchase intent for wallet UNASSIGNED to buy item item-1760852912762-87gt7nuu6 at price $5
+Purchase intent registered with ID: 1760852935534
+=== Purchase Consideration Complete ===
+
+✅ Agent "agent-1760852765576-u370nwzx3" wants to buy "apple"! Purchase Intent: 1760852935534
+🔍 DEBUG: Starting smart contract payment execution...
+💰 Processing payment on smart contract for agent "agent-1760852765576-u370nwzx3"...
+   Item: apple, Price: 1, Seller: undefined
+   Agent wallet: UNASSIGNED
+🔍 About to call processListingPayment with: sender=UNASSIGNED, amount=1
+🔍 Using contract App ID: 1024
+🔍 Checking current listing status...
+Failed to get status from contract 1024: Error: address seems to be malformed: expected length 58, got 10: UNASSIGNED
+    at Address.fromString (/Users/danielpointon/easya/Easy-A-Hackathon/algokit/ch_ai_n/projects/ch_ai_n/node_modules/algosdk/src/encoding/address.ts:94:13)
+    at AppClient.getSender (/Users/danielpointon/easya/Easy-A-Hackathon/algokit/ch_ai_n/projects/ch_ai_n/node_modules/@algorandfoundation/src/types/app-client.ts:1526:49)
+    at AppClient.getABIParams (/Users/danielpointon/easya/Easy-A-Hackathon/algokit/ch_ai_n/projects/ch_ai_n/node_modules/@algorandfoundation/src/types/app-client.ts:1561:25)
+    at Object.call (/Users/danielpointon/easya/Easy-A-Hackathon/algokit/ch_ai_n/projects/ch_ai_n/node_modules/@algorandfoundation/src/types/app-client.ts:1341:28)
+    at Object.call (/Users/danielpointon/easya/Easy-A-Hackathon/algokit/ch_ai_n/projects/ch_ai_n/node_modules/@algorandfoundation/src/types/app-client.ts:1461:67)
+    at ChAiNClient.<anonymous> (/Users/danielpointon/easya/Easy-A-Hackathon/algokit/ch_ai_n/projects/ch_ai_n/artifacts/ch_ai_n/ChAiNClient.ts:712:48)
+    at Generator.next (<anonymous>)
+    at /Users/danielpointon/easya/Easy-A-Hackathon/algokit/ch_ai_n/projects/ch_ai_n/artifacts/ch_ai_n/ChAiNClient.ts:8:71
+    at new Promise (<anonymous>)
+    at __awaiter (/Users/danielpointon/easya/Easy-A-Hackathon/algokit/ch_ai_n/projects/ch_ai_n/artifacts/ch_ai_n/ChAiNClient.ts:4:12)
+⚠️  Smart contract payment failed: Error: address seems to be malformed: expected length 58, got 10: UNASSIGNED
+    at Address.fromString (/Users/danielpointon/easya/Easy-A-Hackathon/algokit/ch_ai_n/projects/ch_ai_n/node_modules/algosdk/src/encoding/address.ts:94:13)
+    at AppClient.getSender (/Users/danielpointon/easya/Easy-A-Hackathon/algokit/ch_ai_n/projects/ch_ai_n/node_modules/@algorandfoundation/src/types/app-client.ts:1526:49)
+    at AppClient.getABIParams (/Users/danielpointon/easya/Easy-A-Hackathon/algokit/ch_ai_n/projects/ch_ai_n/node_modules/@algorandfoundation/src/types/app-client.ts:1561:25)
+    at Object.call (/Users/danielpointon/easya/Easy-A-Hackathon/algokit/ch_ai_n/projects/ch_ai_n/node_modules/@algorandfoundation/src/types/app-client.ts:1341:28)
+    at Object.call (/Users/danielpointon/easya/Easy-A-Hackathon/algokit/ch_ai_n/projects/ch_ai_n/node_modules/@algorandfoundation/src/types/app-client.ts:1461:67)
+    at ChAiNClient.<anonymous> (/Users/danielpointon/easya/Easy-A-Hackathon/algokit/ch_ai_n/projects/ch_ai_n/artifacts/ch_ai_n/ChAiNClient.ts:712:48)
+    at Generator.next (<anonymous>)
+    at /Users/danielpointon/easya/Easy-A-Hackathon/algokit/ch_ai_n/projects/ch_ai_n/artifacts/ch_ai_n/ChAiNClient.ts:8:71
+    at new Promise (<anonymous>)
+    at __awaiter (/Users/danielpointon/easya/Easy-A-Hackathon/algokit/ch_ai_n/projects/ch_ai_n/artifacts/ch_ai_n/ChAiNClient.ts:4:12)
+⚠️  Error stack: Error: address seems to be malformed: expected length 58, got 10: UNASSIGNED
+    at Address.fromString (/Users/danielpointon/easya/Easy-A-Hackathon/algokit/ch_ai_n/projects/ch_ai_n/node_modules/algosdk/src/encoding/address.ts:94:13)
+    at AppClient.getSender (/Users/danielpointon/easya/Easy-A-Hackathon/algokit/ch_ai_n/projects/ch_ai_n/node_modules/@algorandfoundation/src/types/app-client.ts:1526:49)
+    at AppClient.getABIParams (/Users/danielpointon/easya/Easy-A-Hackathon/algokit/ch_ai_n/projects/ch_ai_n/node_modules/@algorandfoundation/src/types/app-client.ts:1561:25)
+    at Object.call (/Users/danielpointon/easya/Easy-A-Hackathon/algokit/ch_ai_n/projects/ch_ai_n/node_modules/@algorandfoundation/src/types/app-client.ts:1341:28)
+    at Object.call (/Users/danielpointon/easya/Easy-A-Hackathon/algokit/ch_ai_n/projects/ch_ai_n/node_modules/@algorandfoundation/src/types/app-client.ts:1461:67)
+    at ChAiNClient.<anonymous> (/Users/danielpointon/easya/Easy-A-Hackathon/algokit/ch_ai_n/projects/ch_ai_n/artifacts/ch_ai_n/ChAiNClient.ts:712:48)
+    at Generator.next (<anonymous>)
+    at /Users/danielpointon/easya/Easy-A-Hackathon/algokit/ch_ai_n/projects/ch_ai_n/artifacts/ch_ai_n/ChAiNClient.ts:8:71
+    at new Promise (<anonymous>)
+    at __awaiter (/Users/danielpointon/easya/Easy-A-Hackathon/algokit/ch_ai_n/projects/ch_ai_n/artifacts/ch_ai_n/ChAiNClient.ts:4:12)
+📤 Sending decision to frontend: BUY - apple
+✅ Decision sent to frontend successfully
+🤖 Processing: Agent "agent-1760852780240-vfddqlzb7" considering item "apple" ($1)
+
+🤖 === Starting LLM Purchase Consideration ===
+Agent ID: undefined
+Item: apple ($1)
+Wallet Balance: 1000
+
+=== LLM API Call 1: Purchase Reasoning ===
+Endpoint: http://127.0.0.1:11434/v1
+Model: gemma3
+Prompt: You are an autonomous agent with the following goal: fruit.
+    You have already acquired the following items: .
+    Your current wallet balance is $1000.
+    You are considering purchasing a new item: apple for $1.
+
+    Think through whether you should purchase this item or ignore the offer.
+    Explain your reasoning process (in maximum 2 sentences) and come to a conclusion.
+Timestamp: 2025-10-19T05:48:55.791Z
+Reasoning: Given my primary goal is to acquire fruit, and an apple costs only $1, it's a highly efficient and inexpensive way to move towards that objective. Therefore, I should purchase the apple – it’s a small investment with a direct contribution to achieving my goal.
+===================
+
+=== LLM API Call 2: Format Decision ===
+Endpoint: http://127.0.0.1:11434/v1
+Model: gemma3
+Prompt: Based on the following reasoning: "Given my primary goal is to acquire fruit, and an apple costs only $1, it's a highly efficient and inexpensive way to move towards that objective. Therefore, I should purchase the apple – it’s a small investment with a direct contribution to achieving my goal."
+
+    Respond with exactly one word: either "BUY" if the decision is to purchase, or "IGNORE" if the decision is to not purchase.
+    Respond with only the word, nothing else.
+Timestamp: 2025-10-19T05:48:57.981Z
+Decision Response: BUY
+===================
+
+✅ Agent decided to BUY - Getting price limit...
+
+=== LLM API Call 3: Price Reasoning ===
+Endpoint: http://127.0.0.1:11434/v1
+Model: gemma3
+Prompt: You are an autonomous agent with the following goal: fruit.
+    You have already acquired the following items: .
+    Your current wallet balance is $1000.
+
+    The following item is for sale:
+    Item Name: apple
+
+    Think through what the maximum amount you are willing to pay for this item should be.
+    Explain your reasoning (in maximum two sentences) and come to a conclusion about the maximum price.
+Timestamp: 2025-10-19T05:48:58.472Z
+Price Reasoning: As an agent whose goal is to acquire fruit, an apple represents a direct step towards that goal. Considering my $1000 wallet balance, I’ll allocate a reasonable amount, perhaps $5 - $10, for a single apple, prioritizing fulfilling my core objective. 
+
+**Maximum Price: $10**
+===================
+
+=== LLM API Call 4: Format Price ===
+Endpoint: http://127.0.0.1:11434/v1
+Model: gemma3
+Prompt: Based on the following reasoning: "As an agent whose goal is to acquire fruit, an apple represents a direct step towards that goal. Considering my $1000 wallet balance, I’ll allocate a reasonable amount, perhaps $5 - $10, for a single apple, prioritizing fulfilling my core objective. 
+
+**Maximum Price: $10**"
+
+    Extract the maximum price amount as a single numerical value only.
+    Respond with just the number, no currency symbols or other text.
+Timestamp: 2025-10-19T05:49:01.114Z
+Price Response: 10
+===================
+
+Maximum price agent willing to pay: 10
+Registered purchase intent for wallet BGIYKTGCUMK7VAHL23BRVDZAUOMXQA7UKIYVOHLQSW73RO5B5I3U2JR3RU to buy item item-1760852912762-87gt7nuu6 at price $10
+Purchase intent registered with ID: 1760852941671
+=== Purchase Consideration Complete ===
+
+✅ Agent "agent-1760852780240-vfddqlzb7" wants to buy "apple"! Purchase Intent: 1760852941671
+🔍 DEBUG: Starting smart contract payment execution...
+💰 Processing payment on smart contract for agent "agent-1760852780240-vfddqlzb7"...
+   Item: apple, Price: 1, Seller: undefined
+   Agent wallet: BGIYKTGCUMK7VAHL23BRVDZAUOMXQA7UKIYVOHLQSW73RO5B5I3U2JR3RU
+🔍 About to call processListingPayment with: sender=BGIYKTGCUMK7VAHL23BRVDZAUOMXQA7UKIYVOHLQSW73RO5B5I3U2JR3RU, amount=1
+🔍 Using contract App ID: 1024
+🔍 Checking current listing status...
+Failed to get status from contract 1024: Error: No signer found for address BGIYKTGCUMK7VAHL23BRVDZAUOMXQA7UKIYVOHLQSW73RO5B5I3U2JR3RU
+    at AccountManager.getSigner (/Users/danielpointon/easya/Easy-A-Hackathon/express-server/node_modules/@algorandfoundation/src/types/account-manager.ts:204:24)
+    at TransactionComposer.getSigner (/Users/danielpointon/easya/Easy-A-Hackathon/express-server/node_modules/@algorandfoundation/src/types/algorand-client.ts:237:59)
+    at TransactionComposer.buildMethodCall (/Users/danielpointon/easya/Easy-A-Hackathon/express-server/node_modules/@algorandfoundation/src/types/composer.ts:1642:18)
+    at TransactionComposer.buildTxnWithSigner (/Users/danielpointon/easya/Easy-A-Hackathon/express-server/node_modules/@algorandfoundation/src/types/composer.ts:1871:25)
+    at TransactionComposer.build (/Users/danielpointon/easya/Easy-A-Hackathon/express-server/node_modules/@algorandfoundation/src/types/composer.ts:1953:44)
+    at processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async TransactionComposer.send (/Users/danielpointon/easya/Easy-A-Hackathon/express-server/node_modules/@algorandfoundation/src/types/composer.ts:2000:20)
+    at async /Users/danielpointon/easya/Easy-A-Hackathon/express-server/node_modules/@algorandfoundation/src/types/algorand-client-transaction-sender.ts:86:25
+    at async AlgorandClientTransactionSender.appCallMethodCall (/Users/danielpointon/easya/Easy-A-Hackathon/express-server/node_modules/@algorandfoundation/src/types/algorand-client-transaction-sender.ts:121:22)
+    at async AppClient.processMethodCallReturn (/Users/danielpointon/easya/Easy-A-Hackathon/algokit/ch_ai_n/projects/ch_ai_n/node_modules/@algorandfoundation/src/types/app-client.ts:934:25)
+⚠️  Smart contract payment failed: Error: No signer found for address BGIYKTGCUMK7VAHL23BRVDZAUOMXQA7UKIYVOHLQSW73RO5B5I3U2JR3RU
+    at AccountManager.getSigner (/Users/danielpointon/easya/Easy-A-Hackathon/express-server/node_modules/@algorandfoundation/src/types/account-manager.ts:204:24)
+    at TransactionComposer.getSigner (/Users/danielpointon/easya/Easy-A-Hackathon/express-server/node_modules/@algorandfoundation/src/types/algorand-client.ts:237:59)
+    at TransactionComposer.buildMethodCall (/Users/danielpointon/easya/Easy-A-Hackathon/express-server/node_modules/@algorandfoundation/src/types/composer.ts:1642:18)
+    at TransactionComposer.buildTxnWithSigner (/Users/danielpointon/easya/Easy-A-Hackathon/express-server/node_modules/@algorandfoundation/src/types/composer.ts:1871:25)
+    at TransactionComposer.build (/Users/danielpointon/easya/Easy-A-Hackathon/express-server/node_modules/@algorandfoundation/src/types/composer.ts:1953:44)
+    at processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async TransactionComposer.send (/Users/danielpointon/easya/Easy-A-Hackathon/express-server/node_modules/@algorandfoundation/src/types/composer.ts:2000:20)
+    at async /Users/danielpointon/easya/Easy-A-Hackathon/express-server/node_modules/@algorandfoundation/src/types/algorand-client-transaction-sender.ts:86:25
+    at async AlgorandClientTransactionSender.appCallMethodCall (/Users/danielpointon/easya/Easy-A-Hackathon/express-server/node_modules/@algorandfoundation/src/types/algorand-client-transaction-sender.ts:121:22)
+    at async AppClient.processMethodCallReturn (/Users/danielpointon/easya/Easy-A-Hackathon/algokit/ch_ai_n/projects/ch_ai_n/node_modules/@algorandfoundation/src/types/app-client.ts:934:25)
+⚠️  Error stack: Error: No signer found for address BGIYKTGCUMK7VAHL23BRVDZAUOMXQA7UKIYVOHLQSW73RO5B5I3U2JR3RU
+    at AccountManager.getSigner (/Users/danielpointon/easya/Easy-A-Hackathon/express-server/node_modules/@algorandfoundation/src/types/account-manager.ts:204:24)
+    at TransactionComposer.getSigner (/Users/danielpointon/easya/Easy-A-Hackathon/express-server/node_modules/@algorandfoundation/src/types/algorand-client.ts:237:59)
+    at TransactionComposer.buildMethodCall (/Users/danielpointon/easya/Easy-A-Hackathon/express-server/node_modules/@algorandfoundation/src/types/composer.ts:1642:18)
+    at TransactionComposer.buildTxnWithSigner (/Users/danielpointon/easya/Easy-A-Hackathon/express-server/node_modules/@algorandfoundation/src/types/composer.ts:1871:25)
+    at TransactionComposer.build (/Users/danielpointon/easya/Easy-A-Hackathon/express-server/node_modules/@algorandfoundation/src/types/composer.ts:1953:44)
+    at processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async TransactionComposer.send (/Users/danielpointon/easya/Easy-A-Hackathon/express-server/node_modules/@algorandfoundation/src/types/composer.ts:2000:20)
+    at async /Users/danielpointon/easya/Easy-A-Hackathon/express-server/node_modules/@algorandfoundation/src/types/algorand-client-transaction-sender.ts:86:25
+    at async AlgorandClientTransactionSender.appCallMethodCall (/Users/danielpointon/easya/Easy-A-Hackathon/express-server/node_modules/@algorandfoundation/src/types/algorand-client-transaction-sender.ts:121:22)
+    at async AppClient.processMethodCallReturn (/Users/danielpointon/easya/Easy-A-Hackathon/algokit/ch_ai_n/projects/ch_ai_n/node_modules/@algorandfoundation/src/types/app-client.ts:934:25)
+📤 Sending decision to frontend: BUY - apple
+✅ Decision sent to frontend successfully
+🤖 Processing: Agent "agent-1760852869252-jq4sadkox" considering item "apple" ($1)
+
+🤖 === Starting LLM Purchase Consideration ===
+Agent ID: undefined
+Item: apple ($1)
+Wallet Balance: 1000
+
+=== LLM API Call 1: Purchase Reasoning ===
+Endpoint: http://127.0.0.1:11434/v1
+Model: gemma3
+Prompt: You are an autonomous agent with the following goal: fruit.
+    You have already acquired the following items: .
+    Your current wallet balance is $1000.
+    You are considering purchasing a new item: apple for $1.
+
+    Think through whether you should purchase this item or ignore the offer.
+    Explain your reasoning process (in maximum 2 sentences) and come to a conclusion.
+Timestamp: 2025-10-19T05:49:01.909Z
+Reasoning: Considering my primary goal is to acquire fruit, a single apple for $1 represents a small but direct step towards achieving that goal. Given my substantial wallet balance of $1000, purchasing the apple is a negligible expenditure and a worthwhile investment in obtaining fruit. 
+
+**Conclusion: Purchase the apple.**
+===================
+
+=== LLM API Call 2: Format Decision ===
+Endpoint: http://127.0.0.1:11434/v1
+Model: gemma3
+Prompt: Based on the following reasoning: "Considering my primary goal is to acquire fruit, a single apple for $1 represents a small but direct step towards achieving that goal. Given my substantial wallet balance of $1000, purchasing the apple is a negligible expenditure and a worthwhile investment in obtaining fruit. 
+
+**Conclusion: Purchase the apple.**"
+
+    Respond with exactly one word: either "BUY" if the decision is to purchase, or "IGNORE" if the decision is to not purchase.
+    Respond with only the word, nothing else.
+Timestamp: 2025-10-19T05:49:04.352Z
+Decision Response: BUY
+===================
+
+✅ Agent decided to BUY - Getting price limit...
+
+=== LLM API Call 3: Price Reasoning ===
+Endpoint: http://127.0.0.1:11434/v1
+Model: gemma3
+Prompt: You are an autonomous agent with the following goal: fruit.
+    You have already acquired the following items: .
+    Your current wallet balance is $1000.
+
+    The following item is for sale:
+    Item Name: apple
+
+    Think through what the maximum amount you are willing to pay for this item should be.
+    Explain your reasoning (in maximum two sentences) and come to a conclusion about the maximum price.
+Timestamp: 2025-10-19T05:49:04.795Z
+Price Reasoning: As an agent whose goal is to acquire fruit, an apple represents a direct step towards fulfilling that objective. Considering my $1000 wallet balance, a reasonable maximum price for an apple would be $1 - $5, prioritizing immediate acquisition of a desirable fruit. 
+
+**Conclusion: Maximum price: $5**
+===================
+
+=== LLM API Call 4: Format Price ===
+Endpoint: http://127.0.0.1:11434/v1
+Model: gemma3
+Prompt: Based on the following reasoning: "As an agent whose goal is to acquire fruit, an apple represents a direct step towards fulfilling that objective. Considering my $1000 wallet balance, a reasonable maximum price for an apple would be $1 - $5, prioritizing immediate acquisition of a desirable fruit. 
+
+**Conclusion: Maximum price: $5**"
+
+    Extract the maximum price amount as a single numerical value only.
+    Respond with just the number, no currency symbols or other text.
+Timestamp: 2025-10-19T05:49:07.337Z
+Price Response: 5
+===================
+
+Maximum price agent willing to pay: 5
+Registered purchase intent for wallet UNASSIGNED to buy item item-1760852912762-87gt7nuu6 at price $5
+Purchase intent registered with ID: 1760852947821
+=== Purchase Consideration Complete ===
+
+✅ Agent "agent-1760852869252-jq4sadkox" wants to buy "apple"! Purchase Intent: 1760852947821
+🔍 DEBUG: Starting smart contract payment execution...
+💰 Processing payment on smart contract for agent "agent-1760852869252-jq4sadkox"...
+   Item: apple, Price: 1, Seller: undefined
+   Agent wallet: UNASSIGNED
+🔍 About to call processListingPayment with: sender=UNASSIGNED, amount=1
+🔍 Using contract App ID: 1024
+🔍 Checking current listing status...
+Failed to get status from contract 1024: Error: address seems to be malformed: expected length 58, got 10: UNASSIGNED
+    at Address.fromString (/Users/danielpointon/easya/Easy-A-Hackathon/algokit/ch_ai_n/projects/ch_ai_n/node_modules/algosdk/src/encoding/address.ts:94:13)
+    at AppClient.getSender (/Users/danielpointon/easya/Easy-A-Hackathon/algokit/ch_ai_n/projects/ch_ai_n/node_modules/@algorandfoundation/src/types/app-client.ts:1526:49)
+    at AppClient.getABIParams (/Users/danielpointon/easya/Easy-A-Hackathon/algokit/ch_ai_n/projects/ch_ai_n/node_modules/@algorandfoundation/src/types/app-client.ts:1561:25)
+    at Object.call (/Users/danielpointon/easya/Easy-A-Hackathon/algokit/ch_ai_n/projects/ch_ai_n/node_modules/@algorandfoundation/src/types/app-client.ts:1341:28)
+    at Object.call (/Users/danielpointon/easya/Easy-A-Hackathon/algokit/ch_ai_n/projects/ch_ai_n/node_modules/@algorandfoundation/src/types/app-client.ts:1461:67)
+    at ChAiNClient.<anonymous> (/Users/danielpointon/easya/Easy-A-Hackathon/algokit/ch_ai_n/projects/ch_ai_n/artifacts/ch_ai_n/ChAiNClient.ts:712:48)
+    at Generator.next (<anonymous>)
+    at /Users/danielpointon/easya/Easy-A-Hackathon/algokit/ch_ai_n/projects/ch_ai_n/artifacts/ch_ai_n/ChAiNClient.ts:8:71
+    at new Promise (<anonymous>)
+    at __awaiter (/Users/danielpointon/easya/Easy-A-Hackathon/algokit/ch_ai_n/projects/ch_ai_n/artifacts/ch_ai_n/ChAiNClient.ts:4:12)
+⚠️  Smart contract payment failed: Error: address seems to be malformed: expected length 58, got 10: UNASSIGNED
+    at Address.fromString (/Users/danielpointon/easya/Easy-A-Hackathon/algokit/ch_ai_n/projects/ch_ai_n/node_modules/algosdk/src/encoding/address.ts:94:13)
+    at AppClient.getSender (/Users/danielpointon/easya/Easy-A-Hackathon/algokit/ch_ai_n/projects/ch_ai_n/node_modules/@algorandfoundation/src/types/app-client.ts:1526:49)
+    at AppClient.getABIParams (/Users/danielpointon/easya/Easy-A-Hackathon/algokit/ch_ai_n/projects/ch_ai_n/node_modules/@algorandfoundation/src/types/app-client.ts:1561:25)
+    at Object.call (/Users/danielpointon/easya/Easy-A-Hackathon/algokit/ch_ai_n/projects/ch_ai_n/node_modules/@algorandfoundation/src/types/app-client.ts:1341:28)
+    at Object.call (/Users/danielpointon/easya/Easy-A-Hackathon/algokit/ch_ai_n/projects/ch_ai_n/node_modules/@algorandfoundation/src/types/app-client.ts:1461:67)
+    at ChAiNClient.<anonymous> (/Users/danielpointon/easya/Easy-A-Hackathon/algokit/ch_ai_n/projects/ch_ai_n/artifacts/ch_ai_n/ChAiNClient.ts:712:48)
+    at Generator.next (<anonymous>)
+    at /Users/danielpointon/easya/Easy-A-Hackathon/algokit/ch_ai_n/projects/ch_ai_n/artifacts/ch_ai_n/ChAiNClient.ts:8:71
+    at new Promise (<anonymous>)
+    at __awaiter (/Users/danielpointon/easya/Easy-A-Hackathon/algokit/ch_ai_n/projects/ch_ai_n/artifacts/ch_ai_n/ChAiNClient.ts:4:12)
+⚠️  Error stack: Error: address seems to be malformed: expected length 58, got 10: UNASSIGNED
+    at Address.fromString (/Users/danielpointon/easya/Easy-A-Hackathon/algokit/ch_ai_n/projects/ch_ai_n/node_modules/algosdk/src/encoding/address.ts:94:13)
+    at AppClient.getSender (/Users/danielpointon/easya/Easy-A-Hackathon/algokit/ch_ai_n/projects/ch_ai_n/node_modules/@algorandfoundation/src/types/app-client.ts:1526:49)
+    at AppClient.getABIParams (/Users/danielpointon/easya/Easy-A-Hackathon/algokit/ch_ai_n/projects/ch_ai_n/node_modules/@algorandfoundation/src/types/app-client.ts:1561:25)
+    at Object.call (/Users/danielpointon/easya/Easy-A-Hackathon/algokit/ch_ai_n/projects/ch_ai_n/node_modules/@algorandfoundation/src/types/app-client.ts:1341:28)
+    at Object.call (/Users/danielpointon/easya/Easy-A-Hackathon/algokit/ch_ai_n/projects/ch_ai_n/node_modules/@algorandfoundation/src/types/app-client.ts:1461:67)
+    at ChAiNClient.<anonymous> (/Users/danielpointon/easya/Easy-A-Hackathon/algokit/ch_ai_n/projects/ch_ai_n/artifacts/ch_ai_n/ChAiNClient.ts:712:48)
+    at Generator.next (<anonymous>)
+    at /Users/danielpointon/easya/Easy-A-Hackathon/algokit/ch_ai_n/projects/ch_ai_n/artifacts/ch_ai_n/ChAiNClient.ts:8:71
+    at new Promise (<anonymous>)
+    at __awaiter (/Users/danielpointon/easya/Easy-A-Hackathon/algokit/ch_ai_n/projects/ch_ai_n/artifacts/ch_ai_n/ChAiNClient.ts:4:12)
+📤 Sending decision to frontend: BUY - apple
+✅ Decision sent to frontend successfully
+🤖 Processing: Agent "agent-1760852875249-cmjsyy80n" considering item "apple" ($1)
+
+🤖 === Starting LLM Purchase Consideration ===
+Agent ID: undefined
+Item: apple ($1)
+Wallet Balance: 1000
+
+=== LLM API Call 1: Purchase Reasoning ===
+Endpoint: http://127.0.0.1:11434/v1
+Model: gemma3
+Prompt: You are an autonomous agent with the following goal: fruit.
+    You have already acquired the following items: .
+    Your current wallet balance is $1000.
+    You are considering purchasing a new item: apple for $1.
+
+    Think through whether you should purchase this item or ignore the offer.
+    Explain your reasoning process (in maximum 2 sentences) and come to a conclusion.
+Timestamp: 2025-10-19T05:49:08.053Z
+Reasoning: Considering my primary goal is to acquire fruit, a single apple at $1 represents a small, achievable step towards that goal.  Given my substantial wallet balance of $1000, purchasing the apple is a low-risk, efficient way to obtain a fruit, and I should proceed with the purchase.
+===================
+
+=== LLM API Call 2: Format Decision ===
+Endpoint: http://127.0.0.1:11434/v1
+Model: gemma3
+Prompt: Based on the following reasoning: "Considering my primary goal is to acquire fruit, a single apple at $1 represents a small, achievable step towards that goal.  Given my substantial wallet balance of $1000, purchasing the apple is a low-risk, efficient way to obtain a fruit, and I should proceed with the purchase."
+
+    Respond with exactly one word: either "BUY" if the decision is to purchase, or "IGNORE" if the decision is to not purchase.
+    Respond with only the word, nothing else.
+Timestamp: 2025-10-19T05:49:10.580Z
+Decision Response: BUY
+===================
+
+✅ Agent decided to BUY - Getting price limit...
+
+=== LLM API Call 3: Price Reasoning ===
+Endpoint: http://127.0.0.1:11434/v1
+Model: gemma3
+Prompt: You are an autonomous agent with the following goal: fruit.
+    You have already acquired the following items: .
+    Your current wallet balance is $1000.
+
+    The following item is for sale:
+    Item Name: apple
+
+    Think through what the maximum amount you are willing to pay for this item should be.
+    Explain your reasoning (in maximum two sentences) and come to a conclusion about the maximum price.
+Timestamp: 2025-10-19T05:49:11.037Z
+Price Reasoning: As an agent whose goal is to acquire fruit, an apple represents a direct step towards that goal. Considering my $1000 wallet balance, I’ll pay no more than $5 for an apple – it’s a relatively inexpensive and direct acquisition of a desirable item. 
+
+**Maximum Price: $5**
+===================
+
+=== LLM API Call 4: Format Price ===
+Endpoint: http://127.0.0.1:11434/v1
+Model: gemma3
+Prompt: Based on the following reasoning: "As an agent whose goal is to acquire fruit, an apple represents a direct step towards that goal. Considering my $1000 wallet balance, I’ll pay no more than $5 for an apple – it’s a relatively inexpensive and direct acquisition of a desirable item. 
+
+**Maximum Price: $5**"
+
+    Extract the maximum price amount as a single numerical value only.
+    Respond with just the number, no currency symbols or other text.
+Timestamp: 2025-10-19T05:49:13.573Z
+Price Response: 5
+===================
+
+Maximum price agent willing to pay: 5
+Registered purchase intent for wallet CD47674W5SPPTHLNAN64Z4Q3EJJLHOVGTEG7MKZX6M2KA4DBHYBS4D67G4 to buy item item-1760852912762-87gt7nuu6 at price $5
+Purchase intent registered with ID: 1760852954047
+=== Purchase Consideration Complete ===
+
+✅ Agent "agent-1760852875249-cmjsyy80n" wants to buy "apple"! Purchase Intent: 1760852954047
+🔍 DEBUG: Starting smart contract payment execution...
+💰 Processing payment on smart contract for agent "agent-1760852875249-cmjsyy80n"...
+   Item: apple, Price: 1, Seller: undefined
+   Agent wallet: CD47674W5SPPTHLNAN64Z4Q3EJJLHOVGTEG7MKZX6M2KA4DBHYBS4D67G4
+🔍 About to call processListingPayment with: sender=CD47674W5SPPTHLNAN64Z4Q3EJJLHOVGTEG7MKZX6M2KA4DBHYBS4D67G4, amount=1
+🔍 Using contract App ID: 1024
+🔍 Checking current listing status...
+Failed to get status from contract 1024: Error: No signer found for address CD47674W5SPPTHLNAN64Z4Q3EJJLHOVGTEG7MKZX6M2KA4DBHYBS4D67G4
+    at AccountManager.getSigner (/Users/danielpointon/easya/Easy-A-Hackathon/express-server/node_modules/@algorandfoundation/src/types/account-manager.ts:204:24)
+    at TransactionComposer.getSigner (/Users/danielpointon/easya/Easy-A-Hackathon/express-server/node_modules/@algorandfoundation/src/types/algorand-client.ts:237:59)
+    at TransactionComposer.buildMethodCall (/Users/danielpointon/easya/Easy-A-Hackathon/express-server/node_modules/@algorandfoundation/src/types/composer.ts:1642:18)
+    at TransactionComposer.buildTxnWithSigner (/Users/danielpointon/easya/Easy-A-Hackathon/express-server/node_modules/@algorandfoundation/src/types/composer.ts:1871:25)
+    at TransactionComposer.build (/Users/danielpointon/easya/Easy-A-Hackathon/express-server/node_modules/@algorandfoundation/src/types/composer.ts:1953:44)
+    at processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async TransactionComposer.send (/Users/danielpointon/easya/Easy-A-Hackathon/express-server/node_modules/@algorandfoundation/src/types/composer.ts:2000:20)
+    at async /Users/danielpointon/easya/Easy-A-Hackathon/express-server/node_modules/@algorandfoundation/src/types/algorand-client-transaction-sender.ts:86:25
+    at async AlgorandClientTransactionSender.appCallMethodCall (/Users/danielpointon/easya/Easy-A-Hackathon/express-server/node_modules/@algorandfoundation/src/types/algorand-client-transaction-sender.ts:121:22)
+    at async AppClient.processMethodCallReturn (/Users/danielpointon/easya/Easy-A-Hackathon/algokit/ch_ai_n/projects/ch_ai_n/node_modules/@algorandfoundation/src/types/app-client.ts:934:25)
+⚠️  Smart contract payment failed: Error: No signer found for address CD47674W5SPPTHLNAN64Z4Q3EJJLHOVGTEG7MKZX6M2KA4DBHYBS4D67G4
+    at AccountManager.getSigner (/Users/danielpointon/easya/Easy-A-Hackathon/express-server/node_modules/@algorandfoundation/src/types/account-manager.ts:204:24)
+    at TransactionComposer.getSigner (/Users/danielpointon/easya/Easy-A-Hackathon/express-server/node_modules/@algorandfoundation/src/types/algorand-client.ts:237:59)
+    at TransactionComposer.buildMethodCall (/Users/danielpointon/easya/Easy-A-Hackathon/express-server/node_modules/@algorandfoundation/src/types/composer.ts:1642:18)
+    at TransactionComposer.buildTxnWithSigner (/Users/danielpointon/easya/Easy-A-Hackathon/express-server/node_modules/@algorandfoundation/src/types/composer.ts:1871:25)
+    at TransactionComposer.build (/Users/danielpointon/easya/Easy-A-Hackathon/express-server/node_modules/@algorandfoundation/src/types/composer.ts:1953:44)
+    at processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async TransactionComposer.send (/Users/danielpointon/easya/Easy-A-Hackathon/express-server/node_modules/@algorandfoundation/src/types/composer.ts:2000:20)
+    at async /Users/danielpointon/easya/Easy-A-Hackathon/express-server/node_modules/@algorandfoundation/src/types/algorand-client-transaction-sender.ts:86:25
+    at async AlgorandClientTransactionSender.appCallMethodCall (/Users/danielpointon/easya/Easy-A-Hackathon/express-server/node_modules/@algorandfoundation/src/types/algorand-client-transaction-sender.ts:121:22)
+    at async AppClient.processMethodCallReturn (/Users/danielpointon/easya/Easy-A-Hackathon/algokit/ch_ai_n/projects/ch_ai_n/node_modules/@algorandfoundation/src/types/app-client.ts:934:25)
+⚠️  Error stack: Error: No signer found for address CD47674W5SPPTHLNAN64Z4Q3EJJLHOVGTEG7MKZX6M2KA4DBHYBS4D67G4
+    at AccountManager.getSigner (/Users/danielpointon/easya/Easy-A-Hackathon/express-server/node_modules/@algorandfoundation/src/types/account-manager.ts:204:24)
+    at TransactionComposer.getSigner (/Users/danielpointon/easya/Easy-A-Hackathon/express-server/node_modules/@algorandfoundation/src/types/algorand-client.ts:237:59)
+    at TransactionComposer.buildMethodCall (/Users/danielpointon/easya/Easy-A-Hackathon/express-server/node_modules/@algorandfoundation/src/types/composer.ts:1642:18)
+    at TransactionComposer.buildTxnWithSigner (/Users/danielpointon/easya/Easy-A-Hackathon/express-server/node_modules/@algorandfoundation/src/types/composer.ts:1871:25)
+    at TransactionComposer.build (/Users/danielpointon/easya/Easy-A-Hackathon/express-server/node_modules/@algorandfoundation/src/types/composer.ts:1953:44)
+    at processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async TransactionComposer.send (/Users/danielpointon/easya/Easy-A-Hackathon/express-server/node_modules/@algorandfoundation/src/types/composer.ts:2000:20)
+    at async /Users/danielpointon/easya/Easy-A-Hackathon/express-server/node_modules/@algorandfoundation/src/types/algorand-client-transaction-sender.ts:86:25
+    at async AlgorandClientTransactionSender.appCallMethodCall (/Users/danielpointon/easya/Easy-A-Hackathon/express-server/node_modules/@algorandfoundation/src/types/algorand-client-transaction-sender.ts:121:22)
+    at async AppClient.processMethodCallReturn (/Users/danielpointon/easya/Easy-A-Hackathon/algokit/ch_ai_n/projects/ch_ai_n/node_modules/@algorandfoundation/src/types/app-client.ts:934:25)
+📤 Sending decision to frontend: BUY - apple
+✅ Decision sent to frontend successfully
+✅ Finished processing item "apple" with all agents
+
+> express-server@1.0.0 start
+> ts-node src/index.ts
+
+✅ Algorand client initialized successfully
+🔄 Item Processor initialized
+📡 Frontend URL: http://localhost:3001
+🚀 Starting server...
+Server running at http://localhost:3000
+⏳ Smart contract will be deployed on first merchant listing creation
+Starting blockchain subscriber for wallet: DLGQ6LNZXWXE2BH34CEI3DRKYAXPFVPOOW6C3XKH7BU4DOIW7V7TAIMFDM
+Starting from round: 25
+Blockchain monitoring started
+
+> express-server@1.0.0 start
+> ts-node src/index.ts
+
+✅ Algorand client initialized successfully
+🔄 Item Processor initialized
+📡 Frontend URL: http://localhost:3001
+🚀 Starting server...
+Server running at http://localhost:3000
+⏳ Smart contract will be deployed on first merchant listing creation
+Starting blockchain subscriber for wallet: DLGQ6LNZXWXE2BH34CEI3DRKYAXPFVPOOW6C3XKH7BU4DOIW7V7TAIMFDM
+Starting from round: 0
+Blockchain monitoring started
+📡 POST /merchants/signup
+Sending 1000000000000 µALGO from CAJVAV5AMRNQ5JKMRRIRWO4LNKUI2KRDRACUVQH3OFGCKPLOJOAEAZYXFA to YU5L7N63MCJ2P37TZFV2EIBGFGCS7ZDJ254VJGAKBNN6447BWA4CLXAHPA via transaction WXWY7VBXQTM6ANM27FVBIT643YA3FM3ODHES6T3JS7HDCIKU3HIA
+Registered merchant: fhjfhjfhfhj - "fhjfhjfhfhj"
+Total merchants registered: 1
+Checking rounds 1 to 1
+Processing round 1 - mock implementation
+📡 POST /agents
+USER ID:
+agent-1760853065218-rmeymxq0f
+USER WALLET ID:
+YU5L7N63MCJ2P37TZFV2EIBGFGCS7ZDJ254VJGAKBNN6447BWA4CLXAHPA
+Initial wallet balance (microALGO): 10000000
+💰 Creating agent on blockchain with 10 ALGO...
+💳 Funding from user wallet: YU5L7N63MCJ2P37TZFV2EIBGFGCS7ZDJ254VJGAKBNN6447BWA4CLXAHPA
+Creating new agent wallet funded by DEPLOYER account...
+LocalNet account 'DEPLOYER' doesn't yet exist; created account X7JMCKPFBGPIC2Q7DSHDIPETKCY52VWLQP7NQPBSWA334OGKPRFPC23R74 with keys stored in KMD and funding with 1000 ALGO
+{
+  addr: Address {
+    publicKey: Uint8Array(32) [
+      197,  98, 225,  75, 232, 108, 201,
+      166, 222, 198,  59,  36, 249, 169,
+      243, 251, 245, 203, 157, 197, 163,
+        2, 165, 157, 173, 219, 126,  36,
+      228, 150, 178,  84
+    ]
+  },
+  sk: Uint8Array(64) [
+    249, 230,  11, 137, 178, 254,  72, 185, 148, 131,
+    149,   0, 101, 154, 107, 196, 147, 134, 204, 168,
+    111,  48,  96, 225, 151, 152, 141, 250, 175,  83,
+    101,  40, 197,  98, 225,  75, 232, 108, 201, 166,
+    222, 198,  59,  36, 249, 169, 243, 251, 245, 203,
+    157, 197, 163,   2, 165, 157, 173, 219, 126,  36,
+    228, 150, 178,  84
+  ]
+}
+New agent wallet created: YVROCS7INTE2NXWGHMSPTKPT7P24XHOFUMBKLHNN3N7CJZEWWJKABXH2IM
+Sending 10000000 µALGO from X7JMCKPFBGPIC2Q7DSHDIPETKCY52VWLQP7NQPBSWA334OGKPRFPC23R74 to YVROCS7INTE2NXWGHMSPTKPT7P24XHOFUMBKLHNN3N7CJZEWWJKABXH2IM via transaction YTMQU2OPLBTW6OEWHMLSYONT2NO4TOIOEKTEZBHQLQP7WMXQXEDA
+✅ Agent wallet funded and metadata posted to blockchain. TX: YTMQU2OPLBTW6OEWHMLSYONT2NO4TOIOEKTEZBHQLQP7WMXQXEDA
+✅ Agent wallet YVROCS7INTE2NXWGHMSPTKPT7P24XHOFUMBKLHNN3N7CJZEWWJKABXH2IM funded with 10 ALGO
+✅ Agent posted to blockchain! Transaction ID: YTMQU2OPLBTW6OEWHMLSYONT2NO4TOIOEKTEZBHQLQP7WMXQXEDA
+✅ Registered agent: agent-1760853065218-rmeymxq0f - "fruit" with 10 ALGO
+Checking rounds 2 to 3
+Processing round 2 - mock implementation
+Processing round 3 - mock implementation
+
+> express-server@1.0.0 start
+> ts-node src/index.ts
+
+✅ Algorand client initialized successfully
+🔄 Item Processor initialized
+📡 Frontend URL: http://localhost:3001
+🚀 Starting server...
+Server running at http://localhost:3000
+⏳ Smart contract will be deployed on first merchant listing creation
+Starting blockchain subscriber for wallet: DLGQ6LNZXWXE2BH34CEI3DRKYAXPFVPOOW6C3XKH7BU4DOIW7V7TAIMFDM
+Starting from round: 3
+Blockchain monitoring started
+📡 POST /agents
+USER ID:
+agent-1760853492914-483gk8106
+USER WALLET ID:
+YU5L7N63MCJ2P37TZFV2EIBGFGCS7ZDJ254VJGAKBNN6447BWA4CLXAHPA
+Initial wallet balance (microALGO): 10000
+💰 Creating agent on blockchain with 0.01 ALGO...
+💳 Funding from user wallet: YU5L7N63MCJ2P37TZFV2EIBGFGCS7ZDJ254VJGAKBNN6447BWA4CLXAHPA
+💳 Funding from user wallet: YU5L7N63MCJ2P37TZFV2EIBGFGCS7ZDJ254VJGAKBNN6447BWA4CLXAHPA
+{
+  addr: Address {
+    publicKey: Uint8Array(32) [
+      223, 165, 12, 147,  17, 197,  98,  75,
+      244, 174, 63, 183,  60,  70,  81,  40,
+        9, 229, 82, 188, 196, 137, 189, 117,
+      177, 214, 26,  65,  52, 243, 183,  71
+    ]
+  },
+  sk: Uint8Array(64) [
+     53, 120, 164,  86,  34, 168,  71,   2,  51, 238, 221,
+    246,  34,  48, 222,  21, 120,  23, 159,  90,  91,  52,
+    197, 199, 222, 203, 109, 177, 185,  17, 219,   5, 223,
+    165,  12, 147,  17, 197,  98,  75, 244, 174,  63, 183,
+     60,  70,  81,  40,   9, 229,  82, 188, 196, 137, 189,
+    117, 177, 214,  26,  65,  52, 243, 183,  71
+  ]
+}
+✅ New agent wallet created: 36SQZEYRYVREX5FOH63TYRSRFAE6KUV4YSE325NR2YNECNHTW5DRQTIXFQ
+Error registering agent: Error: No signer found for address YU5L7N63MCJ2P37TZFV2EIBGFGCS7ZDJ254VJGAKBNN6447BWA4CLXAHPA
+    at AccountManager.getSigner (/Users/danielpointon/easya/Easy-A-Hackathon/express-server/node_modules/@algorandfoundation/src/types/account-manager.ts:204:24)
+    at TransactionComposer.getSigner (/Users/danielpointon/easya/Easy-A-Hackathon/express-server/node_modules/@algorandfoundation/src/types/algorand-client.ts:237:59)
+    at TransactionComposer.buildTxnWithSigner (/Users/danielpointon/easya/Easy-A-Hackathon/express-server/node_modules/@algorandfoundation/src/types/composer.ts:1874:98)
+    at TransactionComposer.build (/Users/danielpointon/easya/Easy-A-Hackathon/express-server/node_modules/@algorandfoundation/src/types/composer.ts:1953:44)
+    at processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async AlgorandClientTransactionSender.payment (/Users/danielpointon/easya/Easy-A-Hackathon/express-server/node_modules/@algorandfoundation/src/types/algorand-client-transaction-sender.ts:82:30)
+Error checking for new transactions: TypeError: fetch failed
+    at node:internal/deps/undici/undici:15845:13
+    at processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async AlgoHttpClientWithRetry.get (/Users/danielpointon/easya/Easy-A-Hackathon/express-server/node_modules/algosdk/src/client/urlTokenBaseHTTPClient.ts:170:17)
+    at async AlgoHttpClientWithRetry.callWithRetry (/Users/danielpointon/easya/Easy-A-Hackathon/express-server/node_modules/@algorandfoundation/src/types/algo-http-client-with-retry.ts:30:20)
+    at async AlgoHttpClientWithRetry.get (/Users/danielpointon/easya/Easy-A-Hackathon/express-server/node_modules/@algorandfoundation/src/types/algo-http-client-with-retry.ts:58:22)
+    at async HTTPClient.get (/Users/danielpointon/easya/Easy-A-Hackathon/express-server/node_modules/algosdk/src/client/client.ts:289:19)
+    at async Status.do (/Users/danielpointon/easya/Easy-A-Hackathon/express-server/node_modules/algosdk/src/client/v2/jsonrequest.ts:65:17) {
+  [cause]: AggregateError
+      at internalConnectMultiple (node:net:1134:18)
+      at afterConnectMultiple (node:net:1715:7) {
+    code: 'ECONNREFUSED',
+    [errors]: [ [Error], [Error] ]
+  }
+}
+📡 POST /merchants/signup
+Sending 1000000000000 µALGO from GHKWL2MXYBJVGMLIKH6XY5YKFAREMPRUNVCXB7WRJBRGTCBUM4PEDRV7RQ to W224FIWWR2TBRVT2AUV5TQVKZA6M7U2VNHIZR5SBD2DCSCWXBKWXGACV7U via transaction QSGVRV6EXF4TVRKFGIDZCUAG56VZF2UV5OPYX5F5S7KM3GY7ZOTA
+Registered merchant: afdsf - "No description provided"
+Total merchants registered: 1
+📡 GET /agents/items
+📥 GET /agents/items
+📊 Returning 0 items
+📡 GET /agents/items
+📥 GET /agents/items
+📊 Returning 0 items
+
+> express-server@1.0.0 start
+> ts-node src/index.ts
+
+✅ Algorand client initialized successfully
+🔄 Item Processor initialized
+📡 Frontend URL: http://localhost:3001
+🚀 Starting server...
+Server running at http://localhost:3000
+⏳ Smart contract will be deployed on first merchant listing creation
+Starting blockchain subscriber for wallet: DLGQ6LNZXWXE2BH34CEI3DRKYAXPFVPOOW6C3XKH7BU4DOIW7V7TAIMFDM
+Starting from round: 1
+Blockchain monitoring started
+📡 GET /
+📡 POST /agents
+USER ID:
+agent-1760853657664-d1e3aphac
+USER WALLET ID:
+W224FIWWR2TBRVT2AUV5TQVKZA6M7U2VNHIZR5SBD2DCSCWXBKWXGACV7U
+Initial wallet balance (microALGO): 20000000
+💰 Creating agent on blockchain with 20 ALGO...
+💳 Funding from user wallet: W224FIWWR2TBRVT2AUV5TQVKZA6M7U2VNHIZR5SBD2DCSCWXBKWXGACV7U
+💳 Funding from user wallet: W224FIWWR2TBRVT2AUV5TQVKZA6M7U2VNHIZR5SBD2DCSCWXBKWXGACV7U
+{
+  addr: Address {
+    publicKey: Uint8Array(32) [
+       33,  27, 110, 199, 207, 102,  89, 127,
+      150, 163, 140, 140,  80, 177, 113,   2,
+      170, 151,   5,  93,  17, 243,  34, 198,
+      123,  74,  98, 148, 168,  70, 231, 206
+    ]
+  },
+  sk: Uint8Array(64) [
+    101,   7, 107, 179, 157, 201,  21,  70, 171, 199,  35,
+      5, 240,   3, 189,  39, 112, 106,  62, 245,  40, 170,
+     38, 151,  70, 173, 102,  82, 195, 179,  87, 184,  33,
+     27, 110, 199, 207, 102,  89, 127, 150, 163, 140, 140,
+     80, 177, 113,   2, 170, 151,   5,  93,  17, 243,  34,
+    198, 123,  74,  98, 148, 168,  70, 231, 206
+  ]
+}
+✅ New agent wallet created: EENW5R6PMZMX7FVDRSGFBMLRAKVJOBK5CHZSFRT3JJRJJKCG47HKXAOP7I
+Error registering agent: Error: No signer found for address W224FIWWR2TBRVT2AUV5TQVKZA6M7U2VNHIZR5SBD2DCSCWXBKWXGACV7U
+    at AccountManager.getSigner (/Users/danielpointon/easya/Easy-A-Hackathon/express-server/node_modules/@algorandfoundation/src/types/account-manager.ts:204:24)
+    at TransactionComposer.getSigner (/Users/danielpointon/easya/Easy-A-Hackathon/express-server/node_modules/@algorandfoundation/src/types/algorand-client.ts:237:59)
+    at TransactionComposer.buildTxnWithSigner (/Users/danielpointon/easya/Easy-A-Hackathon/express-server/node_modules/@algorandfoundation/src/types/composer.ts:1874:98)
+    at TransactionComposer.build (/Users/danielpointon/easya/Easy-A-Hackathon/express-server/node_modules/@algorandfoundation/src/types/composer.ts:1953:44)
+    at processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async AlgorandClientTransactionSender.payment (/Users/danielpointon/easya/Easy-A-Hackathon/express-server/node_modules/@algorandfoundation/src/types/algorand-client-transaction-sender.ts:82:30)

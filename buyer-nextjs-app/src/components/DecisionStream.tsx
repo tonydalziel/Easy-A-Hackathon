@@ -52,7 +52,7 @@ const formatDecisionAsTerminal = (decision: AgentDecision): string => {
   
   // Decision and metadata
   lines.push(`STATUS: ${decision.decision}`);
-  lines.push(`PRICE: $${decision.itemPrice}${decision.maxPrice ? ` | MAX: $${decision.maxPrice}` : ''}`);
+  lines.push(`PRICE: ${decision.itemPrice} ALGO${decision.maxPrice ? ` | MAX: ${decision.maxPrice} ALGO` : ''}`);
   lines.push(`AGENT: ${decision.agentId.slice(0, 24)}...`);
   
   lines.push('');

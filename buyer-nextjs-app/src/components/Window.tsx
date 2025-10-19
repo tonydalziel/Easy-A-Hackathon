@@ -20,19 +20,29 @@
 
 import { Rnd } from 'react-rnd';
 import { WindowData } from '@/types/window';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 interface WindowProps {
   window: WindowData;
   onClose: (id: string) => void;
   onFocus: (id: string) => void;
   onMinimize: (id: string) => void;
+  onPositionChange?: (id: string, x: number, y: number) => void;
   children: React.ReactNode;
 }
 
-export default function Window({ window, onClose, onFocus, onMinimize, children }: WindowProps) {
+export default function Window({ window, onClose, onFocus, onMinimize, onPositionChange, children }: WindowProps) {
   const [isResizing, setIsResizing] = useState(false);
   const [isDragging, setIsDragging] = useState(false);
+  const [isNewWindow, setIsNewWindow] = useState(true);
+
+  // Animate new window entrance
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setIsNewWindow(false);
+    }, 100);
+    return () => clearTimeout(timer);
+  }, []);
 
   // Don't render if minimized
   if (window.isMinimized) {
@@ -54,7 +64,12 @@ export default function Window({ window, onClose, onFocus, onMinimize, children 
       dragHandleClassName="window-header"
       onMouseDown={() => onFocus(window.id)}
       onDragStart={() => setIsDragging(true)}
-      onDragStop={() => setIsDragging(false)}
+      onDragStop={(e, d) => {
+        setIsDragging(false);
+        if (onPositionChange) {
+          onPositionChange(window.id, d.x, d.y);
+        }
+      }}
       onResizeStart={() => setIsResizing(true)}
       onResizeStop={() => setIsResizing(false)}
       enableResizing={{
@@ -95,10 +110,14 @@ export default function Window({ window, onClose, onFocus, onMinimize, children 
       <div 
         className={`
           glass rounded-xl shadow-2xl h-full flex flex-col overflow-hidden
-          transition-all duration-300
-          ${isDragging ? 'scale-105 shadow-cyan-500/20' : ''}
+          transition-all duration-500 ease-out
+          ${isNewWindow ? 'opacity-0 scale-95 translate-y-4' : 'opacity-100 scale-100 translate-y-0'}
+          ${isDragging ? 'scale-105 shadow-cyan-500/20 ring-2 ring-cyan-500/30' : ''}
           ${isResizing ? 'ring-2 ring-cyan-500/50' : ''}
         `}
+        style={{
+          transition: isDragging ? 'none' : 'transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.5s ease-out, box-shadow 0.3s ease'
+        }}
       >
         {/* Window Header */}
         <div className="window-header relative group">

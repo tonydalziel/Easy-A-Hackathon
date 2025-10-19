@@ -3,12 +3,13 @@
 export default function HelpWindow() {
   const commands = [
     { name: '-h', description: 'Display this help window' },
+    { name: 'lora', description: 'Gain blockchain insights using Lora!' },
     { name: 'wallet', description: 'Show your total wallet value' },
     { name: 'watch', description: 'Watch live agent decision stream in real-time' },
-    { name: 'track <agent-id>', description: 'Track a specific agent\'s activity and wallet value' },
-    { name: 'list', description: 'List all agents with their status, tasks, and purchases' },
     { name: 'events', description: 'Show all on-chain events across all agents' },
-    { name: 'create <prompt>', description: 'Create a new agent with the specified prompt' },
+    { name: 'list', description: 'List all agents with their status, tasks, and purchases' },
+    { name: 'track <agent-id>', description: 'Track a specific agent\'s activity and wallet value' },
+    { name: 'BUY -p <prompt> -v <value>', description: 'Create a new agent with specified prompt and budget value (in ALGO)' },
   ];
 
   return (

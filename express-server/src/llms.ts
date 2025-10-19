@@ -19,15 +19,15 @@ async function getLlmResponse<T>(prompt: string): Promise<T> {
     console.log('Model:', MODEL);
     console.log('Prompt:', prompt);
     console.log('Timestamp:', new Date().toISOString());
-    
+
     const response = await openai.chat.completions.create({
         model: MODEL,
         messages: [{ role: 'user', content: prompt }],
     });
-    
+
     console.log('Response:', response.choices[0].message.content);
     console.log('===================\n');
-    
+
     return response.choices[0].message.content as T;
 }
 
@@ -43,20 +43,20 @@ export const agentConsideringPurchaseReasoningPrompt = (agentState: AgentState, 
     You have already acquired the following items: ${agentState.currentItemsAcquired.join(', ')}.
     Your current wallet balance is $${walletBalance}.
     You are considering purchasing a new item: ${itemState.name} for $${itemState.price}.
-    
-    Think through whether you should purchase this item or ignore the offer. 
+
+    Think through whether you should purchase this item or ignore the offer.
     Explain your reasoning process (in maximum 2 sentences) and come to a conclusion.`;
-    
+
     return prompt;
 };
 
 // Step 2: Extract formatted decision from reasoning
 export const agentConsideringPurchaseFormatPrompt = (reasoning: string): string => {
     let prompt = `Based on the following reasoning: "${reasoning}"
-    
+
     Respond with exactly one word: either "BUY" if the decision is to purchase, or "IGNORE" if the decision is to not purchase.
     Respond with only the word, nothing else.`;
-    
+
     return prompt;
 };
 
@@ -64,12 +64,12 @@ export const agentConsideringPurchaseFormatPrompt = (reasoning: string): string 
 export const agentSpecifyingUpperBoundReasoningPrompt = (agentState: AgentState, itemState: ItemState, walletBalance: number): string => {
     let prompt = `You are an autonomous agent with the following goal: ${agentState.prompt}.
     You have already acquired the following items: ${agentState.currentItemsAcquired.join(', ')}.
-    Your current wallet balance is $${walletBalance}. 
-    
+    Your current wallet balance is $${walletBalance}.
+
     The following item is for sale:
     Item Name: ${itemState.name}
 
-    Think through what the maximum amount you are willing to pay for this item should be. 
+    Think through what the maximum amount you are willing to pay for this item should be.
     Explain your reasoning (in maximum two sentences) and come to a conclusion about the maximum price.`;
 
     return prompt;
@@ -78,10 +78,10 @@ export const agentSpecifyingUpperBoundReasoningPrompt = (agentState: AgentState,
 // Step 2: Extract formatted price from reasoning
 export const agentSpecifyingUpperBoundFormatPrompt = (reasoning: string): string => {
     let prompt = `Based on the following reasoning: "${reasoning}"
-    
-    Extract the maximum price amount as a single numerical value only. 
+
+    Extract the maximum price amount as a single numerical value only.
     Respond with just the number, no currency symbols or other text.`;
-    
+
     return prompt;
 }
 
@@ -89,13 +89,13 @@ export const haveLLMConsiderPurchase = async (agentState: AgentState, itemState:
     console.log('\n🤖 === Starting LLM Purchase Consideration ===');
     console.log('Agent ID:', agentState.id);
     console.log('Item:', itemState.name, '($' + itemState.price + ')');
-    
+
     let walletBalance: number = await getBalanceForWallet(agentState.wallet_id);
     console.log('Wallet Balance:', walletBalance);
 
     // Step 1: Get reasoning for purchase decision
     const reasoningPrompt = agentConsideringPurchaseReasoningPrompt(agentState, walletBalance, itemState);
-    
+
     console.log('\n=== LLM API Call 1: Purchase Reasoning ===');
     console.log('Endpoint:', BASE_URL);
     console.log('Model:', MODEL);
@@ -115,7 +115,7 @@ export const haveLLMConsiderPurchase = async (agentState: AgentState, itemState:
 
     // Step 2: Extract formatted decision
     const formatPrompt = agentConsideringPurchaseFormatPrompt(reasoning);
-    
+
     console.log('=== LLM API Call 2: Format Decision ===');
     console.log('Endpoint:', BASE_URL);
     console.log('Model:', MODEL);
@@ -136,47 +136,47 @@ export const haveLLMConsiderPurchase = async (agentState: AgentState, itemState:
     switch (decision) {
         case 'BUY':
             console.log('✅ Agent decided to BUY - Getting price limit...');
-            
+
             // Step 1: Get reasoning for price
             const priceReasoningPrompt = agentSpecifyingUpperBoundReasoningPrompt(agentState, itemState, walletBalance);
-            
+
             console.log('\n=== LLM API Call 3: Price Reasoning ===');
             console.log('Endpoint:', BASE_URL);
             console.log('Model:', MODEL);
             console.log('Prompt:', priceReasoningPrompt);
             console.log('Timestamp:', new Date().toISOString());
-            
+
             const priceReasoningResponse = await openai.chat.completions.create({
                 model: MODEL,
                 messages: [{ role: 'user', content: priceReasoningPrompt }],
                 max_tokens: 300,
                 temperature: 0.7,
             });
-            
+
             const priceReasoning = priceReasoningResponse.choices[0].message.content.trim();
             console.log('Price Reasoning:', priceReasoning);
             console.log('===================\n');
-            
+
             // Step 2: Extract formatted price
             const priceFormatPrompt = agentSpecifyingUpperBoundFormatPrompt(priceReasoning);
-            
+
             console.log('=== LLM API Call 4: Format Price ===');
             console.log('Endpoint:', BASE_URL);
             console.log('Model:', MODEL);
             console.log('Prompt:', priceFormatPrompt);
             console.log('Timestamp:', new Date().toISOString());
-            
+
             const priceFormatResponse = await openai.chat.completions.create({
                 model: MODEL,
                 messages: [{ role: 'user', content: priceFormatPrompt }],
                 max_tokens: 20,
                 temperature: 0.3,
             });
-            
+
             const priceString = priceFormatResponse.choices[0].message.content.trim();
             console.log('Price Response:', priceString);
             console.log('===================\n');
-            
+
             const price = parseFloat(priceString);
             console.log('Maximum price agent willing to pay:', price);
 

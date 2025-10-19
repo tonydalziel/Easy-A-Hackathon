@@ -52,12 +52,12 @@ export default function ItemRegistration() {
       setFormData({ name: '', description: '', price: '', sellerId: '' });
       fetchItems();
     } catch (error) {
-      console.error('❌ Failed to register item:', error);
+      console.error('❌ --- Failed to register item:', error);
       const errorMessage = error instanceof Error ? error.message : 'Unknown error';
       if (errorMessage.includes('fetch')) {
-        setMessage({ 
-          type: 'error', 
-          text: 'Failed to connect to server. Is the express-server running on port 3000?' 
+        setMessage({
+          type: 'error',
+          text: 'Failed to connect to server. Is the express-server running on port 3000?'
         });
       } else {
         setMessage({ type: 'error', text: `Failed to register item: ${errorMessage}` });
@@ -70,13 +70,13 @@ export default function ItemRegistration() {
       console.log('📡 Fetching items from http://localhost:3000/agents/items');
       const response = await fetch('http://localhost:3000/agents/items');
       console.log('📥 Fetch response status:', response.status, response.statusText);
-      
+
       if (!response.ok) {
         const errorText = await response.text();
         console.error('❌ Failed to fetch items:', errorText);
         throw new Error(`Failed to fetch items: ${response.status}`);
       }
-      
+
       const data = await response.json();
       console.log('✅ Fetched items:', data);
       setRegisteredItems(data.items || []);
@@ -87,7 +87,7 @@ export default function ItemRegistration() {
         console.error('💡 Server may not be running. Start with: cd express-server && npm start');
       }
     }
-  };    const handleDelete = async (itemId: string) => {
+  }; const handleDelete = async (itemId: string) => {
     try {
       console.log('🗑️ Deleting item:', itemId);
       const response = await fetch(`http://localhost:3000/agents/items/${itemId}`, {
@@ -182,10 +182,9 @@ export default function ItemRegistration() {
             {/* Price */}
             <div className="group">
               <label className="block text-sm font-semibold text-gray-300 mb-2">
-                Price ($) <span className="text-red-400">*</span>
+                Price (ALGO) <span className="text-red-400">*</span>
               </label>
               <div className="relative">
-                <span className="absolute left-4 top-1/2 -translate-y-1/2 text-green-400 font-bold">$</span>
                 <input
                   type="number"
                   step="0.01"
@@ -235,11 +234,10 @@ export default function ItemRegistration() {
 
           {/* Status Message */}
           {message && (
-            <div className={`mt-4 p-4 rounded-lg border ${
-              message.type === 'success' 
-                ? 'bg-green-500/10 border-green-500/30 text-green-400' 
-                : 'bg-red-500/10 border-red-500/30 text-red-400'
-            } animate-slideIn`}>
+            <div className={`mt-4 p-4 rounded-lg border ${message.type === 'success'
+              ? 'bg-green-500/10 border-green-500/30 text-green-400'
+              : 'bg-red-500/10 border-red-500/30 text-red-400'
+              } animate-slideIn`}>
               <p className="flex items-center gap-2">
                 <span>{message.type === 'success' ? '✅' : '❌'}</span>
                 {message.text}
