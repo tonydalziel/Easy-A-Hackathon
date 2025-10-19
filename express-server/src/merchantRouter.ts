@@ -129,4 +129,32 @@ router.get('/:username/wallet', (req: Request, res: Response) => {
     });
 });
 
+// Get merchant details by wallet address
+router.get('/by-wallet/:walletAddress', (req: Request, res: Response) => {
+    const { walletAddress } = req.params;
+    
+    // Search for merchant by wallet address
+    let foundMerchant: MerchantState | undefined;
+    for (const merchant of registeredMerchants.values()) {
+        if (merchant.wallet_address === walletAddress) {
+            foundMerchant = merchant;
+            break;
+        }
+    }
+    
+    if (!foundMerchant) {
+        return res.status(404).json({ error: 'Merchant not found with this wallet address' });
+    }
+    
+    res.json({
+        merchant: {
+            merchant_id: foundMerchant.merchant_id,
+            username: foundMerchant.username,
+            business_description: foundMerchant.business_description,
+            wallet_address: foundMerchant.wallet_address,
+            created_at: foundMerchant.created_at
+        }
+    });
+});
+
 export default router;
