@@ -14,6 +14,7 @@ export default function AgentTracker({ agentId, onNotFound }: AgentTrackerProps)
   const [decisions, setDecisions] = useState<AgentDecision[]>([]);
   const [streamStatus, setStreamStatus] = useState<'connecting' | 'connected' | 'disconnected'>('connecting');
   const [newDecisionId, setNewDecisionId] = useState<string | null>(null);
+  const [walletBalance, setWalletBalance] = useState<number>(0);
   const eventSourceRef = useRef<EventSource | null>(null);
   const decisionsEndRef = useRef<HTMLDivElement>(null);
 
@@ -23,6 +24,30 @@ export default function AgentTracker({ agentId, onNotFound }: AgentTrackerProps)
     const interval = setInterval(() => fetchAgentData(agentId), 5000);
     return () => clearInterval(interval);
   }, [agentId]);
+
+  // Poll wallet balance every 250ms
+  useEffect(() => {
+    const fetchWalletBalance = async () => {
+      if (!agentData?.wallet_id) return;
+
+      try {
+        const response = await fetch(`/api/wallet?id=${agentData.wallet_id}`);
+        if (response.ok) {
+          const data = await response.json();
+          setWalletBalance(data.currentValue || 0);
+        }
+      } catch (error) {
+        console.error('Failed to fetch wallet balance:', error);
+      }
+    };
+
+    // Fetch immediately
+    fetchWalletBalance();
+
+    // Poll every 250ms
+    const interval = setInterval(fetchWalletBalance, 250);
+    return () => clearInterval(interval);
+  }, [agentData?.wallet_id]);
 
   // Connect to decision stream
   useEffect(() => {
@@ -182,7 +207,21 @@ export default function AgentTracker({ agentId, onNotFound }: AgentTrackerProps)
 
           {/* Wallet Info */}
           <div className="bg-gray-900 rounded p-3">
-            <div className="text-sm text-gray-400 mb-2">Wallet ID</div>
+            <div className="flex justify-between items-start mb-2">
+              <div className="text-sm text-gray-400">Wallet ID</div>
+              <div className="text-right">
+                <div className="text-xs text-gray-400">Balance</div>
+                <div className="text-sm font-bold text-green-400">
+                  {(walletBalance / 1000000).toLocaleString(undefined, {
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 6
+                  })} ALGO
+                </div>
+                <div className="text-xs text-gray-500">
+                  {walletBalance.toLocaleString()} μALGO
+                </div>
+              </div>
+            </div>
             <div className="text-xs font-mono text-green-400 break-all">
               {agentData.wallet_id}
             </div>
