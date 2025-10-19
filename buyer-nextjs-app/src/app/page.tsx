@@ -45,8 +45,8 @@ import { EXPRESS_SERVER_URL } from './api/agents/create/route';
 export default function Home() {
   // Authentication state
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [user, setUser] = useState<{ 
-    username: string; 
+  const [user, setUser] = useState<{
+    username: string;
     walletId: string;
     privateKey?: string;
     merchantId?: string;
@@ -297,7 +297,7 @@ export default function Home() {
     } else if (cmd === 'wallet') {
       createWindow('wallet', 'Wallet Overview');
     } else if (cmd === 'watch') {
-      createWindow('decision-stream', '📡 Live Decision Stream');
+      createWindow('decision-stream', 'Live Decision Stream');
     } else if (cmd === 'track') {
       if (params.length === 0) {
         setError('Error: track command requires an agent ID. Usage: track <agent-id>');
@@ -310,11 +310,11 @@ export default function Home() {
     } else if (cmd === 'events') {
       createWindow('event-history', 'On-Chain Event History');
     } else if (cmd === 'dashboard') {
-      createWindow('dashboard', '📊 System Dashboard');
+      createWindow('dashboard', 'System Dashboard');
     } else if (cmd === 'items') {
       createWindow('item-registration', 'Item Marketplace');
     } else if (cmd === 'lora') {
-      createWindow('lora-explorer', '🔍 Lora Explorer');
+      createWindow('lora-explorer', 'Lora Explorer');
     } else if (cmd === 'create') {
       if (params.length === 0) {
         setError('Error: create command requires a prompt. Usage: create <prompt>');
@@ -343,7 +343,7 @@ export default function Home() {
       const response = await fetch('/api/agents/create', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ 
+        body: JSON.stringify({
           prompt,
           user_wallet_id: user.walletId // Pass user's wallet ID
         }),
@@ -476,8 +476,8 @@ export default function Home() {
     }
   };
 
-  const handleSignupSuccess = (userData: { 
-    username: string; 
+  const handleSignupSuccess = (userData: {
+    username: string;
     walletId: string;
     privateKey?: string;
     merchantId?: string;
