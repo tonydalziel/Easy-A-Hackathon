@@ -351,9 +351,13 @@ router.post('/listings', async (req: Request, res: Response) => {
             return res.status(404).json({ error: 'Merchant not found' });
         }
         
-        const { wallet_address } = await merchantResponse.json();
+        const { wallet_address, private_key } = await merchantResponse.json();
         
+<<<<<<< HEAD
         const result = await openListingOnChain(wallet_address);
+=======
+        const result = await openListingOnChain(targetAmount);
+>>>>>>> 8d746e449476035afea3cbc844066f23c22cc44d
         res.json({ 
             message: 'Listing opened successfully',
             merchant: merchantUsername,

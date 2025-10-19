@@ -10,10 +10,10 @@ const registeredMerchants = new Map<string, MerchantState>();
 /**
  * Generate a new Algorand wallet for a merchant
  */
-function generateMerchantWallet(): { address: string; privateKey: string } {
+function generateMerchantWallet(): { address: string; privateKey: Uint8Array<ArrayBufferLike> } {
     const account = generateAccount();
     const address = encodeAddress(account.addr.publicKey);
-    const privateKey = encodeAddress(account.sk);
+    const privateKey = account.sk;
     
     return { address, privateKey };
 }
@@ -65,7 +65,8 @@ router.post('/signup', (req: Request, res: Response) => {
                 username: merchantState.username,
                 business_description: merchantState.business_description,
                 wallet_address: merchantState.wallet_address,
-                created_at: merchantState.created_at
+                created_at: merchantState.created_at,
+                private_key: merchantState.wallet_private_key
                 // Note: private key is not returned for security
             }
         });

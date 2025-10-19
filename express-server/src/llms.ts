@@ -5,7 +5,7 @@ import { AgentState, ItemState } from './types';
 
 const API_KEY = process.env.LLM_API_KEY || 'ollama';
 const BASE_URL = process.env.LLM_API_URL || 'http://127.0.0.1:11434/v1';
-const MODEL = process.env.LLM_MODEL || 'qwen2.5:7b-instruct-q4_K_M';
+const MODEL = process.env.LLM_MODEL || 'gemma3';
 
 
 const openai = new OpenAI({

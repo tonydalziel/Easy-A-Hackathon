@@ -44,7 +44,13 @@ import { EXPRESS_SERVER_URL } from './api/agents/create/route';
 export default function Home() {
   // Authentication state
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [user, setUser] = useState<{ username: string; walletId: string } | null>(null);
+  const [user, setUser] = useState<{ 
+    username: string; 
+    walletId: string;
+    privateKey?: string;
+    merchantId?: string;
+    description?: string;
+  } | null>(null);
   const [isCheckingAuth, setIsCheckingAuth] = useState(true);
 
   const [command, setCommand] = useState('');
@@ -452,20 +458,33 @@ export default function Home() {
     }
   };
 
-  const handleSignupSuccess = (userData: { username: string; walletId: string }) => {
+  const handleSignupSuccess = (userData: { 
+    username: string; 
+    walletId: string;
+    privateKey?: string;
+    merchantId?: string;
+    description?: string;
+  }) => {
     setUser(userData);
     setIsAuthenticated(true);
-    setSuccess(`Welcome, ${userData.username}! Your wallet has been created.`);
-    setTimeout(() => setSuccess(''), 5000);
+    console.log('✅ User authenticated:', {
+      username: userData.username,
+      walletId: userData.walletId,
+      merchantId: userData.merchantId
+    });
+    setSuccess(`Welcome, ${userData.username}! Your Algorand wallet has been created: ${userData.walletId.substring(0, 20)}...`);
+    setTimeout(() => setSuccess(''), 7000);
   };
 
   const handleLogout = async () => {
     try {
       await fetch('/api/auth/signup', { method: 'DELETE' });
       localStorage.removeItem('user');
+      localStorage.removeItem('wallet_private_key');
       setUser(null);
       setIsAuthenticated(false);
       setWindows([]);
+      console.log('👋 User logged out');
     } catch (error) {
       console.error('Logout failed:', error);
     }
