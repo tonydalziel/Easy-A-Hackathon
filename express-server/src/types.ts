@@ -14,3 +14,12 @@ export type ItemState = {
     name: string;
     price: number;
 }
+
+export type MerchantState = {
+    merchant_id: string;
+    username: string;
+    business_description: string;
+    wallet_address: string;
+    wallet_private_key: string;
+    created_at: number;
+}
