@@ -10,10 +10,14 @@ const DEFAULT_PROVIDER_ID = process.env.DEFAULT_PROVIDER_ID || 'ollama';
 export async function POST(request: Request) {
   try {
     const body = await request.json();
-    const { prompt, model_id, provider_id } = body;
+    const { prompt, model_id, provider_id, user_wallet_id } = body;
 
     if (!prompt) {
       return NextResponse.json({ error: 'Prompt required' }, { status: 400 });
+    }
+
+    if (!user_wallet_id) {
+      return NextResponse.json({ error: 'User wallet ID required' }, { status: 400 });
     }
 
     // Generate agent ID
@@ -59,6 +63,7 @@ export async function POST(request: Request) {
           model_id: agent.model_id,
           prompt: agent.prompt,
           user_id: agent.id, // Pass agent ID as user_id
+          user_wallet_id: user_wallet_id, // Pass user's wallet ID for blockchain funding
           walletBalance: initialWalletBalance // Fund with 1000 ALGO
         })
       });

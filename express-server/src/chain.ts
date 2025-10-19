@@ -66,7 +66,7 @@ export async function transferIntoWallet(wallet_id: string, sender_addr: string,
     const merchantData = await merchantResponse.json();
     const { wallet_address, wallet_private_key: private_key } = merchantData.merchant;
 
-    const senderMnemonic = algosdk.secretKeyToMnemonic(private_key);
+    const senderMnemonic = private_key;
 
     console.log(senderMnemonic);
     // Create account from mnemonic to sign the transaction
@@ -97,12 +97,15 @@ export async function postAgentToChain(sender: string, provider_id: string, mode
     let merchantResponse = await fetch(`http://localhost:3000/merchants/by-wallet/${sender}`);
 
     if (!merchantResponse.ok) {
+        console.error(`Failed to fetch merchant wallet information for sender: ${sender}`);
+        console.error('Response status:', merchantResponse.status);
+        console.error('Response body:', await merchantResponse.text());
         throw new Error('Failed to fetch merchant wallet information');
     }
     const merchantData = await merchantResponse.json();
     const { wallet_private_key: private_key } = merchantData.merchant;
 
-    const senderMnemonic = algosdk.secretKeyToMnemonic(private_key);
+    const senderMnemonic = private_key;
 
     // Create account from mnemonic to sign transactions
     const senderAccount = algorand.account.fromMnemonic(senderMnemonic);

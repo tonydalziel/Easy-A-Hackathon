@@ -172,7 +172,7 @@ router.get('/', (req: Request, res: Response) => {
 // Create/Register a new agent
 router.post('/', async (req: Request, res: Response) => {
     try {
-        const { provider_id, model_id, prompt, user_id, walletBalance } = req.body;
+        const { provider_id, model_id, prompt, user_id, user_wallet_id, walletBalance } = req.body;
 
         // Validate required fields
         if (!provider_id || !model_id || !prompt || !user_id) {
@@ -181,6 +181,17 @@ router.post('/', async (req: Request, res: Response) => {
             });
         }
 
+        if (!user_wallet_id) {
+            return res.status(400).json({
+                error: 'Missing required field: user_wallet_id (user must be authenticated)'
+            });
+        }
+
+        console.log('USER ID:');
+        console.log(user_id);
+        console.log('USER WALLET ID:');
+        console.log(user_wallet_id);
+        
         // Check if agent already exists
         if (registeredAgents.has(user_id)) {
             return res.status(409).json({
@@ -192,17 +203,15 @@ router.post('/', async (req: Request, res: Response) => {
         // Default wallet balance: 1000 ALGO (in microALGO)
         const initialBalance = walletBalance || 1000000000; // 1000 ALGO = 1,000,000,000 microALGO
 
-        // Hardcoded master wallet address (the DISPENSER account with funds)
-        const masterWalletAddress = process.env.SENDER_ADDR || 'VQKN6Y336A26P4EUGNLKW2KO7WF5K7OO3DODUCSSYFCXF35JBSJ6EHMSMU';
-
         let blockchainAgentId: string | null = null;
         let wallet_id = `wallet-${Date.now()}`;
 
         // Post agent to blockchain with funding
         try {
             console.log(`💰 Creating agent on blockchain with ${initialBalance / 1000000} ALGO...`);
+            console.log(`💳 Funding from user wallet: ${user_wallet_id}`);
             blockchainAgentId = await postAgentToChain(
-                masterWalletAddress,
+                user_wallet_id, // Use authenticated user's wallet instead of hardcoded SENDER_ADDR
                 provider_id,
                 model_id,
                 prompt,

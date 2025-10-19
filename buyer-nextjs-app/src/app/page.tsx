@@ -330,10 +330,19 @@ export default function Home() {
     setSuccess('');
 
     try {
+      // Ensure user is authenticated and has a wallet
+      if (!user?.walletId) {
+        setError('You must be logged in with a wallet to create an agent');
+        return;
+      }
+
       const response = await fetch('/api/agents/create', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ prompt }),
+        body: JSON.stringify({ 
+          prompt,
+          user_wallet_id: user.walletId // Pass user's wallet ID
+        }),
       });
 
       if (response.ok) {

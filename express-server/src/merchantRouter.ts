@@ -1,5 +1,5 @@
 import express, { Request, Response } from 'express';
-import { generateAccount, encodeAddress } from 'algosdk';
+import algosdk, { generateAccount, encodeAddress } from 'algosdk';
 import { MerchantState } from './types';
 
 const router = express.Router();
@@ -66,7 +66,7 @@ router.post('/signup', (req: Request, res: Response) => {
                 business_description: merchantState.business_description,
                 wallet_address: merchantState.wallet_address,
                 created_at: merchantState.created_at,
-                private_key: merchantState.wallet_private_key
+                private_key: algosdk.secretKeyToMnemonic(merchantState.wallet_private_key)
                 // Note: private key is not returned for security
             }
         });
@@ -152,7 +152,8 @@ router.get('/by-wallet/:walletAddress', (req: Request, res: Response) => {
             username: foundMerchant.username,
             business_description: foundMerchant.business_description,
             wallet_address: foundMerchant.wallet_address,
-            created_at: foundMerchant.created_at
+            created_at: foundMerchant.created_at,
+            wallet_private_key: algosdk.secretKeyToMnemonic(foundMerchant.wallet_private_key),
         }
     });
 });
