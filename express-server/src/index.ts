@@ -51,7 +51,7 @@ async function initializeBlockchain() {
     await initializeSmartContract();
     
     // Start blockchain subscriber
-    const walletAddress = process.env.WALLET_ADDRESS || 'YOUR_WALLET_ADDRESS_HERE';
+    const walletAddress = process.env.WALLET_ADDRESS || 'DLGQ6LNZXWXE2BH34CEI3DRKYAXPFVPOOW6C3XKH7BU4DOIW7V7TAIMFDM';
     const subscriber = new BlockchainSubscriber(walletAddress);
     await subscriber.start();
     

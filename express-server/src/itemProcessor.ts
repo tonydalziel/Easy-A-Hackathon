@@ -5,7 +5,7 @@ import { AgentState, ItemState } from './types';
 import { haveLLMConsiderPurchase } from './llms';
 
 // Configuration
-const FRONTEND_URL = process.env.FRONTEND_URL || 'http://localhost:3001';
+const FRONTEND_URL = process.env.FRONTEND_URL || 'http://localhost:3000';
 
 export class ItemProcessor {
     private processing = false;

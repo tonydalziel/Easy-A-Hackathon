@@ -363,7 +363,7 @@ export default function Home() {
 
     if (type === 'help') {
       width = 400;
-      height = 300;
+      height = 500;
       // Position help window on the right side to avoid terminal dropdown
       x = window.innerWidth - width - 40;
       y = 20;
@@ -549,9 +549,22 @@ export default function Home() {
                     <span className="text-sm font-medium text-white">
                       {user.username}
                     </span>
-                    <span className="text-xs text-gray-400 font-mono">
-                      {user.walletId.substring(0, 20)}...
-                    </span>
+                    <div className="flex items-center gap-2">
+                      <span className="text-xs text-gray-400 font-mono">
+                        {user.walletId.substring(0, 20)}...
+                      </span>
+                      <a
+                        href={`https://lora.algokit.io/localnet/account/${user.walletId}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-gray-400 hover:text-gray-300 transition-colors"
+                        title="View on Lora Explorer"
+                      >
+                        <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                        </svg>
+                      </a>
+                    </div>
                   </div>
                   <button
                     onClick={handleLogout}

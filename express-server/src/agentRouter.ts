@@ -353,7 +353,7 @@ router.post('/listings', async (req: Request, res: Response) => {
         
         const { wallet_address } = await merchantResponse.json();
         
-        const result = await openListingOnChain(wallet_address, targetAmount);
+        const result = await openListingOnChain(wallet_address);
         res.json({ 
             message: 'Listing opened successfully',
             merchant: merchantUsername,

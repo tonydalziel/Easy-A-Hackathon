@@ -27,7 +27,7 @@ export default function WalletWindow({ address, balance }: WalletWindowProps) {
 
   const fetchWalletData = async () => {
     try {
-      if (!address || address === 'REPLACE_WITH_YOUR_WALLET_ADDRESS') {
+      if (!address || address === 'DLGQ6LNZXWXE2BH34CEI3DRKYAXPFVPOOW6C3XKH7BU4DOIW7V7TAIMFDM') {
         console.log('No valid wallet address configured');
         return;
       }
@@ -52,8 +52,19 @@ export default function WalletWindow({ address, balance }: WalletWindowProps) {
     <div className="text-white font-mono">
       <div className="mb-6">
         <div className="text-gray-400 text-sm mb-2">Wallet Address</div>
-        <div className="text-xs text-cyan-400 bg-gray-800/50 p-2 rounded mb-4 break-all">
-          {address}
+        <div className="text-xs text-cyan-400 bg-gray-800/50 p-2 rounded mb-4 break-all flex items-center justify-between gap-2">
+          <span>{address}</span>
+          <a
+            href={`https://lora.algokit.io/localnet/account/${address}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex-shrink-0 text-cyan-400 hover:text-cyan-300 transition-colors"
+            title="View on Lora Explorer"
+          >
+            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+            </svg>
+          </a>
         </div>
         <div className="text-gray-400 text-sm mb-1">Total Balance</div>
         <div className="text-3xl font-bold text-green-400">
