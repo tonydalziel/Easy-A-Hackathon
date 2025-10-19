@@ -1,37 +1,34 @@
 import { Contract, GlobalState } from '@algorandfoundation/algorand-typescript'
 
 export class ChAiN extends Contract {
+  // Fixed merchant wallet address
+  private readonly MERCHANT_WALLET = 'MERCHANT_WALLET_ADDRESS_HERE'
+  
   // Global state for listing management
   private listingOpen = GlobalState<boolean>({ key: 'listingOpen' })
-  private targetWallet = GlobalState<string>({ key: 'targetWallet' })
   private targetAmount = GlobalState<string>({ key: 'targetAmount' })
   private receivedAmount = GlobalState<string>({ key: 'receivedAmount' })
 
   /**
-   * Opens a new listing with target wallet and amount
+   * Opens a new listing with target amount (merchant wallet is fixed)
    */
-  public openListing(targetWallet: string, targetAmount: string): string {
+  public openListing(targetAmount: string): string {
     // Check if a listing is already open
     if (this.listingOpen.hasValue && this.listingOpen.value) {
       return "Error: A listing is already open. Close it first."
     }
 
     // Validate inputs
-    if (!targetWallet) {
-      return "Error: Target wallet cannot be empty"
-    }
-
     if (!targetAmount || targetAmount === "0") {
       return "Error: Target amount must be greater than 0"
     }
 
     // Open the listing
     this.listingOpen.value = true
-    this.targetWallet.value = targetWallet
     this.targetAmount.value = targetAmount
     this.receivedAmount.value = "0"
 
-    return `Listing opened: ${targetAmount} microAlgos to ${targetWallet}`
+    return `Listing opened: ${targetAmount} microAlgos to ${this.MERCHANT_WALLET}`
   }
 
   /**
@@ -52,9 +49,9 @@ export class ChAiN extends Contract {
       return "Error: Amount must be greater than 0"
     }
 
-    // Check if payment is to the target wallet
-    if (sender !== this.targetWallet.value) {
-      return `Payment from ${sender} not to target wallet ${this.targetWallet.value}. Listing remains open.`
+    // Check if payment is to the merchant wallet
+    if (sender !== this.MERCHANT_WALLET) {
+      return `Payment from ${sender} not to merchant wallet ${this.MERCHANT_WALLET}. Listing remains open.`
     }
 
     // Add to received amount (simplified for now)
@@ -77,7 +74,7 @@ export class ChAiN extends Contract {
       return "No listing is currently open"
     }
 
-    return `Listing open: ${this.receivedAmount.value}/${this.targetAmount.value} microAlgos to ${this.targetWallet.value}`
+    return `Listing open: ${this.receivedAmount.value}/${this.targetAmount.value} microAlgos to ${this.MERCHANT_WALLET}`
   }
 
   /**
@@ -100,6 +97,6 @@ export class ChAiN extends Contract {
       return "No active listing"
     }
 
-    return `Target: ${this.targetAmount.value} microAlgos to ${this.targetWallet.value}, Received: ${this.receivedAmount.value} microAlgos`
+    return `Target: ${this.targetAmount.value} microAlgos to ${this.MERCHANT_WALLET}, Received: ${this.receivedAmount.value} microAlgos`
   }
 }

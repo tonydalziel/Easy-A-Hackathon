@@ -234,13 +234,13 @@ export async function initializeSmartContract() {
 /**
  * Open a listing on the smart contract
  */
-export async function openListingOnChain(targetWallet: string, targetAmount: number): Promise<string> {
+export async function openListingOnChain(targetAmount: number): Promise<string> {
     if (!appClient) {
         await initializeSmartContract();
     }
     
     const response = await appClient.send.openListing({
-        args: { targetWallet, targetAmount }
+        args: { targetAmount }
     });
     
     console.log('Listing opened on chain:', response.return);
