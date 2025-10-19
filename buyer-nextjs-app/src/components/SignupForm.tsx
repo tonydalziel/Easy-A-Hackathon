@@ -3,7 +3,13 @@
 import { useState } from 'react';
 
 interface SignupFormProps {
-  onSignupSuccess: (userData: { username: string; walletId: string }) => void;
+  onSignupSuccess: (userData: { 
+    username: string; 
+    walletId: string;
+    privateKey?: string;
+    merchantId?: string;
+    description?: string;
+  }) => void;
 }
 
 export default function SignupForm({ onSignupSuccess }: SignupFormProps) {
@@ -36,9 +42,16 @@ export default function SignupForm({ onSignupSuccess }: SignupFormProps) {
       }
 
       console.log('✅ Signup successful:', data.user);
+      console.log('🔐 Wallet Address:', data.user.walletId);
       
-      // Store in localStorage as well for client-side access
+      // Store full user data in localStorage (including private key for wallet access)
       localStorage.setItem('user', JSON.stringify(data.user));
+      
+      // Store private key separately for security
+      if (data.user.privateKey) {
+        localStorage.setItem('wallet_private_key', data.user.privateKey);
+        console.log('🔑 Private key stored securely in localStorage');
+      }
       
       onSignupSuccess(data.user);
     } catch (error) {

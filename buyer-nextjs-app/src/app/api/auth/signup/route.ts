@@ -1,14 +1,7 @@
 import { NextResponse } from 'next/server';
 import { cookies } from 'next/headers';
 
-// Placeholder wallet generation function
-// TODO: Replace with actual Algorand wallet generation
-function generateWalletId(username: string): string {
-  // Generate a unique wallet ID (placeholder)
-  const timestamp = Date.now();
-  const random = Math.random().toString(36).substring(2, 15);
-  return `wallet-${username}-${timestamp}-${random}`;
-}
+const EXPRESS_SERVER_URL = process.env.EXPRESS_SERVER_URL || 'http://localhost:3000';
 
 export async function POST(request: Request) {
   try {
@@ -37,17 +30,36 @@ export async function POST(request: Request) {
       );
     }
 
-    // Generate wallet ID
-    const walletId = generateWalletId(username);
-    
-    console.log(`✅ Created user: ${username} with wallet: ${walletId}`);
+    // Call express server to create merchant account with real Algorand wallet
+    console.log(`📡 Calling express server to create merchant: ${username}`);
+    const merchantResponse = await fetch(`${EXPRESS_SERVER_URL}/merchants/signup`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        username: username.trim(),
+        business_description: description || 'No description provided'
+      })
+    });
 
-    // Create user data
+    if (!merchantResponse.ok) {
+      const errorData = await merchantResponse.json();
+      console.error('❌ Express server error:', errorData);
+      throw new Error(errorData.error || 'Failed to create merchant account');
+    }
+
+    const merchantData = await merchantResponse.json();
+    console.log('✅ Merchant created on express server:', merchantData.merchant.username);
+
+    // Create user data for frontend
     const userData = {
-      username,
-      walletId,
-      description: description || '',
-      createdAt: Date.now()
+      username: merchantData.merchant.username,
+      walletId: merchantData.merchant.wallet_address,
+      privateKey: merchantData.merchant.private_key,
+      merchantId: merchantData.merchant.merchant_id,
+      description: merchantData.merchant.business_description,
+      createdAt: merchantData.merchant.created_at
     };
 
     // Set cookie (expires in 30 days)
@@ -67,9 +79,10 @@ export async function POST(request: Request) {
     });
 
   } catch (error) {
-    console.error('Error creating user:', error);
+    console.error('❌ Error creating user:', error);
+    const errorMessage = error instanceof Error ? error.message : 'Failed to create user';
     return NextResponse.json(
-      { error: 'Failed to create user' },
+      { error: errorMessage },
       { status: 500 }
     );
   }

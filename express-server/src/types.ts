@@ -9,7 +9,7 @@ export type AgentState = {
     provider_id: string;
     wallet_id: string;
     wallet_pwd: string;
-    walletBalance: number;
+    walletBalance: number
 }
 
 export type ItemState = {
@@ -23,6 +23,6 @@ export type MerchantState = {
     username: string;
     business_description: string;
     wallet_address: string;
-    wallet_private_key: string;
+    wallet_private_key: Uint8Array<ArrayBufferLike>;
     created_at: number;
 }
