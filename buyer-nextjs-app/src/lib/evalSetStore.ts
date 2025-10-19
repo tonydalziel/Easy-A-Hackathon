@@ -20,11 +20,13 @@ export class EvalSetStore {
     return sets.find(set => set.id === id) || null;
   }
 
-  createEvalSet(name: string, description?: string, tags?: string[]): EvalSet {
+  createEvalSet(name: string, agentId: string, agentPrompt: string, description?: string, tags?: string[]): EvalSet {
     const newSet: EvalSet = {
       id: `eval-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
       name,
       description,
+      agentId,
+      agentPrompt,
       decisions: [],
       createdAt: Date.now(),
       updatedAt: Date.now(),
@@ -118,6 +120,11 @@ export class EvalSetStore {
   private saveEvalSets(sets: EvalSet[]): void {
     if (typeof window === 'undefined') return;
     localStorage.setItem(EVAL_SETS_KEY, JSON.stringify(sets));
+  }
+
+  getEvalSetsByAgent(agentId: string): EvalSet[] {
+    const sets = this.getAllEvalSets();
+    return sets.filter(set => set.agentId === agentId);
   }
 
   // ========== Eval Results ==========

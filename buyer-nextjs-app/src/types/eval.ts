@@ -12,6 +12,8 @@ export type EvalSet = {
   id: string;
   name: string;
   description?: string;
+  agentId: string; // ID of the agent this eval set is for
+  agentPrompt: string; // Snapshot of the agent's prompt when eval set was created
   decisions: LabeledDecision[];
   createdAt: number;
   updatedAt: number;

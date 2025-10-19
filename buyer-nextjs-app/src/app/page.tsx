@@ -484,7 +484,7 @@ export default function Home() {
         return (
           <EvalSetManager
             onRunEval={(evalSetId) => {
-              createWindow('eval-runner', 'Run Evaluation', evalSetId);
+              createWindow('eval-runner', 'Run Evaluation', undefined, evalSetId);
             }}
             onClose={() => closeWindow(window.id)}
           />

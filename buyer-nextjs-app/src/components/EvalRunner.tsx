@@ -24,11 +24,22 @@ export default function EvalRunner({ evalSetId, onClose, onComplete }: EvalRunne
     const set = evalSetStore.getEvalSet(evalSetId);
     setEvalSet(set);
 
-    const allAgents = agentStore.getAllAgents();
-    setAgents(allAgents);
-    
-    if (allAgents.length > 0) {
-      setSelectedAgentId(allAgents[0].id);
+    if (set) {
+      // Get the agent this eval set was created for
+      const evalAgent = agentStore.getAgent(set.agentId);
+      
+      if (evalAgent) {
+        // Default to the eval set's agent
+        setSelectedAgentId(evalAgent.id);
+        setAgents([evalAgent]);
+      } else {
+        // Fallback: get all agents if original agent not found
+        const allAgents = agentStore.getAllAgents();
+        setAgents(allAgents);
+        if (allAgents.length > 0) {
+          setSelectedAgentId(allAgents[0].id);
+        }
+      }
     }
   }, [evalSetId]);
 
@@ -124,54 +135,55 @@ export default function EvalRunner({ evalSetId, onClose, onComplete }: EvalRunne
   // Simulate agent decision - replace with actual LLM call
   const simulateAgentDecision = async (agent: Agent, itemName: string, itemPrice: number): Promise<'BUY' | 'IGNORE'> => {
     // In production, this would call your agent decision API
-    // For now, we'll make a simple simulation based on the agent's prompt
+    // For now, we'll use a mock that's somewhat consistent with the agent's prompt
     
-    try {
-      const response = await fetch(`${process.env.EXPRESS_SERVER_URL || 'http://localhost:3000'}/agents/consider-purchase`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          agentState: {
-            agent_id: agent.id,
-            prompt: agent.prompt,
-            model_id: agent.model_id,
-            provider_id: agent.provider_id,
-            wallet_id: agent.wallet_id,
-            wallet_pwd: agent.wallet_pwd,
-            currentItemsAcquired: agent.currentItemsAcquired
-          },
-          itemState: {
-            id: `eval-item-${Date.now()}`,
-            name: itemName,
-            price: itemPrice
-          }
-        })
-      });
-
-      if (response.ok) {
-        const data = await response.json();
-        return data.decision === 'BUY' ? 'BUY' : 'IGNORE';
-      }
-    } catch (err) {
-      console.error('Error calling agent API:', err);
-    }
-
-    // Fallback simulation
     const prompt = agent.prompt.toLowerCase();
     const item = itemName.toLowerCase();
     
-    // Simple keyword matching
-    if (prompt.includes(item) || item.split(' ').some(word => prompt.includes(word))) {
-      // Check if price is mentioned in prompt
-      const priceMatch = prompt.match(/under\s+\$?(\d+)/i);
-      if (priceMatch) {
-        const maxPrice = parseInt(priceMatch[1]);
-        return itemPrice <= maxPrice ? 'BUY' : 'IGNORE';
-      }
-      return 'BUY';
+    // Extract keywords from prompt
+    const keywords = prompt.split(/\s+/).filter(word => word.length > 3);
+    
+    // Check if item matches any keywords
+    const itemWords = item.split(/\s+/);
+    const hasKeywordMatch = keywords.some(keyword => 
+      itemWords.some(word => word.includes(keyword) || keyword.includes(word))
+    );
+    
+    // Extract price threshold if mentioned
+    let maxPrice: number | null = null;
+    const priceMatch = prompt.match(/under\s+\$?(\d+)|less\s+than\s+\$?(\d+)|below\s+\$?(\d+)|max\s+\$?(\d+)|maximum\s+\$?(\d+)/i);
+    if (priceMatch) {
+      maxPrice = parseInt(priceMatch[1] || priceMatch[2] || priceMatch[3] || priceMatch[4] || priceMatch[5]);
     }
     
-    return 'IGNORE';
+    // Decision logic with some randomness
+    const randomFactor = Math.random();
+    
+    if (hasKeywordMatch) {
+      // Item matches agent's interests
+      if (maxPrice !== null) {
+        // Has price constraint
+        if (itemPrice <= maxPrice) {
+          // Good price - high chance of buying
+          return randomFactor > 0.15 ? 'BUY' : 'IGNORE'; // 85% buy
+        } else {
+          // Too expensive - low chance of buying
+          return randomFactor > 0.8 ? 'BUY' : 'IGNORE'; // 20% buy
+        }
+      } else {
+        // No price constraint, moderate chance
+        return randomFactor > 0.3 ? 'BUY' : 'IGNORE'; // 70% buy
+      }
+    } else {
+      // Item doesn't match interests
+      if (maxPrice !== null && itemPrice <= maxPrice) {
+        // Cheap but not interested - very low chance
+        return randomFactor > 0.9 ? 'BUY' : 'IGNORE'; // 10% buy
+      } else {
+        // Not interested - very low chance
+        return randomFactor > 0.95 ? 'BUY' : 'IGNORE'; // 5% buy
+      }
+    }
   };
 
   if (!evalSet) {
@@ -233,10 +245,21 @@ export default function EvalRunner({ evalSetId, onClose, onComplete }: EvalRunne
 
               {selectedAgentId && (
                 <div className="mt-4 p-4 bg-purple-500/10 border border-purple-500/30 rounded-lg">
-                  <p className="text-sm text-gray-300">
-                    <span className="font-semibold text-purple-400">Prompt:</span>{' '}
+                  <p className="text-sm text-purple-400 font-semibold mb-2">Current Agent Prompt:</p>
+                  <p className="text-sm text-gray-300 mb-3">
                     {agents.find(a => a.id === selectedAgentId)?.prompt}
                   </p>
+                  {evalSet && agents.find(a => a.id === selectedAgentId)?.prompt !== evalSet.agentPrompt && (
+                    <div className="mt-3 pt-3 border-t border-purple-500/30">
+                      <p className="text-sm text-yellow-400 font-semibold mb-2">⚠️ Original Prompt (when eval set created):</p>
+                      <p className="text-sm text-gray-400 italic">
+                        {evalSet.agentPrompt}
+                      </p>
+                      <p className="text-xs text-yellow-300 mt-2">
+                        💡 The agent's prompt has changed. This test will use the current prompt.
+                      </p>
+                    </div>
+                  )}
                 </div>
               )}
             </div>

@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { AgentDecision } from '@/types/agent';
 import { LabeledDecision } from '@/types/eval';
 import { evalSetStore } from '@/lib/evalSetStore';
+import { agentStore } from '@/lib/agentStore';
 
 type DecisionReviewProps = {
   agentId?: string; // Optional filter by agent
@@ -104,9 +105,21 @@ export default function DecisionReview({ agentId, onClose }: DecisionReviewProps
       };
     });
 
+    // Get agent info - use first decision's agentId or provided agentId
+    const firstDecision = labeledDecisions[0].decision;
+    const evalAgentId = agentId || firstDecision.agentId;
+    const agent = agentStore.getAgent(evalAgentId);
+    
+    if (!agent) {
+      alert('Could not find agent information');
+      return;
+    }
+
     // Save eval set
     const evalSet = evalSetStore.createEvalSet(
       evalSetName.trim(),
+      evalAgentId,
+      agent.prompt,
       evalSetDescription.trim() || undefined
     );
 

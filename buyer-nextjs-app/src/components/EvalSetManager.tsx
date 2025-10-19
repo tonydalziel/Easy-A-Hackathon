@@ -162,9 +162,13 @@ export default function EvalSetManager({ onRunEval, onClose }: EvalSetManagerPro
                 <div className="flex-1">
                   <h2 className="text-2xl font-bold text-cyan-400 mb-2">{selectedSet.name}</h2>
                   {selectedSet.description && (
-                    <p className="text-gray-300 text-sm">{selectedSet.description}</p>
+                    <p className="text-gray-300 text-sm mb-2">{selectedSet.description}</p>
                   )}
-                  <p className="text-xs text-gray-500 mt-2">
+                  <div className="bg-purple-500/10 border border-purple-500/30 rounded-lg p-3 mb-2">
+                    <p className="text-xs text-purple-400 font-semibold mb-1">Agent Prompt:</p>
+                    <p className="text-sm text-gray-300 italic">"{selectedSet.agentPrompt}"</p>
+                  </div>
+                  <p className="text-xs text-gray-500">
                     Created {new Date(selectedSet.createdAt).toLocaleString()}
                   </p>
                 </div>
