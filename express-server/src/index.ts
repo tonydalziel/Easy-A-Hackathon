@@ -6,12 +6,12 @@ import { initializeSmartContract } from './chain';
 
 // Handle uncaught errors
 process.on('uncaughtException', (error) => {
-  console.error('💥 Uncaught Exception:', error);
+  console.error('Uncaught Exception:', error);
   process.exit(1);
 });
 
 process.on('unhandledRejection', (reason, promise) => {
-  console.error('💥 Unhandled Rejection at:', promise, 'reason:', reason);
+  console.error('Unhandled Rejection at:', promise, 'reason:', reason);
   process.exit(1);
 });
 
@@ -23,13 +23,13 @@ app.use((req, res, next) => {
   res.header('Access-Control-Allow-Origin', '*'); // Allow all origins (or specify your frontend URL)
   res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
   res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization');
-  
+
   // Handle preflight requests
   if (req.method === 'OPTIONS') {
     console.log(`✅ CORS preflight: ${req.method} ${req.path}`);
     return res.sendStatus(200);
   }
-  
+
   console.log(`📡 ${req.method} ${req.path}`);
   next();
 });
@@ -49,12 +49,12 @@ async function initializeBlockchain() {
   try {
     // Initialize smart contract
     await initializeSmartContract();
-    
+
     // Start blockchain subscriber
     const walletAddress = process.env.WALLET_ADDRESS || 'DLGQ6LNZXWXE2BH34CEI3DRKYAXPFVPOOW6C3XKH7BU4DOIW7V7TAIMFDM';
     const subscriber = new BlockchainSubscriber(walletAddress);
     await subscriber.start();
-    
+
     console.log('Blockchain monitoring started');
   } catch (error) {
     console.error('Failed to initialize blockchain:', error);
@@ -63,7 +63,7 @@ async function initializeBlockchain() {
 
 app.listen(port, async () => {
   console.log(`Server running at http://localhost:${port}`);
-  
+
   // Initialize blockchain after server starts
   await initializeBlockchain();
 });
