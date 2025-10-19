@@ -352,19 +352,9 @@ router.post('/listings', async (req: Request, res: Response) => {
         }
 
         const { wallet_address, private_key } = await merchantResponse.json();
-<<<<<<< HEAD
-        
-<<<<<<< HEAD
-        const result = await openListingOnChain(wallet_address);
-=======
-        const result = await openListingOnChain(targetAmount);
->>>>>>> 8d746e449476035afea3cbc844066f23c22cc44d
-        res.json({ 
-=======
 
         const result = await openListingOnChain(targetAmount);
         res.json({
->>>>>>> ce719887dde6d7f72f660a5d27b152ac8c17733a
             message: 'Listing opened successfully',
             merchant: merchantUsername,
             wallet_address: wallet_address,
