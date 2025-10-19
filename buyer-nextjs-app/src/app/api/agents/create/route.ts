@@ -43,6 +43,9 @@ export async function POST(request: Request) {
     // Store agent in memory
     const storeResult = agentStore.createAgent(agent);
 
+    console.log('Store Result');
+    console.log(storeResult);
+    console.log('END OF STORE RESULT');
     if (!storeResult.success) {
       return NextResponse.json(
         { error: storeResult.message },

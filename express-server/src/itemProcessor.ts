@@ -3,6 +3,7 @@
 
 import { AgentState, ItemState } from './types';
 import { haveLLMConsiderPurchase } from './llms';
+import { processListingPayment } from './chain';
 
 // Configuration
 const FRONTEND_URL = process.env.FRONTEND_URL || 'http://localhost:3001';
@@ -74,7 +75,70 @@ export class ItemProcessor {
 
             if (id) {
                 console.log(`✅ Agent "${agent.agent_id}" wants to buy "${item.name}"! Purchase Intent: ${id}`);
-                await this.sendDecisionToFrontend(agent, item, 'BUY', id, reasoning);
+                console.log(`🔍 DEBUG: Starting smart contract payment execution...`);
+                
+                // Execute smart contract payment
+                try {
+                    console.log(`💰 Processing payment on smart contract for agent "${agent.agent_id}"...`);
+                    console.log(`   Item: ${item.name}, Price: ${item.price}, Seller: ${item.seller_id}`);
+                    console.log(`   Agent wallet: ${agent.wallet_id}`);
+                    
+                    // Get seller's wallet address if seller_id is provided
+                    let sellerWallet = item.seller_id;
+                    if (item.seller_id) {
+                        try {
+                            console.log(`🔍 Fetching merchant wallet for seller: ${item.seller_id}`);
+                            const merchantResponse = await fetch(`http://localhost:3000/merchants/${item.seller_id}/wallet`);
+                            console.log(`🔍 Merchant response status: ${merchantResponse.status}`);
+                            if (merchantResponse.ok) {
+                                const { wallet_address } = await merchantResponse.json();
+                                sellerWallet = wallet_address;
+                                console.log(`   Seller wallet: ${sellerWallet}`);
+                            } else {
+                                console.log(`⚠️  Merchant ${item.seller_id} not found, using seller_id as wallet`);
+                            }
+                        } catch (err) {
+                            console.error('Failed to fetch seller wallet:', err);
+                        }
+                    }
+                    
+                    console.log(`🔍 About to call processListingPayment with: sender=${agent.wallet_id}, amount=${item.price}`);
+                    
+                    // Check if item has a contract appId
+                    if (!item.contractAppId) {
+                        throw new Error('Item does not have a contract appId - listing may not have been created successfully');
+                    }
+                    
+                    const itemAppId = parseInt(item.contractAppId);
+                    console.log(`🔍 Using contract App ID: ${itemAppId}`);
+                    
+                    // First check listing status
+                    console.log(`🔍 Checking current listing status...`);
+                    const { getListingStatusFromChain } = await import('./chain');
+                    const listingStatus = await getListingStatusFromChain(itemAppId, agent.wallet_id, agent.wallet_pwd);
+                    console.log(`📋 Current listing status: ${listingStatus}`);
+                    
+                    // Process payment through smart contract using agent's mnemonic and item's contract
+                    const paymentResult = await processListingPayment(itemAppId, agent.wallet_pwd, item.price);
+                    console.log(`✅ Smart contract payment processed: ${paymentResult}`);
+                    
+                    // Check if payment was successful or if listing wasn't active
+                    if (paymentResult.includes('No active listing') || paymentResult.includes('No listing')) {
+                        console.log(`⚠️  PROBLEM: Smart contract says "${paymentResult}"`);
+                        console.log(`⚠️  This item may not have an active listing on the contract`);
+                        console.log(`⚠️  Item listingId: ${item.listingId}`);
+                    }
+                    
+                    // Send decision to frontend with payment confirmation
+                    await this.sendDecisionToFrontend(agent, item, 'BUY', id, 
+                        `${reasoning}\n\n🔗 Smart Contract: ${paymentResult}`);
+                } catch (contractError) {
+                    console.error(`⚠️  Smart contract payment failed:`, contractError);
+                    console.error(`⚠️  Error stack:`, contractError instanceof Error ? contractError.stack : 'No stack trace');
+                    // Still send decision to frontend even if contract fails
+                    await this.sendDecisionToFrontend(agent, item, 'BUY', id, 
+                        `${reasoning}\n\n⚠️ Smart contract payment pending/failed: ${contractError instanceof Error ? contractError.message : 'Unknown error'}`);
+                }
             } else {
                 console.log(`⏭️  Agent "${agent.agent_id}" passed on "${item.name}"`);
                 await this.sendDecisionToFrontend(agent, item, 'IGNORE', null, reasoning);

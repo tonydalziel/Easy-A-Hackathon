@@ -1,72 +1,61 @@
-import { Contract, GlobalState } from '@algorandfoundation/algorand-typescript'
+import { Contract, GlobalState, itxn, Account, uint64 } from '@algorandfoundation/algorand-typescript'
 
 export class ChAiN extends Contract {
   // Global state for listing management
   private listingOpen = GlobalState<boolean>({ key: 'listingOpen' })
-  private targetWallet = GlobalState<string>({ key: 'targetWallet' })
-  private targetAmount = GlobalState<string>({ key: 'targetAmount' })
-  private receivedAmount = GlobalState<string>({ key: 'receivedAmount' })
+  private targetWallet = GlobalState<Account>({ key: 'targetWallet' })
+  private targetAmount = GlobalState<uint64>({ key: 'targetAmount' })
+  private receivedAmount = GlobalState<uint64>({ key: 'receivedAmount' })
 
   /**
    * Opens a new listing with target wallet and amount
    */
-  public openListing(targetWallet: string, targetAmount: string): string {
+  public openListing(targetWallet: Account, targetAmount: uint64): string {
     // Check if a listing is already open
     if (this.listingOpen.hasValue && this.listingOpen.value) {
       return "Error: A listing is already open. Close it first."
-    }
-
-    // Validate inputs
-    if (!targetWallet) {
-      return "Error: Target wallet cannot be empty"
-    }
-
-    if (!targetAmount || targetAmount === "0") {
-      return "Error: Target amount must be greater than 0"
     }
 
     // Open the listing
     this.listingOpen.value = true
     this.targetWallet.value = targetWallet
     this.targetAmount.value = targetAmount
-    this.receivedAmount.value = "0"
+    this.receivedAmount.value = 0
 
-    return `Listing opened: ${targetAmount} microAlgos to ${targetWallet}`
+    return `Listing opened`
   }
 
   /**
    * Processes incoming payments and checks if listing should close
    */
-  public processPayment(sender: string, amount: string): string {
+  public processPayment(sender: Account, amount: uint64): string {
     // Check if listing is open
     if (!this.listingOpen.hasValue || !this.listingOpen.value) {
       return "No active listing to process payment for"
     }
 
     // Validate inputs
-    if (!sender) {
-      return "Error: Sender cannot be empty"
-    }
-
-    if (!amount || amount === "0") {
+    if (amount === 0) {
       return "Error: Amount must be greater than 0"
     }
 
-    // Check if payment is to the target wallet
-    if (sender !== this.targetWallet.value) {
-      return `Payment from ${sender} not to target wallet ${this.targetWallet.value}. Listing remains open.`
-    }
+    // Send payment to target wallet using inner transaction
+    itxn.payment({
+      amount: amount,
+      receiver: this.targetWallet.value,
+      fee: 0, // fee pooling, so the sender of the app call covers the fee
+    }).submit()
 
-    // Add to received amount (simplified for now)
-    this.receivedAmount.value = amount
+    // Add to received amount
+    this.receivedAmount.value = this.receivedAmount.value + amount
 
-    // Check if target amount is reached (simplified comparison)
-    if (amount === this.targetAmount.value) {
+    // Check if target amount is reached
+    if (this.receivedAmount.value >= this.targetAmount.value) {
       this.listingOpen.value = false
-      return `Listing closed! Target amount reached: ${amount}/${this.targetAmount.value} microAlgos`
+      return `Listing closed! Target amount reached`
     }
 
-    return `Payment received: ${amount} microAlgos. Progress: ${amount}/${this.targetAmount.value}`
+    return `Payment received and forwarded to merchant`
   }
 
   /**
@@ -77,7 +66,7 @@ export class ChAiN extends Contract {
       return "No listing is currently open"
     }
 
-    return `Listing open: ${this.receivedAmount.value}/${this.targetAmount.value} microAlgos to ${this.targetWallet.value}`
+    return `Listing open`
   }
 
   /**
@@ -89,7 +78,7 @@ export class ChAiN extends Contract {
     }
 
     this.listingOpen.value = false
-    return `Listing manually closed. Final amount received: ${this.receivedAmount.value}/${this.targetAmount.value} microAlgos`
+    return `Listing manually closed`
   }
 
   /**
@@ -100,6 +89,6 @@ export class ChAiN extends Contract {
       return "No active listing"
     }
 
-    return `Target: ${this.targetAmount.value} microAlgos to ${this.targetWallet.value}, Received: ${this.receivedAmount.value} microAlgos`
+    return `Active listing`
   }
 }

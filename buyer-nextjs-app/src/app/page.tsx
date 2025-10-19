@@ -353,7 +353,7 @@ export default function Home() {
       }
 
       // Convert ALGO to microALGO (1 ALGO = 1,000,000 microALGO)
-      const microAlgoValue = Math.floor(value * 1000000);
+      const microAlgoValue = value;
 
       const response = await fetch('/api/agents/create', {
         method: 'POST',

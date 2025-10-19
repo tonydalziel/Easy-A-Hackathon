@@ -98,6 +98,7 @@ router.post('/items', async (req: Request, res: Response) => {
 
         // Create smart contract listing on the blockchain
         let listingId: string | undefined = undefined;
+        let contractAppId: number | undefined = undefined;
         try {
             console.log(`📝 Creating smart contract listing for item "${name}" with target amount ${itemPrice}...`);
             
@@ -122,12 +123,22 @@ router.post('/items', async (req: Request, res: Response) => {
                 }
             }
             
-            // Use seller_id as targetWallet (this should be the merchant's wallet address)
-            listingId = await openListingOnChain(targetWallet, itemPrice, targetWallet, deployerPrivateKey);
+            // Deploy new contract instance and open listing
+            const result = await openListingOnChain(targetWallet, itemPrice, targetWallet, deployerPrivateKey);
+            listingId = result.message;
+            contractAppId = result.appId;
             itemState.listingId = listingId;
-            console.log(`✅ Smart contract listing created: ${listingId}`);
+            itemState.contractAppId = contractAppId.toString();
+            console.log(`✅ Smart contract deployed and listing created!`);
+            console.log(`   Contract App ID: ${contractAppId}`);
+            console.log(`   Contract Address: ${result.appAddress}`);
+            console.log(`   Listing: ${listingId}`);
         } catch (error) {
             console.error('⚠️  Failed to create smart contract listing:', error);
+            if (error instanceof Error) {
+                console.error('⚠️  Error message:', error.message);
+                console.error('⚠️  Error stack:', error.stack);
+            }
             console.log('⚠️  Item will be registered without blockchain listing');
             // Continue with item registration even if blockchain fails
         }
@@ -235,30 +246,31 @@ router.post('/', async (req: Request, res: Response) => {
         // Default wallet balance: 1000 ALGO (in microALGO)
         const initialBalance = walletBalance || 1000000000; // 1000 ALGO = 1,000,000,000 microALGO
 
-        let blockchainAgentId: string | null = null;
-		let wallet_id: string = 'UNASSIGNED';
-
 		console.log('Initial wallet balance (microALGO):', initialBalance);
 
-        // Post agent to blockchain with funding
-        try {
-            console.log(`💰 Creating agent on blockchain with ${initialBalance / 1000000} ALGO...`);
-            console.log(`💳 Funding from user wallet: ${user_wallet_id}`);
-            const postingAgentResponse = await postAgentToChain(
-                user_wallet_id, // Use authenticated user's wallet instead of hardcoded SENDER_ADDR
-                provider_id,
-                model_id,
-                prompt,
-                initialBalance
-            );
+        // Post agent to blockchain with funding - THIS MUST SUCCEED
+        console.log(`💰 Creating agent on blockchain with ${initialBalance / 1000000} ALGO...`);
+        console.log(`💳 Funding from user wallet: ${user_wallet_id}`);
+        
+        const postingAgentResponse = await postAgentToChain(
+            user_wallet_id, // Use authenticated user's wallet
+            provider_id,
+            model_id,
+            prompt,
+            initialBalance
+        );
 
-            console.log(`✅ Agent posted to blockchain! Transaction ID: ${postingAgentResponse.transactionId}`);
-			wallet_id = postingAgentResponse.wallet_id;
+        console.log(`✅ Agent posted to blockchain! Transaction ID: ${postingAgentResponse.transactionId}`);
+        const wallet_id = postingAgentResponse.wallet_id;
+        const wallet_mnemonic = postingAgentResponse.wallet_mnemonic;
 
-        } catch (error) {
-            console.error('⚠️  Failed to post agent to blockchain:', error);
-            // Continue with local registration even if blockchain fails
+        // Verify wallet was created successfully
+        if (!wallet_id || wallet_id === 'UNASSIGNED' || !wallet_mnemonic || wallet_mnemonic === 'UNASSIGNED') {
+            throw new Error('Failed to create agent wallet on blockchain');
         }
+
+        console.log(`✅ Agent wallet created: ${wallet_id}`);
+        console.log(`✅ Agent wallet funded with ${initialBalance / 1000000} ALGO from user ${user_wallet_id}`);
 
         // Create agent state
         const agentState: AgentState = {
@@ -268,7 +280,7 @@ router.post('/', async (req: Request, res: Response) => {
             provider_id,
             currentItemsAcquired: [],
             wallet_id,
-            wallet_pwd: 'temp-pwd', // In production, this should be properly managed
+            wallet_pwd: wallet_mnemonic, // Store the mnemonic for signing transactions
             walletBalance: initialBalance
         };
 
@@ -290,7 +302,7 @@ router.post('/', async (req: Request, res: Response) => {
             message: 'Agent registered successfully',
             agentId: user_id,
             agent: agentState,
-            blockchainTxId: blockchainAgentId,
+            blockchainTxId: postingAgentResponse.transactionId,
             itemsToProcess: allItems.length
         });
     } catch (error) {
@@ -418,7 +430,9 @@ router.post('/listings', async (req: Request, res: Response) => {
             message: 'Listing opened successfully',
             merchant: merchantUsername,
             wallet_address: wallet_address,
-            result: result
+            appId: result.appId,
+            appAddress: result.appAddress,
+            listingMessage: result.message
         });
     } catch (error) {
         console.error('Error opening listing:', error);
@@ -426,11 +440,16 @@ router.post('/listings', async (req: Request, res: Response) => {
     }
 });
 
-// Get listing status
-router.get('/listings/status', async (req: Request, res: Response) => {
+// Get listing status for a specific contract
+router.get('/listings/status/:appId', async (req: Request, res: Response) => {
     try {
-        const status = await getListingStatusFromChain();
+        const appId = parseInt(req.params.appId);
+        if (isNaN(appId)) {
+            return res.status(400).json({ error: 'Invalid appId' });
+        }
+        const status = await getListingStatusFromChain(appId);
         res.json({
+            appId,
             status: status
         });
     } catch (error) {
