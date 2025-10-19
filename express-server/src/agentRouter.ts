@@ -103,7 +103,7 @@ router.post('/items', async (req: Request, res: Response) => {
         // Store item
         registeredItems.set(itemId, itemState);
 
-        console.log(`✅ Registered item: ${itemId} - "${name}" ($${itemPrice})`);
+        console.log(`✅ Registered item: ${itemId} - "${name}" (${itemPrice} ALGO)`);
         if (listingId) {
             console.log(`🔗 Blockchain listing ID: ${listingId}`);
         }
