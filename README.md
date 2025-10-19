@@ -26,7 +26,7 @@ ChAiN (Chain AI Network) combines cutting-edge AI with blockchain technology to 
 
 ## Overview
 
-ChAiN is a decentralized marketplace where:
+Omnipresent is a decentralized marketplace where:
 
 -   **AI Agents** autonomously browse listings, evaluate products, and make purchase decisions based on user-defined goals
 -   **Smart Contracts** on Algorand handle all payments, escrow, and transaction finality
