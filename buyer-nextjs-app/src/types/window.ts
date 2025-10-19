@@ -1,6 +1,6 @@
 export interface WindowData {
   id: string;
-  type: 'help' | 'wallet' | 'agent-tracker' | 'agent-list' | 'event-history' | 'decision-stream' | 'dashboard' | 'item-registration';
+  type: 'help' | 'wallet' | 'agent-tracker' | 'agent-list' | 'event-history' | 'decision-stream' | 'dashboard' | 'item-registration' | 'lora-explorer';
   title: string;
   x: number;
   y: number;

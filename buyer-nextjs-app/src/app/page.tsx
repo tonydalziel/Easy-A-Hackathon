@@ -38,6 +38,7 @@ import DecisionStream from '@/components/DecisionStream';
 import Dashboard from '@/components/Dashboard';
 import ItemRegistration from '@/components/ItemRegistration';
 import SignupForm from '@/components/SignupForm';
+import LoraExplorer from '@/components/LoraExplorer';
 import { WindowData } from '@/types/window';
 import { EXPRESS_SERVER_URL } from './api/agents/create/route';
 
@@ -69,7 +70,7 @@ export default function Home() {
     successRate: 0,
   });
 
-  const commands = ['-h', 'wallet', 'watch', 'track', 'list', 'events', 'create', 'dashboard'];
+  const commands = ['-h', 'wallet', 'watch', 'track', 'list', 'events', 'create', 'dashboard', 'lora'];
 
   const commandInfo: Record<string, { params?: string; description: string; icon?: string }> = {
     '-h': { description: 'Display help window', icon: '?' },
@@ -80,6 +81,7 @@ export default function Home() {
     'events': { description: 'Show all on-chain events', icon: '⋯' },
     'create': { params: '<prompt>', description: 'Create a new agent with the specified prompt', icon: '+' },
     'dashboard': { description: 'Open system dashboard with analytics', icon: '▣' },
+    'lora': { description: 'Open Lora Algorand block explorer', icon: '🔍' },
   };
 
   useEffect(() => {
@@ -311,6 +313,8 @@ export default function Home() {
       createWindow('dashboard', '📊 System Dashboard');
     } else if (cmd === 'items') {
       createWindow('item-registration', 'Item Marketplace');
+    } else if (cmd === 'lora') {
+      createWindow('lora-explorer', '🔍 Lora Explorer');
     } else if (cmd === 'create') {
       if (params.length === 0) {
         setError('Error: create command requires a prompt. Usage: create <prompt>');
@@ -366,7 +370,7 @@ export default function Home() {
   };
 
   const createWindow = (
-    type: 'help' | 'wallet' | 'agent-tracker' | 'agent-list' | 'event-history' | 'decision-stream' | 'dashboard' | 'item-registration',
+    type: 'help' | 'wallet' | 'agent-tracker' | 'agent-list' | 'event-history' | 'decision-stream' | 'dashboard' | 'item-registration' | 'lora-explorer',
     title: string,
     agentId?: string
   ) => {
@@ -396,6 +400,9 @@ export default function Home() {
       height = 600;
     } else if (type === 'dashboard') {
       width = 900;
+      height = 700;
+    } else if (type === 'lora-explorer') {
+      width = 1000;
       height = 700;
     }
 
@@ -451,6 +458,8 @@ export default function Home() {
         return <Dashboard />;
       case 'item-registration':
         return <ItemRegistration />;
+      case 'lora-explorer':
+        return <LoraExplorer />;
       case 'agent-tracker':
         return window.agentId ? (
           <AgentTracker
@@ -631,6 +640,7 @@ export default function Home() {
                           {window.type === 'dashboard' && '▣'}
                           {window.type === 'item-registration' && '🏪'}
                           {window.type === 'agent-tracker' && '→'}
+                          {window.type === 'lora-explorer' && '🔍'}
                         </span>
                         <span className="text-sm text-gray-300 group-hover:text-white font-medium max-w-[120px] truncate transition-colors">
                           {window.title}

@@ -6,6 +6,7 @@ import { Agent } from '@/types/agent';
 export default function AgentList() {
   const [agents, setAgents] = useState<Agent[]>([]);
   const [walletBalances, setWalletBalances] = useState<Record<string, number>>({});
+  const [isRefreshing, setIsRefreshing] = useState(false);
 
   useEffect(() => {
     fetchAllAgents();
@@ -45,6 +46,7 @@ export default function AgentList() {
 
   const fetchAllAgents = async () => {
     try {
+      setIsRefreshing(true);
       // Get list of agent IDs
       const response = await fetch('/api/agents');
       if (response.ok) {
@@ -74,6 +76,8 @@ export default function AgentList() {
       }
     } catch (error) {
       console.error('Failed to fetch agents:', error);
+    } finally {
+      setIsRefreshing(false);
     }
   };
 
@@ -107,6 +111,34 @@ export default function AgentList() {
     <div className="text-white font-mono">
       <div className="mb-3 flex justify-between items-center">
         <h2 className="text-lg font-bold text-cyan-400">All Agents ({agents.length})</h2>
+        <button
+          onClick={fetchAllAgents}
+          disabled={isRefreshing}
+          className={`
+            flex items-center gap-2 px-3 py-2 rounded-lg text-xs font-medium
+            transition-all duration-200 border
+            ${isRefreshing
+              ? 'bg-gray-800 text-gray-500 border-gray-700 cursor-not-allowed'
+              : 'bg-cyan-500/20 hover:bg-cyan-500/30 text-cyan-400 hover:text-cyan-300 border-cyan-500/50 hover:border-cyan-400 hover:shadow-lg hover:shadow-cyan-500/20'
+            }
+          `}
+          title="Refresh agent list"
+        >
+          <svg
+            className={`w-4 h-4 ${isRefreshing ? 'animate-spin' : ''}`}
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
+            />
+          </svg>
+          {isRefreshing ? 'Refreshing...' : 'Refresh'}
+        </button>
       </div>
 
       <div className="overflow-auto">
