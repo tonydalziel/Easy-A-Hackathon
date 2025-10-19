@@ -13,10 +13,10 @@ const registeredAgents = new Map<string, AgentState>();
 // In-memory storage for items for sale
 const registeredItems = new Map<string, ItemState>();
 
-// Example endpoint 
+// Example endpoint
 router.get('/status', (req: Request, res: Response) => {
     const processorStatus = itemProcessor.getQueueStatus();
-    res.json({ 
+    res.json({
         status: 'Agent router is running',
         agents: registeredAgents.size,
         items: registeredItems.size,
@@ -42,12 +42,12 @@ router.get('/items/:itemId', (req: Request, res: Response) => {
     console.log('📥 GET /agents/items/:itemId - Item ID:', req.params.itemId);
     const { itemId } = req.params;
     const item = registeredItems.get(itemId);
-    
+
     if (!item) {
         console.log('❌ Item not found:', itemId);
         return res.status(404).json({ error: 'Item not found' });
     }
-    
+
     console.log('✅ Found item:', item);
     res.json({ item });
 });
@@ -87,7 +87,7 @@ router.post('/items', (req: Request, res: Response) => {
 
         // Store item
         registeredItems.set(itemId, itemState);
-        
+
         console.log(`✅ Registered item: ${itemId} - "${name}" ($${itemPrice})`);
         console.log(`📊 Total items registered: ${registeredItems.size}`);
 
@@ -121,17 +121,17 @@ router.post('/items', (req: Request, res: Response) => {
 router.delete('/items/:itemId', (req: Request, res: Response) => {
     console.log('📥 DELETE /agents/items/:itemId - Item ID:', req.params.itemId);
     const { itemId } = req.params;
-    
+
     if (!registeredItems.has(itemId)) {
         console.log('❌ Item not found:', itemId);
         return res.status(404).json({ error: 'Item not found' });
     }
-    
+
     const item = registeredItems.get(itemId);
     registeredItems.delete(itemId);
     console.log(`✅ Deleted item: ${itemId} - "${item?.name}"`);
     console.log(`📊 Remaining items: ${registeredItems.size}`);
-    
+
     res.json({
         success: true,
         message: 'Item deleted successfully'
@@ -172,6 +172,9 @@ router.post('/', async (req: Request, res: Response) => {
         // Default wallet balance: 1000 ALGO (in microALGO)
         const initialBalance = walletBalance || 1000000000; // 1000 ALGO = 1,000,000,000 microALGO
 
+        // Hardcoded master wallet address (the DISPENSER account with funds)
+        const masterWalletAddress = process.env.SENDER_ADDR || 'VQKN6Y336A26P4EUGNLKW2KO7WF5K7OO3DODUCSSYFCXF35JBSJ6EHMSMU';
+
         let blockchainAgentId: string | null = null;
         let wallet_id = `wallet-${Date.now()}`;
 
@@ -179,6 +182,7 @@ router.post('/', async (req: Request, res: Response) => {
         try {
             console.log(`💰 Creating agent on blockchain with ${initialBalance / 1000000} ALGO...`);
             blockchainAgentId = await postAgentToChain(
+                masterWalletAddress,
                 provider_id,
                 model_id,
                 prompt,
@@ -243,8 +247,8 @@ router.post('/consider-purchase', async (req: Request, res: Response) => {
 
         // Validate request body
         if (!agentState || !itemState) {
-            return res.status(400).json({ 
-                error: 'Missing required fields: agentState and itemState' 
+            return res.status(400).json({
+                error: 'Missing required fields: agentState and itemState'
             });
         }
 
@@ -252,21 +256,21 @@ router.post('/consider-purchase', async (req: Request, res: Response) => {
         const purchaseIntentId = await haveLLMConsiderPurchase(agentState, itemState);
 
         if (purchaseIntentId === null) {
-            return res.json({ 
+            return res.json({
                 decision: 'IGNORE',
                 purchaseIntentId: null,
                 message: 'Agent decided not to purchase the item'
             });
         }
 
-        res.json({ 
+        res.json({
             decision: 'BUY',
             purchaseIntentId,
             message: 'Purchase intent registered successfully'
         });
     } catch (error) {
         console.error('Error in consider-purchase endpoint:', error);
-        res.status(500).json({ 
+        res.status(500).json({
             error: 'Internal server error',
             details: error instanceof Error ? error.message : 'Unknown error'
         });
@@ -291,7 +295,7 @@ router.post('/process-all', async (req: Request, res: Response) => {
         }
 
         // Process asynchronously
-        const promises = allAgents.map(agent => 
+        const promises = allAgents.map(agent =>
             itemProcessor.processAllItemsWithAgent(agent, allItems)
         );
 
@@ -307,7 +311,7 @@ router.post('/process-all', async (req: Request, res: Response) => {
         });
     } catch (error) {
         console.error('Error in process-all endpoint:', error);
-        res.status(500).json({ 
+        res.status(500).json({
             error: 'Internal server error',
             details: error instanceof Error ? error.message : 'Unknown error'
         });
@@ -319,12 +323,12 @@ router.get('/:agentId', (req: Request, res: Response) => {
     console.log('📥 GET /agents/:agentId - Agent ID:', req.params.agentId);
     const { agentId } = req.params;
     const agent = registeredAgents.get(agentId);
-    
+
     if (!agent) {
         console.log('❌ Agent not found:', agentId);
         return res.status(404).json({ error: 'Agent not found' });
     }
-    
+
     console.log('✅ Found agent:', agent.agent_id);
     res.json({ agent });
 });
@@ -336,13 +340,13 @@ import { openListingOnChain, getListingStatusFromChain } from './chain';
 router.post('/listings', async (req: Request, res: Response) => {
     try {
         const { targetWallet, targetAmount } = req.body;
-        
+
         if (!targetWallet || !targetAmount) {
             return res.status(400).json({ error: 'targetWallet and targetAmount are required' });
         }
-        
+
         const result = await openListingOnChain(targetWallet, targetAmount);
-        res.json({ 
+        res.json({
             message: 'Listing opened successfully',
             result: result
         });
@@ -356,7 +360,7 @@ router.post('/listings', async (req: Request, res: Response) => {
 router.get('/listings/status', async (req: Request, res: Response) => {
     try {
         const status = await getListingStatusFromChain();
-        res.json({ 
+        res.json({
             status: status
         });
     } catch (error) {

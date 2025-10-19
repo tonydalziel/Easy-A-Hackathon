@@ -68,12 +68,21 @@ export async function POST(request: Request) {
         // Continue anyway - agent is still created locally
       } else {
         const expressData = await expressResponse.json();
-        console.log(`✅ Agent ${agentId} registered with express-server`);
-        if (expressData.blockchainTxId) {
-          console.log(`💰 Agent funded on blockchain! Tx: ${expressData.blockchainTxId}`);
-          // Update local agent with blockchain info
-          agent.wallet_id = expressData.blockchainTxId;
+        console.log(`Agent ${agentId} registered with express-server`);
+
+        // Update local agent with blockchain info
+        if (expressData.agent) {
+          agent.wallet_id = expressData.agent.wallet_id || agent.wallet_id;
+          agent.walletBalance = expressData.agent.walletBalance || initialWalletBalance;
         }
+
+        if (expressData.blockchainTxId) {
+          console.log(`Agent funded on blockchain! Tx: ${expressData.blockchainTxId}`);
+          agent.blockchainTxId = expressData.blockchainTxId;
+        }
+
+        // Update the agent in the store with blockchain info
+        agentStore.createAgent(agent);
       }
     } catch (error) {
       console.error('Error calling express-server:', error);

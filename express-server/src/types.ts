@@ -1,3 +1,6 @@
+import { Account } from "algosdk/dist/types/client/v2/algod/models/types";
+
+Account
 export type AgentState = {
     agent_id: string;
     prompt: string;
