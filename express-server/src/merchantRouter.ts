@@ -1,5 +1,5 @@
 import express, { Request, Response } from 'express';
-import { generateAccount, encodeAddress } from 'algosdk';
+import algosdk, { generateAccount, encodeAddress } from 'algosdk';
 import { MerchantState } from './types';
 
 const router = express.Router();
@@ -66,7 +66,7 @@ router.post('/signup', (req: Request, res: Response) => {
                 business_description: merchantState.business_description,
                 wallet_address: merchantState.wallet_address,
                 created_at: merchantState.created_at,
-                private_key: merchantState.wallet_private_key
+                private_key: algosdk.secretKeyToMnemonic(merchantState.wallet_private_key)
                 // Note: private key is not returned for security
             }
         });
@@ -126,6 +126,35 @@ router.get('/:username/wallet', (req: Request, res: Response) => {
     
     res.json({
         wallet_address: merchant.wallet_address
+    });
+});
+
+// Get merchant details by wallet address
+router.get('/by-wallet/:walletAddress', (req: Request, res: Response) => {
+    const { walletAddress } = req.params;
+    
+    // Search for merchant by wallet address
+    let foundMerchant: MerchantState | undefined;
+    for (const merchant of registeredMerchants.values()) {
+        if (merchant.wallet_address === walletAddress) {
+            foundMerchant = merchant;
+            break;
+        }
+    }
+    
+    if (!foundMerchant) {
+        return res.status(404).json({ error: 'Merchant not found with this wallet address' });
+    }
+    
+    res.json({
+        merchant: {
+            merchant_id: foundMerchant.merchant_id,
+            username: foundMerchant.username,
+            business_description: foundMerchant.business_description,
+            wallet_address: foundMerchant.wallet_address,
+            created_at: foundMerchant.created_at,
+            wallet_private_key: algosdk.secretKeyToMnemonic(foundMerchant.wallet_private_key),
+        }
     });
 });
 

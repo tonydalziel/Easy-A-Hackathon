@@ -1,10 +1,9 @@
 import { AlgorandClient, microAlgo, mnemonicAccount } from '@algorandfoundation/algokit-utils';
 import { ItemState, AgentState } from './types';
-import { TransactionType, generateAccount, encodeAddress } from 'algosdk';
+import algosdk, { TransactionType, generateAccount, encodeAddress } from 'algosdk';
 import { AlgoAmount } from '@algorandfoundation/algokit-utils/types/amount';
 
 const SENDER_ADDR = process.env.SENDER_ADDR || '';
-const SENDER_MNEMONIC = "govern hawk project purpose blur major sword artist fit benefit rely expire extend spell admit fluid grace refuse cigar project bulk often sea abstract region"
 
 // Initialize Algorand client with error handling
 let algorand: AlgorandClient | null = null;
@@ -58,12 +57,20 @@ export async function transferIntoWallet(wallet_id: string, sender_addr: string,
         throw new Error('Algorand client not initialized');
     }
 
-    if (!SENDER_MNEMONIC) {
-        throw new Error('SENDER_ACCOUNT_MNEMONIC not configured in environment');
-    }
+    let merchantResponse = await fetch(`http://localhost:3000/merchants/by-wallet/${sender_addr}`);
 
+    console.log(`Sender ${sender_addr}`);
+    if (!merchantResponse.ok) {
+        throw new Error('Failed to fetch merchant wallet information');
+    }
+    const merchantData = await merchantResponse.json();
+    const { wallet_address, wallet_private_key: private_key } = merchantData.merchant;
+
+    const senderMnemonic = private_key;
+
+    console.log(senderMnemonic);
     // Create account from mnemonic to sign the transaction
-    const senderAccount = mnemonicAccount(SENDER_MNEMONIC);
+    const senderAccount = mnemonicAccount(senderMnemonic);
 
     const result = await algorand.send.payment({
         sender: senderAccount.addr,
@@ -84,12 +91,24 @@ export async function postAgentToChain(sender: string, provider_id: string, mode
         throw new Error('Algorand client not initialized');
     }
 
-    if (!SENDER_MNEMONIC) {
-        throw new Error('SENDER_ACCOUNT_MNEMONIC not configured in environment');
+    // Fetch merchant information by wallet address
+
+    console.log(sender);
+    let merchantResponse = await fetch(`http://localhost:3000/merchants/by-wallet/${sender}`);
+
+    if (!merchantResponse.ok) {
+        console.error(`Failed to fetch merchant wallet information for sender: ${sender}`);
+        console.error('Response status:', merchantResponse.status);
+        console.error('Response body:', await merchantResponse.text());
+        throw new Error('Failed to fetch merchant wallet information');
     }
+    const merchantData = await merchantResponse.json();
+    const { wallet_private_key: private_key } = merchantData.merchant;
+
+    const senderMnemonic = private_key;
 
     // Create account from mnemonic to sign transactions
-    const senderAccount = algorand.account.fromMnemonic(SENDER_MNEMONIC);
+    const senderAccount = algorand.account.fromMnemonic(senderMnemonic);
 
     const { wallet_id, account } = await getNewWallet();
     console.log(`New agent wallet created: ${wallet_id}`);

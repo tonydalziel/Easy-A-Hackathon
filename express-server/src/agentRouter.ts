@@ -1,6 +1,6 @@
 // router for agent endpoints
 import express, { Request, Response } from 'express';
-import { postAgentToChain } from './chain';
+import { postAgentToChain, openListingOnChain, getListingStatusFromChain } from './chain';
 import { AgentState, ItemState } from './types';
 import { haveLLMConsiderPurchase } from './llms';
 import { itemProcessor } from './itemProcessor';
@@ -53,7 +53,7 @@ router.get('/items/:itemId', (req: Request, res: Response) => {
 });
 
 // Register a new item for sale
-router.post('/items', (req: Request, res: Response) => {
+router.post('/items', async (req: Request, res: Response) => {
     try {
         console.log('📥 POST /agents/items - Request body:', req.body);
         const { name, description, price, seller_id } = req.body;
@@ -82,13 +82,31 @@ router.post('/items', (req: Request, res: Response) => {
         const itemState: ItemState = {
             id: itemId,
             name,
-            price: itemPrice
+            price: itemPrice,
+            seller_id,
+            description
         };
+
+        // Create smart contract listing on the blockchain
+        let listingId: string | undefined = undefined;
+        try {
+            console.log(`📝 Creating smart contract listing for item "${name}" with target amount ${itemPrice}...`);
+            listingId = await openListingOnChain(itemPrice);
+            itemState.listingId = listingId;
+            console.log(`✅ Smart contract listing created: ${listingId}`);
+        } catch (error) {
+            console.error('⚠️  Failed to create smart contract listing:', error);
+            console.log('⚠️  Item will be registered without blockchain listing');
+            // Continue with item registration even if blockchain fails
+        }
 
         // Store item
         registeredItems.set(itemId, itemState);
 
         console.log(`✅ Registered item: ${itemId} - "${name}" ($${itemPrice})`);
+        if (listingId) {
+            console.log(`🔗 Blockchain listing ID: ${listingId}`);
+        }
         console.log(`📊 Total items registered: ${registeredItems.size}`);
 
         // Process this new item with all existing agents
@@ -105,8 +123,10 @@ router.post('/items', (req: Request, res: Response) => {
             itemId: itemId,
             name: itemState.name,
             price: itemState.price,
+            listingId: itemState.listingId,
             item: itemState,
-            agentsNotified: allAgents.length
+            agentsNotified: allAgents.length,
+            blockchainEnabled: !!itemState.listingId
         });
     } catch (error) {
         console.error('❌ Error registering item:', error);
@@ -152,7 +172,7 @@ router.get('/', (req: Request, res: Response) => {
 // Create/Register a new agent
 router.post('/', async (req: Request, res: Response) => {
     try {
-        const { provider_id, model_id, prompt, user_id, walletBalance } = req.body;
+        const { provider_id, model_id, prompt, user_id, user_wallet_id, walletBalance } = req.body;
 
         // Validate required fields
         if (!provider_id || !model_id || !prompt || !user_id) {
@@ -161,6 +181,17 @@ router.post('/', async (req: Request, res: Response) => {
             });
         }
 
+        if (!user_wallet_id) {
+            return res.status(400).json({
+                error: 'Missing required field: user_wallet_id (user must be authenticated)'
+            });
+        }
+
+        console.log('USER ID:');
+        console.log(user_id);
+        console.log('USER WALLET ID:');
+        console.log(user_wallet_id);
+        
         // Check if agent already exists
         if (registeredAgents.has(user_id)) {
             return res.status(409).json({
@@ -172,17 +203,15 @@ router.post('/', async (req: Request, res: Response) => {
         // Default wallet balance: 1000 ALGO (in microALGO)
         const initialBalance = walletBalance || 1000000000; // 1000 ALGO = 1,000,000,000 microALGO
 
-        // Hardcoded master wallet address (the DISPENSER account with funds)
-        const masterWalletAddress = process.env.SENDER_ADDR || 'VQKN6Y336A26P4EUGNLKW2KO7WF5K7OO3DODUCSSYFCXF35JBSJ6EHMSMU';
-
         let blockchainAgentId: string | null = null;
         let wallet_id = `wallet-${Date.now()}`;
 
         // Post agent to blockchain with funding
         try {
             console.log(`💰 Creating agent on blockchain with ${initialBalance / 1000000} ALGO...`);
+            console.log(`💳 Funding from user wallet: ${user_wallet_id}`);
             blockchainAgentId = await postAgentToChain(
-                masterWalletAddress,
+                user_wallet_id, // Use authenticated user's wallet instead of hardcoded SENDER_ADDR
                 provider_id,
                 model_id,
                 prompt,
@@ -333,9 +362,6 @@ router.get('/:agentId', (req: Request, res: Response) => {
     res.json({ agent });
 });
 
-// Import listing functions
-import { openListingOnChain, getListingStatusFromChain } from './chain';
-
 // Open a new listing
 router.post('/listings', async (req: Request, res: Response) => {
     try {
@@ -352,19 +378,9 @@ router.post('/listings', async (req: Request, res: Response) => {
         }
 
         const { wallet_address, private_key } = await merchantResponse.json();
-<<<<<<< HEAD
-        
-<<<<<<< HEAD
-        const result = await openListingOnChain(wallet_address);
-=======
-        const result = await openListingOnChain(targetAmount);
->>>>>>> 8d746e449476035afea3cbc844066f23c22cc44d
-        res.json({ 
-=======
 
         const result = await openListingOnChain(targetAmount);
         res.json({
->>>>>>> ce719887dde6d7f72f660a5d27b152ac8c17733a
             message: 'Listing opened successfully',
             merchant: merchantUsername,
             wallet_address: wallet_address,
