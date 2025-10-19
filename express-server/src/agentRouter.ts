@@ -206,6 +206,8 @@ router.post('/', async (req: Request, res: Response) => {
         let blockchainAgentId: string | null = null;
 		let wallet_id: string = 'UNASSIGNED';
 
+		console.log('Initial wallet balance (microALGO):', initialBalance);
+
         // Post agent to blockchain with funding
         try {
             console.log(`💰 Creating agent on blockchain with ${initialBalance / 1000000} ALGO...`);

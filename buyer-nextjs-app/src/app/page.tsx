@@ -64,7 +64,6 @@ export default function Home() {
   const [success, setSuccess] = useState('');
   const [suggestion, setSuggestion] = useState('');
   const [showSuggestions, setShowSuggestions] = useState(false);
-  const [parameterHint, setParameterHint] = useState('');
   const [availableAgents, setAvailableAgents] = useState<Array<{ id: string; prompt: string; status: string }>>([]);
   const [selectedIndex, setSelectedIndex] = useState(-1);
   const [systemStats, setSystemStats] = useState({
@@ -149,7 +148,7 @@ export default function Home() {
           if (decisionsRes.ok) {
             const decisionsData = await decisionsRes.json();
             const totalDecisions = decisionsData.decisions?.length || 0;
-            const buyCount = decisionsData.decisions?.filter((d: any) => d.decision === 'BUY').length || 0;
+            const buyCount = decisionsData.decisions?.filter((d: any) => d.decision === 'buy').length || 0;
             const successRate = totalDecisions > 0 ? Math.round((buyCount / totalDecisions) * 100) : 0;
 
             setSystemStats({
@@ -177,7 +176,6 @@ export default function Home() {
 
     if (!command) {
       setSuggestion('');
-      setParameterHint('');
       setShowSuggestions(false);
       return;
     }
@@ -192,18 +190,6 @@ export default function Home() {
       setSuggestion(match.slice(cmd.length));
     } else {
       setSuggestion('');
-    }
-
-    // Show parameter hint for commands that need parameters
-    if (commands.includes(cmd) && parts.length === 1) {
-      const info = commandInfo[cmd];
-      if (info?.params) {
-        setParameterHint(`${cmd} ${info.params} - ${info.description}`);
-      } else {
-        setParameterHint('');
-      }
-    } else {
-      setParameterHint('');
     }
 
     // Auto-show suggestions for track command
@@ -383,7 +369,6 @@ export default function Home() {
         if (data.success && data.agentId) {
           setSuccess(`Agent created successfully with ${value} ALGO! ID: ${data.agentId}`);
           setTimeout(() => setSuccess(''), 5000);
-          // Optionally open the agent tracker window
         //   createWindow('agent-tracker', `Agent Tracker - ${data.agentId}`, data.agentId);
         } else {
           setError(data.message || 'Failed to create agent');
@@ -784,25 +769,6 @@ export default function Home() {
                 </svg>
               </button>
             </div>
-
-            {/* Parameter hint */}
-            {parameterHint && !suggestion && (
-              <div className="absolute top-full left-0 mt-2 w-full slide-in">
-                <div className="glass rounded-lg px-4 py-3 border border-blue-500/30">
-                  <div className="flex items-start gap-3">
-                    <div className="text-2xl text-blue-400">i</div>
-                    <div>
-                      <div className="text-blue-400 font-mono text-sm mb-1">
-                        Usage: <span className="text-white font-semibold">{parameterHint.split(' - ')[0]}</span>
-                      </div>
-                      <div className="text-gray-400 text-xs">
-                        {parameterHint.split(' - ')[1]}
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            )}
 
             {/* Autocomplete hint */}
             {suggestion && (
