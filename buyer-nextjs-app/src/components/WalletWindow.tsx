@@ -27,8 +27,21 @@ export default function WalletWindow({ address, balance }: WalletWindowProps) {
 
   const fetchWalletData = async () => {
     try {
-      if (!address || address === 'REPLACE_WITH_YOUR_WALLET_ADDRESS') {
-        console.log('No valid wallet address configured');
+      if (!address) {
+        // No address provided, let the API use the authenticated user's wallet
+        console.log('No address provided, using authenticated user wallet');
+        const response = await fetch(`/api/wallet`);
+        if (response.ok) {
+          const data = await response.json();
+          setCurrentValue(data.currentValue || 0);
+        } else {
+          console.error('Failed to fetch wallet data');
+        }
+        return;
+      }
+
+      if (address === 'REPLACE_WITH_YOUR_WALLET_ADDRESS') {
+        console.log('Placeholder wallet address detected');
         return;
       }
 
