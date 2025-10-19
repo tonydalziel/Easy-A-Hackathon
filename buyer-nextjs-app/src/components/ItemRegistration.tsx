@@ -182,7 +182,7 @@ export default function ItemRegistration() {
             {/* Price */}
             <div className="group">
               <label className="block text-sm font-semibold text-gray-300 mb-2">
-                Price ($) <span className="text-red-400">*</span>
+                Price (ALGO) <span className="text-red-400">*</span>
               </label>
               <div className="relative">
                 <span className="absolute left-4 top-1/2 -translate-y-1/2 text-green-400 font-bold">$</span>
